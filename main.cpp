@@ -19,7 +19,7 @@
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
 
-const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ";
+const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_title";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
