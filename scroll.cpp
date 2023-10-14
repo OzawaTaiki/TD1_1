@@ -7,6 +7,7 @@ void SCROLL::update(const Vector2& pos, bool isShake)
 
 
 	if (!isShake) {
+
 		scroll.x = float(pos.x - scrollXAxis);
 		scroll.y = float(pos.y - scrollYAxis);
 
