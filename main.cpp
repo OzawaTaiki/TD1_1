@@ -19,7 +19,7 @@
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
 
-const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ";
+const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_title";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -203,11 +203,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//リセット（タイトルと同じ）
 			SPlayer.ReturnPlayer();
 			SelectJD.ButtonFlagReset(SPlayer.isJump, SPlayer.CPos.y, SPlayer.radius);
+
 			//選択画面の自機ジャンプ
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SelectJD.isReleaseFlag();
 				SPlayer.jump(SelectJD.getNormalizeJumpVect());
 			}
+
 			//選択画面での自機の移動処理
 			SPlayer.Move();
 
@@ -331,9 +333,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				JD.isReleaseFlag();
 				PLYR.jump(JD.getNormalizeJumpVect());
 			}
+
 			//プレイヤーの座標更新
 			PLYR.dirUpdate();
-			PLYR.Move();
+
+			if (!PLYR.isBlasted) {
+				PLYR.Move();
+			} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				STAGE.blasterPosSet(PLYR.pos, PLYR.size);
+			}
 
 			//プレイヤーの衝突判定
 			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
@@ -346,19 +354,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//リザルトの時間測定する
 			score.TimeCount();
+
 			//仮置き、ゲームオーバー
 			if (keys[DIK_3] && !preKeys[DIK_3]) {
 				SceneNo = 3;
 				isChangeScene = true;
 			}
+
 			//仮置きゲームクリア
 			if (keys[DIK_4] && !preKeys[DIK_4]) {
 				SceneNo = 4;
 				isChangeScene = true;
 			}
+
 			break;
+
 #pragma endregion
 		case GAMEOVER:
+
 			//セレクト画面へ戻る
 			if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SceneNo = 1;
@@ -366,6 +379,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			break;
 		case GAMECLEAR:
+
 			//時間に応じてスコアを表示
 			score.result();
 			SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
@@ -375,9 +389,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			break;
 		}
+
 		//シーン切り替えしたときの処理
 #pragma region"シーン切り替え"
-//フラグが立つとイージング開始
+
+		//フラグが立つとイージング開始
 		if (isChangeScene) {
 			changeUp.t += 0.02f * changeUp.dir;
 			changeLow.t += 0.02f * changeLow.dir;
@@ -385,6 +401,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			changeUp.easeT = 1.0f - powf(1.0f - changeUp.t, 3.0f);
 			changeLow.CPos.y = (1.0f - changeLow.easeT) * changeLow.minPos + changeLow.easeT * changeLow.maxPos;
 			changeUp.CPos.y = (1.0f - changeUp.easeT) * changeUp.minPos + changeUp.easeT * changeUp.maxPos;
+
 			//最大で停止
 			if (changeUp.t >= 1.00f) {
 				changeUp.t = 1.0f;
@@ -394,9 +411,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					changeUp.timer = 10;//閉じてからタイマーの時間分停止
 				}
 			}
+
 			if (changeLow.t >= 1.00f) {
 				changeLow.t = 1.0f;
 				changeLow.timer -= 1;
+
 				if (changeLow.timer == 0) {
 					changeLow.dir *= -1;
 					changeLow.timer = 10;//閉じてからタイマーの時間分停止
@@ -405,29 +424,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (SceneNo == 0) {
 					scene = TITLE;
 				}
+
 				if (SceneNo == 1) {
 					scene = SELECT;
 				}
+
 				if (SceneNo == 2) {
 					scene = GAME;
 				}
+
 				if (SceneNo == 3) {
 					scene = GAMEOVER;
 				}
+
 				if (SceneNo == 4) {
 					scene = GAMECLEAR;
 				}
+
 				if (SceneNo == 5) {
 					return 0;
 				}
+
 				isReset = true;//ここでリセット
 				//ここまで
 			}
+
 			//最小で停止
 			if (changeUp.t <= 0.00f) {
 				changeUp.t = 0.0f;
 				changeUp.dir *= -1;
 			}
+
 			if (changeLow.t <= 0.00f) {
 				changeLow.t = 0.0f;
 				changeLow.dir *= -1;
