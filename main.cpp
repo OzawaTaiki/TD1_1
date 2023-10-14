@@ -126,6 +126,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	Score score;//スコア表示
+
+	score.numberGH[0] = Novice::LoadTexture("./Resources/images/0.png");
+	score.numberGH[1] = Novice::LoadTexture("./Resources/images/1.png");
+	score.numberGH[2] = Novice::LoadTexture("./Resources/images/2.png");
+	score.numberGH[3] = Novice::LoadTexture("./Resources/images/3.png");
+	score.numberGH[4] = Novice::LoadTexture("./Resources/images/4.png");
+	score.numberGH[5] = Novice::LoadTexture("./Resources/images/5.png");
+	score.numberGH[6] = Novice::LoadTexture("./Resources/images/6.png");
+	score.numberGH[7] = Novice::LoadTexture("./Resources/images/7.png");
+	score.numberGH[8] = Novice::LoadTexture("./Resources/images/8.png");
+	score.numberGH[9] = Novice::LoadTexture("./Resources/images/9.png");
+
 	bool isReset = false;//リセットフラグ
 
 	/*--------------------------------------------------------------------*/
@@ -512,15 +524,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
 
 			PLYR.debugPrint();
-
-#pragma endregion
 			score.DrawTimer();
+#pragma endregion
+
 			break;
 		case GAMEOVER:
 			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x006600FF, kFillModeSolid);
 			break;
 		case GAMECLEAR:
 			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+			score.DrawResultTimer();
+			score.DrawTimer();
 			break;
 		}
 		//シーンチェンジの上
