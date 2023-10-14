@@ -21,7 +21,9 @@ public:
 
 	int stunTimer;
 	int blastTimer;
+	int shakeTimer;
 	int blastCountDwon;
+	int blastDistance;
 
 	Vector2 MoveDir;
 
@@ -60,7 +62,9 @@ public:
 
 		stunTimer = 120;
 		blastTimer = 120;
+		shakeTimer = 15;
 		blastCountDwon = 30;
+		blastDistance = 0;
 
 	};
 

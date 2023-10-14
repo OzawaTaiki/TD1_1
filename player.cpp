@@ -200,7 +200,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				pos.x = a * maptchipSize + size.x;
 				if (isJump)
 				{
-					if (velocity.y > 10) {
+					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
 						isShake = true;
 					} else {
 						isShake = false;
@@ -231,7 +231,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				if (isJump)
 				{
 
-					if (velocity.y > 10) {
+					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
 						isShake = true;
 					} else {
 						isShake = false;
@@ -288,7 +288,18 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		}
 	}
 
-	if (isStun && stunTimer >= 0)// 敵スタンアイテムの時間制限処理
+	//画面揺れの時間制限処理
+	if (isShake) {
+		shakeTimer--;
+	}
+
+	if (shakeTimer <= 0) {
+		isShake = false;
+		shakeTimer = 15;
+	}
+
+	// 敵スタンアイテムの時間制限処理
+	if (isStun && stunTimer >= 0)
 	{
 		stunTimer--;
 	} else
@@ -297,16 +308,17 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		stunTimer = 120;
 	}
 
-
-	if (isBlasted && blastTimer >= 0)// 大砲の時間制限と移動処理
+	// 大砲の時間制限と移動処理
+	if (isBlasted && blastTimer >= 0 && blastDistance <= 1000)
 	{
 		blastCountDwon--;
 		isJump = true;
 
 		if (blastCountDwon <= 0) {
-			pos.x += 13.0f;
+			pos.x += 25.0f;
+			blastDistance += 25;
 			blastTimer--;
-			velocity.x = 3.0f;
+			velocity.x = 5.0f;
 		}
 
 	} else
@@ -314,6 +326,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		isBlasted = false;
 		blastTimer = 120;
 		blastCountDwon = 30;
+		blastDistance = 0;
 	}
 }
 
