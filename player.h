@@ -15,15 +15,21 @@ public:
 	bool isAlive;
 	bool isGoal;
 
+	int lives;
+
 	bool isStun;
 	bool isShake;
 	bool isBlasted;
+	bool isHitStop;
 
 	int stunTimer;
 	int blastTimer;
 	int shakeTimer;
+	int respawnTimer;
+
 	int blastCountDwon;
 	int blastDistance;
+	float hitStopTimer;
 
 	Vector2 MoveDir;
 
@@ -31,6 +37,7 @@ public:
 	float addT;
 	float maxVelocity;
 	float minVelocity;
+	float hitStopVelocity;
 
 	float dir = 1;
 
@@ -42,6 +49,9 @@ public:
 		size = { 16,16 };
 		acceleration = { 0.00f,0.5f };
 		velocity = { 0,0 };
+
+		lives = 3;
+
 		isJump = false;
 		isAlive = true;
 		isGoal = false;
@@ -53,6 +63,8 @@ public:
 		addT = 0.02f;
 		maxVelocity = 30.0f;
 		minVelocity = 1.0f;
+		hitStopTimer = 5;
+		hitStopVelocity = 1.0f;
 
 		boundCount = 0;
 		isStun = false;
@@ -63,6 +75,8 @@ public:
 		stunTimer = 120;
 		blastTimer = 120;
 		shakeTimer = 15;
+		respawnTimer = 120;
+
 		blastCountDwon = 30;
 		blastDistance = 0;
 
@@ -82,7 +96,7 @@ public:
 
 	void antiMove();
 
-	void Respawn();
+	void Respawn(bool& isHit, Vector2& enemyPos);
 
 	void gaugeControl();
 

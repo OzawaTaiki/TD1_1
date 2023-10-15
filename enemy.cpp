@@ -1,9 +1,6 @@
 ﻿#include "enemy.h"
 
-void ENEMY::draw(const Vector2& scroll)
-{
-	Novice::ScreenPrintf(0, 600, "%.1f,%.1f", pos.x, pos.y);
-
+void ENEMY::draw(const Vector2& scroll){
 	Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
 }
 
@@ -17,7 +14,7 @@ Vector2 ENEMY::getSize()
 	return size;
 }
 
-void ENEMY::Move(const Vector2& playerPos, bool isStun)
+void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 {
 	//敵の移動角度の計算
 	float moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
@@ -30,13 +27,13 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun)
 	pos.y -= mSin * speed;*/
 
 	//敵の移動
-	if (!isStun) {
+	if (!isStun && !isHitStop) {
 		pos.x -= float(moveDirX) * speed;
 		pos.y -= float(moveDirY) * speed;
 
 		color = 0x00ff00ff;
 	}
-	else {
+	else if (isStun) {
 		color = 0xf03c3cff;
 	}
 
@@ -60,9 +57,24 @@ void ENEMY::timeSlow(bool isJump)
 		speed = 5.0f;
 		slowTimer = 120;
 	}
+}
+void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
+	float distance = 0.0f;
+	distance = sqrtf((playerPos.x - pos.x) * (playerPos.x - pos.x) + (playerPos.y - pos.y) * (playerPos.y - pos.y));
+	if (distance <= size.x + playerSize.x) {
+		isHit = true;
+		isPopEffect = true;
+	} else {
+		isHit = false;
+	}
+	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 
-
-	Novice::ScreenPrintf(600, 0, "slowTimer = %d", slowTimer);
+}
+void ENEMY::Respawn(bool& playerIsAlive) {
+	if (!playerIsAlive) {
+		pos.x = -200;
+		pos.y = 3000;
+	}
 }
 
 

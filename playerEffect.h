@@ -18,6 +18,6 @@ class playerEffect {
 
 	public:
 	
-	void Move(const bool& isJump, const Vector2& playerCPos);
+	void Move(const bool& isJump,const bool& isAlive, const Vector2& playerCPos);
 	void Draw(const Vector2& scroll);
 };

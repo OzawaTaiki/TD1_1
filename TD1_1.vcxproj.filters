@@ -62,6 +62,12 @@
     <ClCompile Include="vector2Util.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="playerEffct.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyHitEffect.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -149,5 +155,7 @@
     <ClInclude Include="TitleJumpDirection.h" />
     <ClInclude Include="vector2Util.h" />
     <ClInclude Include="GameClearEffect.h" />
+    <ClInclude Include="playerEffect.h" />
+    <ClInclude Include="enemyHitEffect.h" />
   </ItemGroup>
 </Project>
