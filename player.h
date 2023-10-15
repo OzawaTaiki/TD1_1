@@ -17,8 +17,13 @@ public:
 
 	bool isStun;
 	bool isShake;
+	bool isBlasted;
 
 	int stunTimer;
+	int blastTimer;
+	int shakeTimer;
+	int blastCountDwon;
+	int blastDistance;
 
 	Vector2 MoveDir;
 
@@ -40,7 +45,7 @@ public:
 		isJump = false;
 		isAlive = true;
 		isGoal = false;
-		
+
 
 		MoveDir = { 1,0 };
 
@@ -52,12 +57,18 @@ public:
 		boundCount = 0;
 		isStun = false;
 		isShake = false;
+		isBlasted = false;
+
 
 		stunTimer = 120;
+		blastTimer = 120;
+		shakeTimer = 15;
+		blastCountDwon = 30;
+		blastDistance = 0;
 
 	};
 
-	void draw(const Vector2 &scroll);
+	void draw(const Vector2& scroll);
 
 	Vector2 getPos();
 
@@ -75,7 +86,7 @@ public:
 
 	void gaugeControl();
 
-	void jump(const Vector2 &kJumpVect);
+	void jump(const Vector2& kJumpVect);
 
 	void dirUpdate();
 

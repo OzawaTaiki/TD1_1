@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <Vector2.h>
+#include <time.h>
 
 #include "stage.h"
 #include "player.h"
@@ -18,6 +19,7 @@
 
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
+#include "GameClearEffect.h"
 
 const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
 
@@ -30,6 +32,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
+	unsigned int currentTime = static_cast<int>(time(nullptr));
+	srand(currentTime);
 
 	/*シーンの変数*/
 	/*--------------------------------------------------------------------*/
@@ -40,7 +44,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAMEOVER,
 		GAMECLEAR
 	};
-	SCENE scene = TITLE;
+	SCENE scene = GAME;
 	int SceneNo = 2;
 	bool isChangeScene = false;
 
@@ -137,6 +141,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	score.numberGH[7] = Novice::LoadTexture("./Resources/images/7.png");
 	score.numberGH[8] = Novice::LoadTexture("./Resources/images/8.png");
 	score.numberGH[9] = Novice::LoadTexture("./Resources/images/9.png");
+
+	score.rankGH[0] = Novice::LoadTexture("./Resources/images/RankS.png");
+	score.rankGH[1] = Novice::LoadTexture("./Resources/images/RankA.png");
+	score.rankGH[2] = Novice::LoadTexture("./Resources/images/RankB.png");
+	score.rankGH[3] = Novice::LoadTexture("./Resources/images/RankC.png");
+
+	const int PAPER_MAX = 64;
+	EffectPaper effectpaper[PAPER_MAX];
+
 
 	bool isReset = false;//リセットフラグ
 
@@ -345,7 +358,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			//プレイヤーの座標更新
 			PLYR.dirUpdate();
-			PLYR.Move();
+			if (!PLYR.isBlasted) {
+				PLYR.Move();	
+			} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				STAGE.blasterPosSet(PLYR.pos, PLYR.size);
+			}
 
 			//プレイヤーの衝突判定
 			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
@@ -378,6 +395,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			break;
 		case GAMECLEAR:
+
+			for (int i = 0; i < PAPER_MAX;i++) {
+				effectpaper[i].rotate();
+				effectpaper[i].Move();
+				VectorVertexS(effectpaper[i].vertex, effectpaper[i].CPos, effectpaper[i].size, effectpaper[i].size);
+			}
+
 			//時間に応じてスコアを表示
 			score.result();
 			SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
@@ -522,9 +546,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			GAUGE.draw(PLYR.getPressT());
 
 			JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
-
 			PLYR.debugPrint();
 			score.DrawTimer();
+
 #pragma endregion
 
 			break;
@@ -532,11 +556,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x006600FF, kFillModeSolid);
 			break;
 		case GAMECLEAR:
+
 			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
-			score.DrawResultTimer();
-			score.DrawTimer();
+			score.result();//rank表示
+			score.DrawResultTimer();//クリアタイム表示
+			for (int i = 0; i < PAPER_MAX; i++) {
+				effectpaper[i].DrawUpDate();
+			}
 			break;
 		}
+
+
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);
 		//シーンチェンジの下
