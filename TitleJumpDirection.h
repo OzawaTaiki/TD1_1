@@ -43,7 +43,7 @@ public:
 		isRelease = false;
 	};
 
-	void rotate(const Vector2& pos, float direction);
+	void rotate(const Vector2& pos, float direction, const bool& Reload);
 
 	Vector2 getNormalizeJumpVect();
 
