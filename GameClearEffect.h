@@ -29,11 +29,21 @@ Matrix2x2 MakeRotateMatrix(float theta) {
 	return rotateMatrix;
 }
 
+enum colorType{
+	REDCOLOR,
+	ORANGECOLOR,
+	YELLOWCOLOR,
+	GREENCOLOR,
+	WATERCOLOR,
+	PURPLECOLOR
+};
+
+
 struct EffectPaper {
 	float moveSpeed = static_cast<float>(rand() % 110 + 30) * 0.1f;
-	Vector2 CPos = { static_cast<float>(rand() % 1280),static_cast<float>(rand() % 300-500) };//static_cast<float>(rand() % 22-200)
+	Vector2 CPos = { static_cast<float>(rand() % 1280),static_cast<float>(rand() % 300 - 500) };//static_cast<float>(rand() % 22-200)
 	Vector2 vertex[4] = { 0 };
-	float size= static_cast<float>(rand() % 31 + 10); 
+	float size = static_cast<float>(rand() % 31 + 10);
 	float rotateTheta = 0;
 	float theta = (1.0f / static_cast<int>(rand() % 101 + 30) * float(M_PI));
 	Matrix2x2 rotateMatrix = MakeRotateMatrix(theta);
@@ -47,11 +57,11 @@ struct EffectPaper {
 	Vector2 rotateLeftBottom;
 	Vector2 rotateRightBottom;
 
-	int colorRandNum = rand() % 5;
-	unsigned int color =  0 ;
+	int colorRandNum = rand() % 6;
+	unsigned int color = 0;
 
 	int whiteGH = Novice::LoadTexture("./NoviceResources/white1x1.png");
-	
+
 	void rotate() {
 		rotateTheta += theta;
 
@@ -82,20 +92,37 @@ struct EffectPaper {
 			CPos.y = -100;
 			size = static_cast<float>(rand() % 51 + 10);
 			moveSpeed = static_cast<float>(rand() % 11 + 1);
-
+			Color();
 		};
 	};
 
 	void Color() {
-
-
+		if (colorRandNum == REDCOLOR) {
+			color = 0xAC3232FF;//赤
+		}
+		if (colorRandNum == ORANGECOLOR) {
+			color = 0xDF7126FF;//橙色
+		}
+		if (colorRandNum == YELLOWCOLOR) {
+			color = 0xDFD613FF;//黄色
+		}
+		if (colorRandNum == GREENCOLOR) {
+			color = 0x73C820FF;//緑
+		}
+		if (colorRandNum == WATERCOLOR) {
+			color = 0x5FCDE4FF;//水色
+		}
+		if (colorRandNum == PURPLECOLOR) {
+			color = 0xD55FE4FF;//紫色
+		}
+	
+		
 	}
-
 	void DrawUpDate() {
 		Novice::DrawQuad(static_cast<int>(rotateLeftTop.x), static_cast<int>(rotateLeftTop.y),
 			static_cast<int>(rotateRightTop.x), static_cast<int>(rotateRightTop.y),
 			static_cast<int>(rotateLeftBottom.x), static_cast<int>(rotateLeftBottom.y),
 			static_cast<int>(rotateRightBottom.x), static_cast<int>(rotateRightBottom.y),
-			0, 0, 1, 1, whiteGH, 0xFFFF00FF);
+			0, 0, 1, 1, whiteGH, color);
 	}
 };

@@ -36,22 +36,18 @@ struct Score {
 
 	void result() {
 		//ランクを出す
-		if (ClearTimerS <= 4) {
-			Novice::ScreenPrintf(640, 340, "S");//S
+		if (ClearTimerS <= 4) {//S
 			Novice::DrawSprite(static_cast<int>(resultRankCPos.x-rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[0], 1.5f, 1.5f, 0.0f, 0xFFFF00FF);
 		}
 		if (ClearTimerS > 4 &&
-			ClearTimerS <= 6) {
-			Novice::ScreenPrintf(640, 340, "A");//A
+			ClearTimerS <= 6) {//A
 			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[1], 1.5f, 1.5f, 0.0f, 0xFF0000FF);
 		}
 		if (ClearTimerS > 6 &&
-			ClearTimerS <= 10) {
-			Novice::ScreenPrintf(640, 340, "B");//B
+			ClearTimerS <= 10) {//B
 			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[2], 1.5f, 1.5f, 0.0f, 0x0000FFFF);
 		}
-		if (ClearTimerS > 10) {
-			Novice::ScreenPrintf(640, 340, "C");//C
+		if (ClearTimerS > 10) {//C
 			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[3], 1.5f, 1.5f, 0.0f, 0x00FF00FF);
 		}
 	}

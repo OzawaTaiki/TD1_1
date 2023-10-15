@@ -44,8 +44,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAMEOVER,
 		GAMECLEAR
 	};
-	SCENE scene = GAME;
-	int SceneNo = 2;
+	SCENE scene = SELECT;
+	int SceneNo = 0;
 	bool isChangeScene = false;
 
 	/*--------------------------------------------------------------------*/
@@ -332,85 +332,100 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 #pragma endregion
 		case GAME:
-
-			//プレイヤーのリスポーン
-			PLYR.Respawn();
-
-			if (PLYR.isGoal)
-			{
-				return 0;
-			}
-
-			if (keys[DIK_R])
-				PLYR.isAlive = false;
-
-			//プレイヤーの操作	
-			if (keys[DIK_SPACE])
-			{
-				JD.isPressFlag();
-				PLYR.gaugeControl();
-			}
-
-			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
-			{
-				JD.isReleaseFlag();
-				PLYR.jump(JD.getNormalizeJumpVect());
-			}
-			//プレイヤーの座標更新
-			PLYR.dirUpdate();
-			if (!PLYR.isBlasted) {
-				PLYR.Move();	
-			} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
-				STAGE.blasterPosSet(PLYR.pos, PLYR.size);
-			}
-
-			//プレイヤーの衝突判定
-			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
-
-			ENEMY.Move(PLYR.pos, PLYR.isStun);
-			ENEMY.timeSlow(PLYR.isJump);
-
-			SCROLL.update(PLYR.getPos(), PLYR.isShake);
-			JD.ButtonFlagReset(PLYR.isJump);
-
-			//リザルトの時間測定する
-			score.TimeCount();
-			//仮置き、ゲームオーバー
-			if (keys[DIK_3] && !preKeys[DIK_3]) {
-				SceneNo = 3;
-				isChangeScene = true;
-			}
-			//仮置きゲームクリア
-			if (keys[DIK_4] && !preKeys[DIK_4]) {
-				SceneNo = 4;
-				isChangeScene = true;
-			}
-			break;
-#pragma endregion
 		case GAMEOVER:
-			//セレクト画面へ戻る
-			if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-				SceneNo = 1;
-				isChangeScene = true;
-			}
-			break;
 		case GAMECLEAR:
+#pragma region"ゲームの更新処理"
+			if (scene == GAME) {
+				//プレイヤーのリスポーン
+				PLYR.Respawn();
 
-			for (int i = 0; i < PAPER_MAX;i++) {
-				effectpaper[i].rotate();
-				effectpaper[i].Move();
-				VectorVertexS(effectpaper[i].vertex, effectpaper[i].CPos, effectpaper[i].size, effectpaper[i].size);
+				if (PLYR.isGoal)
+				{
+					return 0;
+				}
+
+				if (keys[DIK_R])
+					PLYR.isAlive = false;
+
+				//プレイヤーの操作	
+				if (keys[DIK_SPACE])
+				{
+					JD.isPressFlag();
+					PLYR.gaugeControl();
+				}
+
+				if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
+				{
+					JD.isReleaseFlag();
+					PLYR.jump(JD.getNormalizeJumpVect());
+				}
+				//プレイヤーの座標更新
+				PLYR.dirUpdate();
+				if (!PLYR.isBlasted) {
+					PLYR.Move();
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+					STAGE.blasterPosSet(PLYR.pos, PLYR.size);
+				}
+
+				//プレイヤーの衝突判定
+				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
+
+				ENEMY.Move(PLYR.pos, PLYR.isStun);
+				ENEMY.timeSlow(PLYR.isJump);
+
+				SCROLL.update(PLYR.getPos(), PLYR.isShake);
+				JD.ButtonFlagReset(PLYR.isJump);
+				if (scene == GAME) {
+					//リザルトの時間測定する
+					score.TimeCount();
+					//仮置き、ゲームオーバー
+					if (keys[DIK_3] && !preKeys[DIK_3]) {
+						SceneNo = 3;
+						isChangeScene = true;
+					}
+					//仮置きゲームクリア
+					if (keys[DIK_4] && !preKeys[DIK_4]) {
+						SceneNo = 4;
+						isChangeScene = true;
+					}
+				}
 			}
+#pragma endregion
 
-			//時間に応じてスコアを表示
-			score.result();
-			SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
-			if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-				SceneNo = 1;
-				isChangeScene = true;
+#pragma region"ゲームオーバーの更新処理"
+
+			if (scene == GAMEOVER) {
+				//セレクト画面へ戻る
+				if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+					SceneNo = 1;
+					isChangeScene = true;
+				}
+			}
+#pragma endregion
+
+#pragma region"ゲームクリアの更新処理"
+
+			if (scene == GAMECLEAR) {
+				for (int i = 0; i < PAPER_MAX; i++) {
+					effectpaper[i].rotate();
+					effectpaper[i].Move();
+					VectorVertexS(effectpaper[i].vertex, effectpaper[i].CPos, effectpaper[i].size, effectpaper[i].size);
+					effectpaper[i].Color();
+				}
+
+				//時間に応じてスコアを表示
+				score.result();
+				SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
+				if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+					SceneNo = 1;
+					isChangeScene = true;
+				}
 			}
 			break;
 		}
+#pragma endregion
+
+
 		//シーン切り替えしたときの処理
 #pragma region"シーン切り替え"
 //フラグが立つとイージング開始
@@ -539,32 +554,41 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 			break;
 		case GAME:
+		case GAMEOVER:
+		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
 			STAGE.draw(SCROLL.getScroll());
-			ENEMY.draw(SCROLL.getScroll());
-			PLYR.draw(SCROLL.getScroll());
-			GAUGE.draw(PLYR.getPressT());
+			if (scene == GAME) {
+				ENEMY.draw(SCROLL.getScroll());
+				PLYR.draw(SCROLL.getScroll());
+				GAUGE.draw(PLYR.getPressT());
 
-			JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
-			PLYR.debugPrint();
-			score.DrawTimer();
-
+				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
+				PLYR.debugPrint();
+				score.DrawTimer();
+			}
 #pragma endregion
 
-			break;
-		case GAMEOVER:
-			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x006600FF, kFillModeSolid);
-			break;
-		case GAMECLEAR:
+#pragma region"ゲームオーバーの描画処理"
+			if (scene == GAMEOVER) {
+				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x660000EE, kFillModeSolid);
+				Novice::ScreenPrintf(640, 360, "GAMEOVER");
+			}
+#pragma endregion
 
-			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
-			score.result();//rank表示
-			score.DrawResultTimer();//クリアタイム表示
-			for (int i = 0; i < PAPER_MAX; i++) {
-				effectpaper[i].DrawUpDate();
+#pragma region"ゲームクリアの描画処理"
+
+			if (scene == GAMECLEAR) {
+				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000EE, kFillModeSolid);
+				score.result();//rank表示
+				score.DrawResultTimer();//クリアタイム表示
+				for (int i = 0; i < PAPER_MAX; i++) {
+					effectpaper[i].DrawUpDate();
+				}
 			}
 			break;
 		}
+#pragma endregion
 
 
 		//シーンチェンジの上
