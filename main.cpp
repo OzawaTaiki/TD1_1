@@ -22,6 +22,7 @@
 
 
 #include "GameClearEffect.h"
+#include "playerEffect.h"
 
 const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
 
@@ -63,6 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	jumpDirection JD;
 
+	playerEffect PEffect;
 
 	TjumpDirection TitleJD;
 	TjumpDirection SelectJD;
@@ -162,7 +164,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	//ステージのロード
-	STAGE.loadStage(1);
+	STAGE.loadStage(0);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -367,6 +369,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				//プレイヤーの座標更新
 				PLYR.dirUpdate();
+
 				if (!PLYR.isBlasted) {
 					PLYR.Move();
 				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
@@ -375,12 +378,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//プレイヤーの衝突判定
 				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
-
+				PEffect.Move(PLYR.isJump, PLYR.pos);
 				ENEMY.Move(PLYR.pos, PLYR.isStun);
 				ENEMY.timeSlow(PLYR.isJump);
 
 				SCROLL.update(PLYR.getPos(), PLYR.isShake);
 				JD.ButtonFlagReset(PLYR.isJump);
+
+
+
 				if (scene == GAME) {
 					//リザルトの時間測定する
 					score.TimeCount();
@@ -549,7 +555,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < TITLEBOX_MAX; i++) {
 				TitleBox[i].DrawUpDate();
 			}
-			TitleJD.rotate(TPlayer.CPos, TPlayer.dir);
+			TitleJD.rotate(TPlayer.CPos, TPlayer.dir,TPlayer.isReload);
 			TPlayer.draw();
 			TitleRogo.DrawUpDate();
 #pragma endregion
@@ -559,7 +565,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				SelectBox[i].DrawUpDate();
 			}
-			SelectJD.rotate(SPlayer.CPos, SPlayer.dir);
+			SelectJD.rotate(SPlayer.CPos, SPlayer.dir,SPlayer.isReload);
 			SelectRogo.DrawUpDate();
 			SPlayer.draw();
 #pragma endregion
@@ -577,6 +583,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
 				PLYR.debugPrint();
 				score.DrawTimer();
+				PEffect.Draw(SCROLL.getScroll());
 			}
 #pragma endregion
 

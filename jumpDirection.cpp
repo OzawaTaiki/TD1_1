@@ -25,10 +25,9 @@ void jumpDirection::rotate(const Vector2& pos, float direction, const Vector2& s
 			Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - scroll.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y - scroll.y), 3, 3, 0, 0xdd5050ff, kFillModeSolid);
 		}
 	}
-
 	Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
-
 }
+
 
 Vector2 jumpDirection::getNormalizeJumpVect()
 {
