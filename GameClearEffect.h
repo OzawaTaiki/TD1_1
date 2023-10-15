@@ -84,7 +84,6 @@ struct EffectPaper {
 	};
 
 	void Move() {
-
 		CPos.y += moveSpeed;
 
 		if (CPos.y >= 1380) {

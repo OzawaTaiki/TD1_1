@@ -19,6 +19,8 @@
 
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
+
+
 #include "GameClearEffect.h"
 
 const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
@@ -32,8 +34,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
+	/*乱数生成*/
 	unsigned int currentTime = static_cast<int>(time(nullptr));
 	srand(currentTime);
+
+#pragma region"変数"
 
 	/*シーンの変数*/
 	/*--------------------------------------------------------------------*/
@@ -154,6 +159,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool isReset = false;//リセットフラグ
 
 	/*--------------------------------------------------------------------*/
+#pragma endregion
 
 	//ステージのロード
 	STAGE.loadStage(1);
@@ -180,7 +186,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//押すとその方向へ飛んでいく
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				TitleJD.isReleaseFlag();
-				TPlayer.jump(TitleJD.getNormalizeJumpVect(),isChangeScene);
+				TPlayer.jump(TitleJD.getNormalizeJumpVect(), isChangeScene);
 			}
 
 			TPlayer.Move();
