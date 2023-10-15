@@ -148,5 +148,6 @@
     <ClInclude Include="TitleBox.h" />
     <ClInclude Include="TitleJumpDirection.h" />
     <ClInclude Include="vector2Util.h" />
+    <ClInclude Include="GameClearEffect.h" />
   </ItemGroup>
 </Project>

@@ -155,6 +155,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="GameClearEffect.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="jumpDirection.h" />
     <ClInclude Include="player.h" />

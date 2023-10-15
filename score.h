@@ -14,8 +14,11 @@ struct Score {
 
 	int eachNumber[8];
 	Vector2 numberPos[8] = { 0,0 };
+	Vector2 resultRankCPos = { 640,400 };
+	int rankSize = 225;
 	/*画像の読み込み*/
 	int numberGH[10] = { 0 };
+	int rankGH[4] = { 0 };
 	int tentenGH = Novice::LoadTexture("./Resources/images/tenten.png");
 
 	void TimeCount() {
@@ -35,17 +38,21 @@ struct Score {
 		//ランクを出す
 		if (ClearTimerS <= 4) {
 			Novice::ScreenPrintf(640, 340, "S");//S
+			Novice::DrawSprite(static_cast<int>(resultRankCPos.x-rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[0], 1.5f, 1.5f, 0.0f, 0xFFFF00FF);
 		}
 		if (ClearTimerS > 4 &&
 			ClearTimerS <= 6) {
 			Novice::ScreenPrintf(640, 340, "A");//A
+			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[1], 1.5f, 1.5f, 0.0f, 0xFF0000FF);
 		}
 		if (ClearTimerS > 6 &&
 			ClearTimerS <= 10) {
 			Novice::ScreenPrintf(640, 340, "B");//B
+			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[2], 1.5f, 1.5f, 0.0f, 0x0000FFFF);
 		}
 		if (ClearTimerS > 10) {
 			Novice::ScreenPrintf(640, 340, "C");//C
+			Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[3], 1.5f, 1.5f, 0.0f, 0x00FF00FF);
 		}
 	}
 
@@ -81,7 +88,7 @@ struct Score {
 
 		for (int i = 0; i < 8; i++) {
 			numberPos[i].x = 356.0f + (static_cast<int>(i) * 71);
-			numberPos[i].y = 150.0f;
+			numberPos[i].y = 100.0f;
 			if (i != 2 && i != 5) {
 				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1, 1, 0.0f, 0xFFFFFFFF);
 			} else {
