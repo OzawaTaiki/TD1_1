@@ -37,7 +37,6 @@ void PLAYER::Move()
 		velocity.x -= acceleration.x * MoveDir.x;
 		//if (absVeloY > 0.5f)
 		velocity.y += acceleration.y;
-
 	} else
 	{
 		velocity.y += acceleration.y;
@@ -51,8 +50,8 @@ void PLAYER::Move()
 		velocity = { 0,0 };
 	}
 
-	pos.x += velocity.x;
-	pos.y += velocity.y;
+	pos.x += velocity.x * hitStopVelocity;
+	pos.y += velocity.y * hitStopVelocity;
 
 }
 
@@ -62,15 +61,28 @@ void PLAYER::antiMove()
 	pos.y -= velocity.y;
 }
 
-void PLAYER::Respawn()
+void PLAYER::Respawn(bool& isHit ,Vector2& enemyPos)
 {
-	if (!isAlive)
+	if (isHit && lives > 0)
 	{
-		isAlive = true;
-		pos = { 300.0f,1500.0f };
-		velocity = { 0,0 };
-		MoveDir = { 0,0 };
+		isAlive = false;
+
+		if (!isAlive) {
+			respawnTimer--;
+		}
+
+		if(respawnTimer <= 0 && lives > 0){
+			isAlive = true;
+			lives -= 1;
+			pos = { 300.0f,1500.0f };
+			enemyPos = { -100.0f,1500.0f };
+			velocity = { 0,0 };
+			MoveDir = { 0,0 };
+			respawnTimer = 120;
+		}
+
 	}
+	Novice::ScreenPrintf(1000, 0, "lives = %d", lives);
 }
 
 void PLAYER::gaugeControl()
@@ -202,8 +214,12 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				{
 					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
 						isShake = true;
+						isHitStop = true;
+						hitStopVelocity = 0.0f;
 					} else {
 						isShake = false;
+						isHitStop = false;
+						hitStopVelocity = 1.0f;
 					}
 
 					switch (localHit[i])
@@ -212,14 +228,20 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						velocity.x *= -0.3f;
 						break;
 					case 11:
-						velocity.x *= -1.1f;
-						velocity.y *= 1.1f;
+						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
+							velocity.x *= -1.1f;
+							velocity.y *= 1.1f;
+						} else {
+							velocity.x *= -1.0f;
+						}
 						break;
 					default:
 						break;
 					}
 				} else {
 					isShake = false;
+					isHitStop = false;
+					hitStopVelocity = 1.0f;
 				}
 				break;
 			}
@@ -231,10 +253,14 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				if (isJump)
 				{
 
-					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
+					if (abs(int(velocity.y)) >= 16) {
 						isShake = true;
+						isHitStop = true;
+						hitStopVelocity = 0.0f;
 					} else {
 						isShake = false;
+						isHitStop = false;
+						hitStopVelocity = 1.0f;
 					}
 
 					switch (localHit[i])
@@ -244,7 +270,9 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 
 						if (i == 4)
 						{
-							boundCount++;
+							if (!isHitStop) {
+								boundCount++;
+							}
 
 							if (boundCount > 2)
 							{
@@ -255,8 +283,12 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						}
 						break;
 					case 11:
-						velocity.x *= 1.1f;
-						velocity.y *= -1.1f;
+						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
+							velocity.x *= 1.1f;
+							velocity.y *= -1.1f;
+						} else {
+							velocity.y *= -1.0f;
+						}
 						break;
 					}
 				} else
@@ -264,6 +296,8 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 					antiMove();
 					velocity.y = 0;
 					isShake = false;
+					isHitStop = false;
+					hitStopVelocity = 1.0f;
 				}
 
 				break;
@@ -288,6 +322,17 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		}
 	}
 
+	if (isHitStop)
+	{
+		hitStopTimer--;
+	}
+
+	if (hitStopTimer <= 0)
+	{
+		isHitStop = false;
+		hitStopVelocity = 1.0f;
+		hitStopTimer = 5;
+	}
 	//画面揺れの時間制限処理
 	if (isShake) {
 		shakeTimer--;
@@ -315,7 +360,12 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		isJump = true;
 
 		if (blastCountDwon <= 0) {
-			pos.x += 25.0f;
+			if (dir >= 1) {
+				pos.x += 25.0f;
+			} else if (dir < 1) {
+				pos.x -= 25.0f;
+			}
+
 			blastDistance += 25;
 			blastTimer--;
 			velocity.x = 5.0f;
@@ -328,6 +378,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		blastCountDwon = 30;
 		blastDistance = 0;
 	}
+
 }
 
 void PLAYER::debugPrint()

@@ -311,7 +311,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAME:
 
 			//プレイヤーのリスポーン
-			PLYR.Respawn();
+			PLYR.Respawn(ENEMY.isHit,ENEMY.pos);
 
 			if (PLYR.isGoal)
 			{
@@ -338,7 +338,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.dirUpdate();
 
 			if (!PLYR.isBlasted) {
-				PLYR.Move();
+				if (PLYR.respawnTimer >= 120) {
+					PLYR.Move();
+				}
 			} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 				STAGE.blasterPosSet(PLYR.pos, PLYR.size);
 			}
@@ -346,8 +348,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//プレイヤーの衝突判定
 			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
 
-			ENEMY.Move(PLYR.pos, PLYR.isStun);
+			//敵の移動処理
+			if (PLYR.respawnTimer >= 120) {
+				ENEMY.Move(PLYR.pos, PLYR.isStun, PLYR.isHitStop);
+			}
+
 			ENEMY.timeSlow(PLYR.isJump);
+
+			ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
 
 			SCROLL.update(PLYR.getPos(), PLYR.isShake);
 			JD.ButtonFlagReset(PLYR.isJump);

@@ -57,16 +57,8 @@ void STAGE::draw(const Vector2& scroll)
 }
 
 void STAGE::blasterPosSet(Vector2& pos, Vector2& size) {
-	for (int i = 0; i < kStageSizeY; i++)
-	{
-		for (int j = 0; j < kStageSizeX; j++)
-		{
-			if (field[i][j] == 22) { //大砲
-				pos.x = float(mapchipsize * j + size.x);
-				pos.y = float(mapchipsize * i + size.y);
-			}
-		}
-	}
+		pos.x = float(mapchipsize * blasterMapNum.x + size.x);
+		pos.y = float(mapchipsize * blasterMapNum.y + size.y);
 }
 
 int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
@@ -94,6 +86,11 @@ int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
 		//アイテム撮ったとき消す
 		if (field[y][x] == 20 || field[y][x] == 21) {
 			field[y][x] = 0;
+		}
+
+		if (field[y][x] == 22) {
+			blasterMapNum.x = float(x);
+			blasterMapNum.y = float(y);
 		}
 	}
 

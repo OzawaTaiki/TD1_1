@@ -5,6 +5,8 @@
 
 class ENEMY {
 
+public:
+
 	Vector2 pos;
 	Vector2 size;
 
@@ -13,10 +15,9 @@ class ENEMY {
 
 	bool isMove;
 	bool isSlow;
+	bool isHit;
+
 	int color = 0xf03c3cff;
-
-
-public:
 
 	ENEMY()
 	{
@@ -28,6 +29,7 @@ public:
 
 		isMove = false;
 		isSlow = true;
+		isHit = false;
 
 	};
 
@@ -37,8 +39,12 @@ public:
 
 	Vector2 getSize();
 
-	void Move(const Vector2& playerPos,bool isStun);
+	void Move(const Vector2& playerPos,bool isStun, bool isHitStop);
 
 	void timeSlow(bool isJump);
+
+	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
+
+	void Respawn(bool& playerIsAlive);
 
 };

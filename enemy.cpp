@@ -17,7 +17,7 @@ Vector2 ENEMY::getSize()
 	return size;
 }
 
-void ENEMY::Move(const Vector2& playerPos, bool isStun)
+void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 {
 	//敵の移動角度の計算
 	float moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
@@ -30,13 +30,13 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun)
 	pos.y -= mSin * speed;*/
 
 	//敵の移動
-	if (!isStun) {
+	if (!isStun && !isHitStop) {
 		pos.x -= float(moveDirX) * speed;
 		pos.y -= float(moveDirY) * speed;
 
 		color = 0x00ff00ff;
 	}
-	else {
+	else if (isStun) {
 		color = 0xf03c3cff;
 	}
 
@@ -63,6 +63,28 @@ void ENEMY::timeSlow(bool isJump)
 
 
 	Novice::ScreenPrintf(600, 0, "slowTimer = %d", slowTimer);
+}
+
+void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
+	float distance = 0.0f;
+
+	distance = sqrtf((playerPos.x - pos.x) * (playerPos.x - pos.x) + (playerPos.y - pos.y) * (playerPos.y - pos.y));
+
+	if(distance <= size.x + playerSize.x) {
+		isHit = true;
+	}
+	else {
+		isHit = false;
+	}
+
+	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
+}
+
+void ENEMY::Respawn(bool& playerIsAlive) {
+	if (!playerIsAlive) {
+		pos.x = -100;
+		pos.y = 1500;
+	}
 }
 
 
