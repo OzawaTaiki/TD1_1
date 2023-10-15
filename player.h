@@ -38,7 +38,7 @@ public:
 
 	PLAYER()
 	{
-		pos = { 300.0f,1500.0f };
+		pos = { 300.0f,3000.0f };
 		size = { 16,16 };
 		acceleration = { 0.00f,0.5f };
 		velocity = { 0,0 };

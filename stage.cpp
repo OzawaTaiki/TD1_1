@@ -1,4 +1,7 @@
-﻿#include "stage.h"
+﻿#include"stage.h"
+#include <stdio.h>
+
+
 
 int STAGE::getmapChipsize()
 {
@@ -7,24 +10,25 @@ int STAGE::getmapChipsize()
 
 void STAGE::loadStage(int stageNum)
 {
-	stageNum = 0;
+	loadStageNum = stageNum;
 
-	for (int i = 0; i < kStageSizeY; i++)
+	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{
-		for (int j = 0; j < kStageSizeX; j++)
+		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
-			field[i][j] = stage[i][j];
+			field[i][j] = stage[loadStageNum][i][j];
 		}
 	}
+
 }
 
 void STAGE::draw(const Vector2& scroll)
 {
 	//Novice::DrawSprite(int(mapchipsize), int(mapchipsize), GH, 32.0f, 32.0f, 0, BLACK);
 
-	for (int i = 0; i < kStageSizeY; i++)
+	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{
-		for (int j = 0; j < kStageSizeX; j++)
+		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
 			if (field[i][j] < 10 && field[i][j] != 3)//空気
 			{
@@ -40,6 +44,8 @@ void STAGE::draw(const Vector2& scroll)
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j] - 10]);
 			} else if (field[i][j] < 30)//アイテム
 			{
+				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]]);
+
 				if (field[i][j] == 20)//加速アイテム
 					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), 20, 20, 0.0f, BLUE, kFillModeSolid);
 
@@ -48,20 +54,19 @@ void STAGE::draw(const Vector2& scroll)
 
 				if (field[i][j] == 22)//大砲
 					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), 20, 20, 0.0f, BLACK, kFillModeSolid);
-
-
-				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]]);
 			}
 		}
 	}
 }
 
-void STAGE::blasterPosSet(Vector2& pos, Vector2& size) {
-	for (int i = 0; i < kStageSizeY; i++)
+void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
+{
+	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{
-		for (int j = 0; j < kStageSizeX; j++)
+		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
-			if (field[i][j] == 22) { //大砲
+			if (field[i][j] == 22)
+			{ //大砲
 				pos.x = float(mapchipsize * j + size.x);
 				pos.y = float(mapchipsize * i + size.y);
 			}
@@ -95,6 +100,7 @@ int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
 		if (field[y][x] == 20 || field[y][x] == 21) {
 			field[y][x] = 0;
 		}
+
 	}
 
 	return returnHitArr;
