@@ -25,11 +25,13 @@ struct TitlePlayer {
 		color = playerColor;
 	}
 
-	void jump(const Vector2& kJumpVect) {
-		if (!isJump) {
-			vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
+	void jump(const Vector2& kJumpVect,bool isSceneChange) {
+		if (!isSceneChange) {
+			if (!isJump) {
+				vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
 
-			isJump = true;
+				isJump = true;
+			}
 		}
 	}
 

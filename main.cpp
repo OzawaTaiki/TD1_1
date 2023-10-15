@@ -180,7 +180,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//押すとその方向へ飛んでいく
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				TitleJD.isReleaseFlag();
-				TPlayer.jump(TitleJD.getNormalizeJumpVect());
+				TPlayer.jump(TitleJD.getNormalizeJumpVect(),isChangeScene);
 			}
 
 			TPlayer.Move();
@@ -231,7 +231,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//選択画面の自機ジャンプ
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SelectJD.isReleaseFlag();
-				SPlayer.jump(SelectJD.getNormalizeJumpVect());
+				SPlayer.jump(SelectJD.getNormalizeJumpVect(), isChangeScene);
 			}
 			//選択画面での自機の移動処理
 			SPlayer.Move();
@@ -396,9 +396,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (scene == GAMEOVER) {
 				//セレクト画面へ戻る
-				if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-					SceneNo = 1;
-					isChangeScene = true;
+				if (!isChangeScene) {
+					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+						SceneNo = 1;
+						isChangeScene = true;
+					}
 				}
 			}
 #pragma endregion
@@ -416,9 +418,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//時間に応じてスコアを表示
 				score.result();
 				SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
-				if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-					SceneNo = 1;
-					isChangeScene = true;
+
+				if (!isChangeScene) {
+					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+						SceneNo = 1;
+						isChangeScene = true;
+					}
 				}
 			}
 			break;
