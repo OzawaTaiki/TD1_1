@@ -61,7 +61,7 @@ void STAGE::blasterPosSet(Vector2& pos, Vector2& size) {
 		pos.y = float(mapchipsize * blasterMapNum.y + size.y);
 }
 
-int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
+int STAGE::collisionCheck(const Vector2& pos, const Vector2& size, const Vector2& velocity)
 {
 	unsigned int returnHitArr = 0;		//当たったブロック番号格納
 	int multiplyNum = 100000000;		//計算用
@@ -84,8 +84,15 @@ int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
 		multiplyNum /= 100;
 
 		//アイテム撮ったとき消す
-		if (field[y][x] == 20 || field[y][x] == 21) {
-			field[y][x] = 0;
+		if (field[y][x] >= 20 && field[y][x] < 30) {
+			isGetItem = true;
+			itemHitPoint = field[y][x] * multiplyNum;
+			itemHitSubNum = multiplyNum;
+			if (field[y][x] != 20 || field[y][x] != 21)
+			{
+				field[y][x] = velocity.x < 0 ? 0 : 1;
+			}
+
 		}
 
 		if (field[y][x] == 22) {

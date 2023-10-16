@@ -79,6 +79,11 @@ class STAGE {
 
 	Vector2 blasterMapNum = { 0,0 };
 
+	bool isGetItem = false;
+
+	int itemHitPoint = 0;
+	int itemHitSubNum = 0;
+
 
 public:
 
@@ -103,7 +108,7 @@ public:
 
 	void blasterPosSet(Vector2& pos, Vector2& size);
 
-	int collisionCheck(const Vector2& pos, const Vector2& size);
+	int collisionCheck(const Vector2& pos, const Vector2& size, const Vector2& velocity);
 
 
 };

@@ -348,7 +348,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			//プレイヤーの衝突判定
-			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
+			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size,PLYR.velocity), STAGE.getmapChipsize());
 
 			//敵の移動処理
 			if (PLYR.respawnTimer >= 120) {

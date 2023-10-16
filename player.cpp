@@ -237,6 +237,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 							velocity.y *= 1.1f;
 						} else {
 							velocity.x *= -1.0f;
+							velocity.y *= 1.0f;
 						}
 						break;
 					default:
@@ -291,6 +292,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 							velocity.x *= 1.1f;
 							velocity.y *= -1.1f;
 						} else {
+							velocity.x *= 1.0f;
 							velocity.y *= -1.0f;
 						}
 						break;
@@ -326,6 +328,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		}
 	}
 
+	//ヒットスットプの時間制限処理
 	if (isHitStop)
 	{
 		hitStopTimer--;
@@ -337,6 +340,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		hitStopVelocity = 1.0f;
 		hitStopTimer = 5;
 	}
+
 	//画面揺れの時間制限処理
 	if (isShake) {
 		shakeTimer--;
