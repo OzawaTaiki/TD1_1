@@ -20,7 +20,6 @@
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
 
-
 #include "GameClearEffect.h"
 #include "playerEffect.h"
 #include "enemyHitEffect.h"
