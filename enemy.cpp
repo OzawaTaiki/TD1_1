@@ -80,11 +80,5 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 }
 
-void ENEMY::Respawn(bool& playerIsAlive) {
-	if (!playerIsAlive) {
-		pos.x = -100;
-		pos.y = 1500;
-	}
-}
 
 

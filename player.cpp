@@ -66,6 +66,10 @@ void PLAYER::Respawn(bool& isHit ,Vector2& enemyPos)
 	if (isHit && lives > 0)
 	{
 		isAlive = false;
+		isBlasted = false;
+		blastTimer = 120;
+		blastCountDwon = 30;
+		blastDistance = 0;
 
 		if (!isAlive) {
 			respawnTimer--;
@@ -225,10 +229,10 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 					switch (localHit[i])
 					{
 					case 10:
-						velocity.x *= -0.3f;
+						velocity.x *= -0.6f;
 						break;
 					case 11:
-						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
+						if (abs(int(velocity.x)) < 30.0f && abs(int(velocity.y)) < 30.0f) {
 							velocity.x *= -1.1f;
 							velocity.y *= 1.1f;
 						} else {
@@ -283,7 +287,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						}
 						break;
 					case 11:
-						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
+						if (abs(int(velocity.x)) < 30.0f && abs(int(velocity.y)) < 30.0f) {
 							velocity.x *= 1.1f;
 							velocity.y *= -1.1f;
 						} else {

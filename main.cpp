@@ -318,8 +318,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				return 0;
 			}
 
-			if (keys[DIK_R])
-				PLYR.isAlive = false;
+			if (keys[DIK_R]) {
+				PLYR.pos.x = 300.0f;
+				PLYR.pos.y = 1500.0f;
+			}
 
 			//プレイヤーの操作	
 			if (keys[DIK_SPACE])
