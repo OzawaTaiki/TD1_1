@@ -387,7 +387,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				//プレイヤーの衝突判定
-				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
+				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size,PLYR.velocity), STAGE.getmapChipsize());
 				PEffect.Move(PLYR.isJump, PLYR.isAlive, PLYR.pos);
 
 				//敵の移動処理

@@ -39,7 +39,7 @@ public:
 
 	Vector2 getSize();
 
-	void Move(const Vector2& playerPos,bool isStun, bool isHitStop);
+	void Move(const Vector2& playerPos,bool isStun, bool isHitStop );
 
 	void timeSlow(bool isJump);
 
