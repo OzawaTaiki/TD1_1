@@ -88,11 +88,14 @@ int STAGE::collisionCheck(const Vector2& pos, const Vector2& size, const Vector2
 			isGetItem = true;
 			itemHitPoint = field[y][x] * multiplyNum;
 			itemHitSubNum = multiplyNum;
+
 			if (field[y][x] != 20 || field[y][x] != 21)
 			{
 				field[y][x] = velocity.x < 0 ? 0 : 1;
 			}
 
+		} else {
+			isGetItem = false;
 		}
 
 		if (field[y][x] == 22) {
