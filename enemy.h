@@ -4,7 +4,7 @@
 #include <Vector2Util.h>
 
 class ENEMY {
-
+public:
 	Vector2 pos;
 	Vector2 size;
 
@@ -13,14 +13,15 @@ class ENEMY {
 
 	bool isMove;
 	bool isSlow;
+	bool isHit;
+	bool isPopEffect;
+
 	int color = 0xf03c3cff;
 
 
-public:
-
 	ENEMY()
 	{
-		pos = { -100.0f,1500.0f };
+		pos = { -200.0f,3000.0f };
 		size = { 128,128 };
 
 		speed = 5.0f;
@@ -28,7 +29,8 @@ public:
 
 		isMove = false;
 		isSlow = true;
-
+		isHit = false;
+	isPopEffect = false;
 	};
 
 	void draw(const Vector2 &scroll);
@@ -37,8 +39,12 @@ public:
 
 	Vector2 getSize();
 
-	void Move(const Vector2& playerPos,bool isStun);
+	void Move(const Vector2& playerPos,bool isStun, bool isHitStop );
 
 	void timeSlow(bool isJump);
+
+	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
+
+	void Respawn(bool& playerIsAlive);
 
 };

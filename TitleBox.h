@@ -38,8 +38,8 @@ struct Box {
 	}
 
 	void DrawUpDate() {
-
 		if (isDraw) {
+
 			Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
 				Wsize, Hsize, 0.0f, color, kFillModeSolid);
 			/*

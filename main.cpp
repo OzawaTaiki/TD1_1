@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <Vector2.h>
+#include <time.h>
 
 #include "stage.h"
 #include "player.h"
@@ -19,7 +20,12 @@
 #include "jumpDirection.h"
 #include "TitleJumpDirection.h"
 
-const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_title";
+
+#include "GameClearEffect.h"
+#include "playerEffect.h"
+#include "enemyHitEffect.h"
+
+const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -30,6 +36,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
+	/*乱数生成*/
+	unsigned int currentTime = static_cast<int>(time(nullptr));
+	srand(currentTime);
+
+#pragma region"変数"
 
 	/*シーンの変数*/
 	/*--------------------------------------------------------------------*/
@@ -40,9 +51,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAMEOVER,
 		GAMECLEAR
 	};
-	SCENE scene = TITLE;
-	int SceneNo = 2;
+	SCENE scene = SELECT;
+	int SceneNo = 0;
 	bool isChangeScene = false;
+	bool isChangeSceneGame = false;
 
 	/*--------------------------------------------------------------------*/
 
@@ -54,9 +66,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	jumpDirection JD;
 
+	playerEffect PEffect;
 
 	TjumpDirection TitleJD;
 	TjumpDirection SelectJD;
+
+	EnemyHitEffect enemyHitEffect;
 
 	/*--------------------------------------------------------------------*/
 	const int TITLEBOX_MAX = 2;
@@ -126,12 +141,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	Score score;//スコア表示
+
+	score.numberGH[0] = Novice::LoadTexture("./Resources/images/0.png");
+	score.numberGH[1] = Novice::LoadTexture("./Resources/images/1.png");
+	score.numberGH[2] = Novice::LoadTexture("./Resources/images/2.png");
+	score.numberGH[3] = Novice::LoadTexture("./Resources/images/3.png");
+	score.numberGH[4] = Novice::LoadTexture("./Resources/images/4.png");
+	score.numberGH[5] = Novice::LoadTexture("./Resources/images/5.png");
+	score.numberGH[6] = Novice::LoadTexture("./Resources/images/6.png");
+	score.numberGH[7] = Novice::LoadTexture("./Resources/images/7.png");
+	score.numberGH[8] = Novice::LoadTexture("./Resources/images/8.png");
+	score.numberGH[9] = Novice::LoadTexture("./Resources/images/9.png");
+
+	score.rankGH[0] = Novice::LoadTexture("./Resources/images/RankS.png");
+	score.rankGH[1] = Novice::LoadTexture("./Resources/images/RankA.png");
+	score.rankGH[2] = Novice::LoadTexture("./Resources/images/RankB.png");
+	score.rankGH[3] = Novice::LoadTexture("./Resources/images/RankC.png");
+
+	const int PAPER_MAX = 64;
+	EffectPaper effectpaper[PAPER_MAX];
+
+
 	bool isReset = false;//リセットフラグ
+	bool isResetGame = false;//残機ありのリセットフラグ
 
 	/*--------------------------------------------------------------------*/
+#pragma endregion
 
 	//ステージのロード
-	STAGE.loadStage(1);
+	STAGE.loadStage(0);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -155,7 +193,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//押すとその方向へ飛んでいく
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				TitleJD.isReleaseFlag();
-				TPlayer.jump(TitleJD.getNormalizeJumpVect());
+				TPlayer.jump(TitleJD.getNormalizeJumpVect(), isChangeScene);
 			}
 
 			TPlayer.Move();
@@ -206,7 +244,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//選択画面の自機ジャンプ
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SelectJD.isReleaseFlag();
-				SPlayer.jump(SelectJD.getNormalizeJumpVect());
+				SPlayer.jump(SelectJD.getNormalizeJumpVect(), isChangeScene);
 			}
 			//選択画面での自機の移動処理
 			SPlayer.Move();
@@ -307,74 +345,126 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 #pragma endregion
 		case GAME:
-
-			//プレイヤーのリスポーン
-			PLYR.Respawn();
-
-			if (PLYR.isGoal)
-			{
-				return 0;
-			}
-
-			if (keys[DIK_R])
-				PLYR.isAlive = false;
-
-			//プレイヤーの操作	
-			if (keys[DIK_SPACE])
-			{
-				JD.isPressFlag();
-				PLYR.gaugeControl();
-			}
-
-			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
-			{
-				JD.isReleaseFlag();
-				PLYR.jump(JD.getNormalizeJumpVect());
-			}
-			//プレイヤーの座標更新
-			PLYR.dirUpdate();
-			PLYR.Move();
-
-			//プレイヤーの衝突判定
-			PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
-
-			ENEMY.Move(PLYR.pos, PLYR.isStun);
-			ENEMY.timeSlow(PLYR.isJump);
-
-			SCROLL.update(PLYR.getPos(), PLYR.isShake);
-			JD.ButtonFlagReset(PLYR.isJump);
-
-			//リザルトの時間測定する
-			score.TimeCount();
-			//仮置き、ゲームオーバー
-			if (keys[DIK_3] && !preKeys[DIK_3]) {
-				SceneNo = 3;
-				isChangeScene = true;
-			}
-			//仮置きゲームクリア
-			if (keys[DIK_4] && !preKeys[DIK_4]) {
-				SceneNo = 4;
-				isChangeScene = true;
-			}
-			break;
-#pragma endregion
 		case GAMEOVER:
-			//セレクト画面へ戻る
-			if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-				SceneNo = 1;
-				isChangeScene = true;
-			}
-			break;
 		case GAMECLEAR:
-			//時間に応じてスコアを表示
-			score.result();
-			SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
-			if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
-				SceneNo = 1;
-				isChangeScene = true;
+#pragma region"ゲームの更新処理"
+			if (scene == GAME) {
+				//プレイヤーのリスポーン
+				PLYR.Respawn(ENEMY.isHit, ENEMY.pos);
+				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
+					isChangeSceneGame = true;
+				}
+
+				if (PLYR.isGoal)
+				{
+					return 0;
+				}
+
+				if (keys[DIK_R])
+					PLYR.isAlive = false;
+
+				//プレイヤーの操作	
+				if (keys[DIK_SPACE])
+				{
+					JD.isPressFlag();
+					PLYR.gaugeControl();
+				}
+
+				if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
+				{
+					JD.isReleaseFlag();
+					PLYR.jump(JD.getNormalizeJumpVect());
+				}
+				//プレイヤーの座標更新
+				PLYR.dirUpdate();
+
+				if (!PLYR.isBlasted) {
+					if (PLYR.respawnTimer >= 120) {
+						PLYR.Move();
+					}
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+					STAGE.blasterPosSet(PLYR.pos, PLYR.size);
+				}
+
+				//プレイヤーの衝突判定
+				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size,PLYR.velocity), STAGE.getmapChipsize());
+				PEffect.Move(PLYR.isJump, PLYR.isAlive, PLYR.pos);
+
+				//敵の移動処理
+				if (PLYR.respawnTimer >= 120) {
+					ENEMY.Move(PLYR.pos, PLYR.isStun, PLYR.isHitStop);
+				}
+
+				ENEMY.timeSlow(PLYR.isJump);
+				ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
+				enemyHitEffect.UpDate(ENEMY.isHit, PLYR.pos);
+
+				SCROLL.update(PLYR.getPos(), PLYR.isShake);
+				JD.ButtonFlagReset(PLYR.isJump);
+
+
+				if (scene == GAME) {
+					//リザルトの時間測定する
+					score.TimeCount();
+					//仮置き、ゲームオーバー
+					if (keys[DIK_3] && !preKeys[DIK_3]) {
+						SceneNo = 3;
+						isChangeScene = true;
+
+					}
+					if (PLYR.respawnTimer <= 60 &&//個々の秒数弄るとゲームオーバー前だけ時間を長くすることができる
+						PLYR.lives <= 0) {
+						SceneNo = 3;
+						isChangeScene = true;
+					}
+					//仮置きゲームクリア
+					if (keys[DIK_4] && !preKeys[DIK_4]) {
+						SceneNo = 4;
+						isChangeScene = true;
+					}
+				}
+			}
+#pragma endregion
+
+#pragma region"ゲームオーバーの更新処理"
+
+			if (scene == GAMEOVER) {
+				//セレクト画面へ戻る
+				if (!isChangeScene) {
+					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+						SceneNo = 1;
+						isChangeScene = true;
+					}
+				}
+			}
+#pragma endregion
+
+#pragma region"ゲームクリアの更新処理"
+
+			if (scene == GAMECLEAR) {
+				for (int i = 0; i < PAPER_MAX; i++) {
+					effectpaper[i].rotate();
+					effectpaper[i].Move();
+					VectorVertexS(effectpaper[i].vertex, effectpaper[i].CPos, effectpaper[i].size, effectpaper[i].size);
+					effectpaper[i].Color();
+				}
+
+				//時間に応じてスコアを表示
+				score.result();
+				SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
+
+				if (!isChangeScene) {
+					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+						SceneNo = 1;
+						isChangeScene = true;
+					}
+				}
 			}
 			break;
 		}
+#pragma endregion
+
+
 		//シーン切り替えしたときの処理
 #pragma region"シーン切り替え"
 //フラグが立つとイージング開始
@@ -434,10 +524,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isChangeScene = false;
 			}
 		}
+
+
+		if (isChangeSceneGame) {
+			changeUp.t += 0.02f * changeUp.dir;
+			changeLow.t += 0.02f * changeLow.dir;
+			changeLow.easeT = 1.0f - powf(1.0f - changeLow.t, 3.0f);
+			changeUp.easeT = 1.0f - powf(1.0f - changeUp.t, 3.0f);
+			changeLow.CPos.y = (1.0f - changeLow.easeT) * changeLow.minPos + changeLow.easeT * changeLow.maxPos;
+			changeUp.CPos.y = (1.0f - changeUp.easeT) * changeUp.minPos + changeUp.easeT * changeUp.maxPos;
+			//最大で停止
+			if (changeUp.t >= 1.00f) {
+				changeUp.t = 1.0f;
+				changeUp.timer -= 1;
+				if (changeUp.timer == 0) {
+					changeUp.dir *= -1;
+					changeUp.timer = 10;//閉じてからタイマーの時間分停止
+				}
+			}
+			if (changeLow.t >= 1.00f) {
+				changeLow.t = 1.0f;
+				changeLow.timer -= 1;
+				if (changeLow.timer == 0) {
+					changeLow.dir *= -1;
+					changeLow.timer = 10;//閉じてからタイマーの時間分停止
+				}
+				//閉じている間に行われる処理ここから
+				isResetGame = true;//ここでリセット
+				//ここまで
+			}
+			//最小で停止
+			if (changeUp.t <= 0.00f) {
+				changeUp.t = 0.0f;
+				changeUp.dir *= -1;
+			}
+			if (changeLow.t <= 0.00f) {
+				changeLow.t = 0.0f;
+				changeLow.dir *= -1;
+				isChangeSceneGame = false;
+			}
+		}
 #pragma endregion
 		//リセットの中身
 #pragma region"リセット"
 		if (isReset) {
+
+			/*タイトルで必要なリセット*/
 			for (int i = 0; i < 2; i++) {
 				TitleBox[i].isHit = false;
 				JD.ButtonFlagReset(PLYR.isJump);	TitleBox[i].vel = { 0,0 };
@@ -450,6 +582,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				100,
 				0xFFFFFFFF
 			);
+
+
+			/*セレクトで必要なリセット*/
 			SPlayer.Init(
 				{ 640,720 },
 				100,
@@ -462,6 +597,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[i].isHit = false;
 				SelectBox[i].velY = 0;
 			}
+
+
+			/*ゲームで必要なリセット*/
+			PLYR.pos = { 300.0f,3000.0f };
+			PLYR.size = { 16,16 };
+			PLYR.acceleration = { 0.00f,0.5f };
+			PLYR.velocity = { 0,0 };
+			PLYR.lives = 3;
+			PLYR.isJump = false;
+			PLYR.isAlive = true;
+			PLYR.isGoal = false;
+			PLYR.MoveDir = { 1,0 };
+			PLYR.PressT = 0;
+			PLYR.addT = 0.02f;
+			PLYR.maxVelocity = 30.0f;
+			PLYR.minVelocity = 1.0f;
+			PLYR.hitStopTimer = 5;
+			PLYR.hitStopVelocity = 1.0f;
+			PLYR.boundCount = 0;
+			PLYR.isStun = false;
+			PLYR.isShake = false;
+			PLYR.isBlasted = false;
+			PLYR.stunTimer = 120;
+			PLYR.blastTimer = 120;
+			PLYR.shakeTimer = 15;
+			PLYR.respawnTimer = 120;
+			PLYR.blastCountDwon = 30;
+			PLYR.blastDistance = 0;
+
+			ENEMY.pos = { -200.0f,3000.0f };
+			ENEMY.size = { 128,128 };
+			ENEMY.speed = 5.0f;
+			ENEMY.slowTimer = 120;
+			ENEMY.isMove = false;
+			ENEMY.isSlow = true;
+			ENEMY.isHit = false;
+			ENEMY.isPopEffect = false;
+			for (int i = 0; i < 8; i++) {
+				enemyHitEffect.CPos[i] = { 0,0 };
+				enemyHitEffect.size[i] = 0;
+				enemyHitEffect.vel[i] = { 0,0 };
+				enemyHitEffect.acc[i] = { 0,0.8f };
+				enemyHitEffect.isAppear[i] = false;
+			}
+
+
 			if (scene == SELECT) {//GAMEとCLEARの間でリセットするとスコアを表示できないため
 				score.ClearTimer = 0;
 				score.ClearTimerS = 0;
@@ -470,6 +651,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			isReset = false;//フラグを下す
 		}
 
+
+		if (isResetGame) {
+			for (int i = 0; i < 8; i++) {
+				enemyHitEffect.CPos[i] = { 0,0 };
+				enemyHitEffect.size[i] = 0;
+				enemyHitEffect.vel[i] = { 0,0 };
+				enemyHitEffect.acc[i] = { 0,0.8f };
+				enemyHitEffect.isAppear[i] = false;
+				isResetGame = false;
+			}
+
+		}
 #pragma endregion
 
 		///
@@ -487,7 +680,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < TITLEBOX_MAX; i++) {
 				TitleBox[i].DrawUpDate();
 			}
-			TitleJD.rotate(TPlayer.CPos, TPlayer.dir);
+			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
 			TPlayer.draw();
 			TitleRogo.DrawUpDate();
 #pragma endregion
@@ -497,32 +690,54 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				SelectBox[i].DrawUpDate();
 			}
-			SelectJD.rotate(SPlayer.CPos, SPlayer.dir);
+			SelectJD.rotate(SPlayer.CPos, SPlayer.dir, SPlayer.isReload);
 			SelectRogo.DrawUpDate();
 			SPlayer.draw();
 #pragma endregion
 			break;
 		case GAME:
+		case GAMEOVER:
+		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
 			STAGE.draw(SCROLL.getScroll());
-			ENEMY.draw(SCROLL.getScroll());
-			PLYR.draw(SCROLL.getScroll());
-			GAUGE.draw(PLYR.getPressT());
+			if (scene == GAME) {
+				ENEMY.draw(SCROLL.getScroll());
+				PLYR.draw(SCROLL.getScroll());
+				GAUGE.draw(PLYR.getPressT());
 
-			JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll());
+				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive);
+				PLYR.debugPrint();
+				score.DrawTimer();
+				PEffect.Draw(SCROLL.getScroll());
+				enemyHitEffect.Draw(SCROLL.getScroll());
 
-			PLYR.debugPrint();
-
+			}
 #pragma endregion
-			score.DrawTimer();
-			break;
-		case GAMEOVER:
-			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x006600FF, kFillModeSolid);
-			break;
-		case GAMECLEAR:
-			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+
+#pragma region"ゲームオーバーの描画処理"
+			if (scene == GAMEOVER) {
+				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x660000EE, kFillModeSolid);
+				Novice::ScreenPrintf(640, 360, "GAMEOVER");
+			}
+#pragma endregion
+
+#pragma region"ゲームクリアの描画処理"
+
+			if (scene == GAMECLEAR) {
+				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000EE, kFillModeSolid);
+				score.result();//rank表示
+				score.DrawResultTimer();//クリアタイム表示
+				for (int i = 0; i < PAPER_MAX; i++) {
+					effectpaper[i].DrawUpDate();
+				}
+			}
 			break;
 		}
+#pragma endregion
+
+		Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
+		Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
+
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);
 		//シーンチェンジの下

@@ -16,7 +16,7 @@ class SCROLL {
 public:
 	SCROLL() {
 
-		scrollXAxis = 640;
+		scrollXAxis = 700;
 		scrollYAxis = 164;
 
 		scroll = { 0,0 };
