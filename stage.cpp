@@ -28,20 +28,51 @@ void STAGE::draw(const Vector2& scroll)
 	{
 		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
-			if (field[i][j] < 10 && field[i][j] != 3)//空気
-			{
+			if (field[i][j] < 3 && field[i][j] != 3) { //空気
 				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);
-			} else if (field[i][j] == 3)
-			{
+			} else if (field[i][j] == 3) {
+
 				Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]] - 0x55);
-			} else if (field[i][j] < 20)//ブロック
-			{
+
+			} else if (field[i][j] < 20) {//ブロック
+
+				//壁
+				if (field[i][j] == 4)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[3], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 5)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[4], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 6)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[5], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 7)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[6], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 8)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[7], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 9)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[8], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 10)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[9], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 11)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[10], 1.0f, 1.0f, 0, 0xffffffff);
 				if (field[i][j] == 12)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);
-				else
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[11], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 13)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[12], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 14)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[13], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 15)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[14], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 16)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[15], 1.0f, 1.0f, 0, 0xffffffff);
+				if (field[i][j] == 17)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[16], 1.0f, 1.0f, 0, 0xffffffff);
+
+				if (field[i][j] == 18)//加速する壁
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j] - 10]);
-			} else if (field[i][j] < 30)//アイテム
-			{
+
+				if (field[i][j] == 19)//トゲ
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);
+
+			} else if (field[i][j] < 30) { //アイテム
 				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]]);
 
 				if (field[i][j] == 20)//加速アイテム
@@ -51,7 +82,7 @@ void STAGE::draw(const Vector2& scroll)
 					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), 20, 20, 0.0f, RED, kFillModeSolid);
 
 				if (field[i][j] == 22)//大砲
-					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), 20, 20, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), 20, 20, 0.0f, GREEN, kFillModeSolid);
 			}
 		}
 	}

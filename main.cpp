@@ -360,8 +360,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					return 0;
 				}
 
-				if (keys[DIK_R])
-					PLYR.isAlive = false;
+				if (keys[DIK_R]) {
+					PLYR.pos.x = 300.0f;
+					PLYR.pos.y = 1500.0f;
+				}
 
 				//プレイヤーの操作	
 				if (keys[DIK_SPACE])
@@ -395,7 +397,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					ENEMY.Move(PLYR.pos, PLYR.isStun, PLYR.isHitStop);
 				}
 
-				ENEMY.timeSlow(PLYR.isJump);
+				ENEMY.timeSlow(PLYR.isJump, PLYR.isAlive);
 				ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
 				enemyHitEffect.UpDate(ENEMY.isHit, PLYR.pos);
 
@@ -699,6 +701,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAMEOVER:
 		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
+
+			Novice::DrawBox(0, 0, 1280, 720, 0.0f, BLACK, kFillModeSolid);
+
 			STAGE.draw(SCROLL.getScroll());
 			if (scene == GAME) {
 				ENEMY.draw(SCROLL.getScroll());

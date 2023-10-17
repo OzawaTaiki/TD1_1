@@ -39,23 +39,28 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 
 }
 
-void ENEMY::timeSlow(bool isJump)
+void ENEMY::timeSlow(bool isJump, bool playerIsAlive)
 {
 
-	if (slowTimer <= 0) {
-		isSlow = false;
-	}
-	else if (isJump) {
-		isSlow = true;
-	}
+	if (playerIsAlive) {
+		if (slowTimer <= 0) {
+			isSlow = false;
+		} else if (isJump) {
+			isSlow = true;
+		}
 
-	if (!isJump && isSlow) {
-		speed = 0.5f;
-		slowTimer--;
-	}
-	else {
-		speed = 5.0f;
-		slowTimer = 120;
+		if (!isJump && isSlow) {
+			speed = 0.5f;
+			slowTimer--;
+		} else {
+			speed = 5.0f;
+			slowTimer = 120;
+		}
+
+	} else {
+		speed = 0.0f;
+		isSlow = true;
+		slowTimer = 150;
 	}
 }
 void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {

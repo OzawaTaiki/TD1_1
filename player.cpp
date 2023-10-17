@@ -143,7 +143,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		hitBlock = hitBlock % divisor;
 		divisor /= 100;
 
-		if (localHit[i] == 12)//hari no toki death
+		if (localHit[i] == 19)//hari no toki death
 		{
 			isAlive = false;
 		} else if (localHit[i] == 0)
@@ -162,7 +162,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 
 	for (int i = 0; i < 5; i++)
 	{
-		if (localHit[i] >= 10 && localHit[i] < 20)
+		if (localHit[i] >= 4 && localHit[i] < 20)
 		{
 			if (i == 0)
 			{
@@ -207,11 +207,11 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						localHit[3] = HitCopy;
 						localHit[4] = 0;
 					}
-				} else if (localHit[2] >= 10 && localHit[2] < 20 &&
-					localHit[3] >= 10 && localHit[3] < 20)
+				} else if (localHit[2] >= 4 && localHit[2] < 20 &&
+					localHit[3] >= 4 && localHit[3] < 20)
 				{
-					if (localHit[1] >= 10 && localHit[1] < 20 ||
-						localHit[4] >= 10 && localHit[4] < 20)
+					if (localHit[1] >= 4 && localHit[1] < 20 ||
+						localHit[4] >= 4 && localHit[4] < 20)
 					{
 						if (MoveDir.x < 0)
 						{
@@ -231,11 +231,11 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 							localHit[4] = 0;
 						}
 					}
-				} else if (localHit[1] >= 10 && localHit[1] < 20 &&
-					localHit[4] >= 10 && localHit[4] < 20)
+				} else if (localHit[1] >= 4 && localHit[1] < 20 &&
+					localHit[4] >= 4 && localHit[4] < 20)
 				{
-					if (localHit[2] >= 10 && localHit[2] < 20 ||
-						localHit[3] >= 10 && localHit[3] < 20)
+					if (localHit[2] >= 4 && localHit[2] < 20 ||
+						localHit[3] >= 4 && localHit[3] < 20)
 					{
 						if (MoveDir.y < 0)
 						{
@@ -270,7 +270,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				if (isJump)
 				{
 					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
-						//isShake = true;
+						isShake = true;
 						//isHitStop = true;
 						//hitStopVelocity = 0.0f;
 					} else {
@@ -279,12 +279,13 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						hitStopVelocity = 1.0f;
 					}
 
+					if (localHit[i] >= 4 && localHit[i] <= 17) {
+						velocity.x *= -0.6f;
+					}
+
 					switch (localHit[i])
 					{
-					case 10:
-						velocity.x *= -0.6f;
-						break;
-					case 11:
+					case 18:
 						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 							velocity.x *= -1.1f;
 							velocity.y *= 1.1f;
@@ -311,7 +312,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				{
 
 					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
-						//isShake = true;
+						isShake = true;
 						//isHitStop = true;
 						//hitStopVelocity = 0.0f;
 					} else {
@@ -320,9 +321,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						hitStopVelocity = 1.0f;
 					}
 
-					switch (localHit[i])
-					{
-					case 10:
+					if (localHit[i] >= 4 && localHit[i] <= 17) {
 						velocity.y *= -(0.9f - (0.25f * boundCount));
 
 						if (i == 4)
@@ -337,8 +336,11 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 								isJump = false;
 							}
 						}
-						break;
-					case 11:
+					}
+
+					switch (localHit[i])
+					{
+					case 18:
 						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 							velocity.x *= 1.1f;
 							velocity.y *= -1.1f;

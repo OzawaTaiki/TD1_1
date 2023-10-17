@@ -41,7 +41,7 @@ public:
 
 	void Move(const Vector2& playerPos,bool isStun, bool isHitStop );
 
-	void timeSlow(bool isJump);
+	void timeSlow(bool isJump, bool playerIsAlive);
 
 	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
 
