@@ -7,7 +7,7 @@
 
 
 struct SceneChange {
-	Vector2 CPos = { 0,0 };
+	Vector2 CPos = { 0 };
 	int Wsize = 1280;
 	int Hsize = 720;
 	unsigned int color = 0xFFFFFFFF;

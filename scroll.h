@@ -8,8 +8,8 @@ class SCROLL {
 	int scrollXAxis;
 	int scrollYAxis;
 
-	int scrollXRand = 0;
-	int scrollYRand = 0;
+	int scrollXRand;
+	int scrollYRand;
 
 	Vector2 scroll;
 
@@ -18,12 +18,14 @@ public:
 
 		scrollXAxis = 700;
 		scrollYAxis = 164;
+		scrollXRand = 0;;
+		scrollYRand = 0;;
 
 		scroll = { 0,0 };
 
 	};
 
-	void update(const Vector2& pos, bool isShake);
+	void update(const Vector2 &pos, bool isShake);
 
 	Vector2 getScroll();
 

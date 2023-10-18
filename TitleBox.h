@@ -10,9 +10,9 @@ struct Box {
 	Vector2 CPos = { 0 };
 	Vector2 vertex[4] = { 0 };
 	Vector2 vel = { 0 };
-	int Wsize = { 0 };
-	int Hsize={0};
-	unsigned int color = 0xFFFFFFFF;
+	int Wsize = 0;
+	int Hsize = 0;
+	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
 
