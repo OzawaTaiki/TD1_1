@@ -425,9 +425,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//プレイヤーの衝突判定
 				if (!PLYR.isHitStop)
-					PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw, ENEMY.isPopEffect, ENEMY. isHit,isChangeSceneGame);
+					PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
 				else
-					PLYR.hitAction(0, STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw,ENEMY.isPopEffect, ENEMY.isHit, isChangeSceneGame);
+					PLYR.hitAction(0, STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
 
 				//プレイヤーのリスポーン
 				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);

@@ -66,7 +66,7 @@ void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
 	{
 		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
-			if (field[i][j] == 22)
+			if (field[i][j] == 23|| field[i][j] == 24)
 			{ //大砲
 				pos.x = float(mapchipsize * j + size.x);
 				pos.y = float(mapchipsize * i + size.y);

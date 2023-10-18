@@ -401,7 +401,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		}
 	}
 
-	if (localHit[4] >= 4 && localHit[4] < 19 && isJump)
+	if (localHit[4] >= 4 && localHit[4] < 19&& isJump)
 	{
 		boundCount++;
 
