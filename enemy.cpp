@@ -32,7 +32,7 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 	}
 }
 
-void ENEMY::timeSlow(bool isJump, bool playerIsAlive)
+void ENEMY::timeSlow(bool& isJump, bool& playerIsAlive)
 {
 
 	if (playerIsAlive) {
@@ -49,7 +49,7 @@ void ENEMY::timeSlow(bool isJump, bool playerIsAlive)
 		}
 		else {
 			speed = 5.0f;
-			slowTimer = 120;
+			slowTimer = 150;
 		}
 
 	}
@@ -71,10 +71,10 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	else {
 		isHit = false;
 	}
-	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
+	//Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 }
 
-void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection)
+void ENEMY::setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection)
 {
 	if (isSet)
 	{
@@ -116,7 +116,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 			warningTimer = 70;
 		}
 	}
-	Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
-	Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
-	Novice::ScreenPrintf(500, 80, "warningTimer = %d", warningTimer);
+	//Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
+	//Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
+	//Novice::ScreenPrintf(500, 80, "warningTimer = %d", warningTimer);
 }

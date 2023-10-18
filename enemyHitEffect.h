@@ -16,7 +16,7 @@ public:
 	unsigned int color = 0xFF0000FF;
 
 public:
-	void UpDate(const bool& isHit, const Vector2& playerCPos);
+	void UpDate(const bool& isHit, const bool& isHitToge, const Vector2& playerCPos);
 
 	void Draw(const Vector2& scroll);
 

@@ -82,7 +82,7 @@ void PLAYER::antiMove()
 
 void PLAYER::Respawn(bool& isHit, Vector2& enemyPos, const Vector2& enemyRespawnPos)
 {
-	if (isHit && lives >= 0) {
+	if ((isHit || isHitToge) && lives >= 0) {
 		isAlive = false;
 		isBlasted = false;
 		blastTimer = 120;
@@ -98,6 +98,7 @@ void PLAYER::Respawn(bool& isHit, Vector2& enemyPos, const Vector2& enemyRespawn
 		if (respawnTimer <= 0 && lives > 0) {
 			isAlive = true;
 			isHit = false;
+			isHitToge = false;
 			lives -= 1;
 			pos = respawnPos;
 			enemyPos = enemyRespawnPos;
@@ -165,10 +166,12 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		if (localHit[i] == 19 || localHit[i] == 20)//hari no toki death
 		{
 			isAlive = false;
+			isHitToge = true;
 		} else if (localHit[i] == 0)
 			dir = -1;
 		else if (localHit[i] == 1)
 			dir = 1;
+
 		if (localHit[i] == 2)
 			isGoal = true;
 	}
@@ -320,7 +323,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= -1.1f;
-								velocity.y *= 1.1f;
+								velocity.y *= 1.4f;
 							} else {
 								velocity.x *= -1.0f;
 							}
@@ -353,7 +356,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
-							velocity.y *= -(0.9f - (0.25f * boundCount));
+							velocity.y *= -(0.6f - (0.25f * boundCount));
 						} else if (localHit[i] == 18)
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
@@ -401,7 +404,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		}
 	}
 
-	if (localHit[4] >= 4 && localHit[4] < 19&& isJump)
+	if (localHit[4] >= 4 && localHit[4] < 19 && isJump)
 	{
 		boundCount++;
 
@@ -474,13 +477,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 void PLAYER::debugPrint()
 {
-	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
-	Novice::ScreenPrintf(0, 40, "%f", PressT);
-
-	Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
-
-	Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
-	Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
-	Novice::ScreenPrintf(0, 260, "%d", boundCount);
-	Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
+	//Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
+	//Novice::ScreenPrintf(0, 40, "%f", PressT);
+	//Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
+	//Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
+	//Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
+	//Novice::ScreenPrintf(0, 260, "%d", boundCount);
+	//Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
 }

@@ -18,6 +18,7 @@ public:
 	bool isJump;
 	bool isAlive;
 	bool isGoal;
+	bool isHitToge;
 
 	int GH;
 	int lives;
@@ -41,6 +42,7 @@ public:
 	int blastCountDwon;
 	int blastDistance;
 	float hitStopTimer;
+
 
 	Vector2 MoveDir;
 
@@ -79,7 +81,7 @@ public:
 		isAlive = true;
 		isGoal = false;
 		isHitStop = false;
-
+		isHitToge = false;
 
 		MoveDir = { 1,0 };
 

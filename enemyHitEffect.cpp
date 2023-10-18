@@ -1,9 +1,9 @@
 #include "enemyHitEffect.h"
 
-void EnemyHitEffect::UpDate(const bool& isHit, const Vector2& playerCPos) {
-	if (isHit) {
+void EnemyHitEffect::UpDate(const bool& isHit, const bool& isHitToge, const Vector2& playerCPos) {
+	if (isHit || isHitToge) {
 		for (int i = 0; i < EEFFECT_MAX; i++) {
-			if (!isAppear[i] ) {
+			if (!isAppear[i]) {
 				CPos[i] = playerCPos;
 				acc[i] = { 0.0f,0.8f };
 				vel[i].x = static_cast<float>(rand() % 31 - 15);

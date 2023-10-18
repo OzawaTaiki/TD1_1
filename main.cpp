@@ -391,7 +391,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					PLYR.respawnPos = { 0,0 };
 				}
 
-
+				//プレイヤーのリスポーン
+				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
+				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
+					isChangeSceneGame = true;
+				}
 
 				if (PLYR.isGoal)
 				{
@@ -429,11 +433,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 					PLYR.hitAction(0, STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
 
-				//プレイヤーのリスポーン
-				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
-				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
-					isChangeSceneGame = true;
-				}
+
 
 				refEffect.Appear(PLYR.jumpVel, PLYR.pos);
 				refEffect.DrawTimer();
@@ -449,7 +449,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				ENEMY.timeSlow(PLYR.isJump, PLYR.isAlive);
 				ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
-				enemyHitEffect.UpDate(ENEMY.isHit, PLYR.pos);
+				enemyHitEffect.UpDate(ENEMY.isHit, PLYR.isHitToge, PLYR.pos);
 
 				SCROLL.update(PLYR.getPos(), PLYR.isShake);
 				JD.ButtonFlagReset(PLYR.isJump);
@@ -660,6 +660,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.isJump = false;
 			PLYR.isAlive = true;
 			PLYR.isGoal = false;
+			PLYR.isHitToge = false;
 			PLYR.MoveDir = { 1,0 };
 			PLYR.PressT = 0.35f;
 			PLYR.addT = 0.02f;
@@ -678,16 +679,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
 
-			ENEMY.pos = { -200.0f,3000.0f };
+			ENEMY.pos = { -500.0f,3000.0f };
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
-			ENEMY.slowTimer = 120;
+			ENEMY.slowTimer = 150;
 			ENEMY.warningCountDown = 60;
 			ENEMY.warningTimer = 70;
 			ENEMY.isMove = false;
 			ENEMY.isSlow = true;
 			ENEMY.isHit = false;
 			ENEMY.isPopEffect = false;
+			ENEMY.respawnPos = ENEMY.pos;
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
 				enemyHitEffect.size[i] = 0;
@@ -779,7 +781,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームオーバーの描画処理"
 			if (scene == GAMEOVER) {
 				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x660000EE, kFillModeSolid);
-				Novice::ScreenPrintf(640, 360, "GAMEOVER");
+				//Novice::ScreenPrintf(640, 360, "GAMEOVER");
 			}
 #pragma endregion
 
@@ -797,8 +799,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 #pragma endregion
 
-		Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
-		Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
+		//Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
+		//Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
 
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);

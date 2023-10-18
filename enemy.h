@@ -34,7 +34,7 @@ public:
 		size = { 128,128 };
 
 		speed = 5.0f;
-		slowTimer = 120;
+		slowTimer = 150;
 
 		warningCountDown = 60;
 		warningTimer = 70;
@@ -60,11 +60,11 @@ public:
 
 	void Move(const Vector2& playerPos, bool isStun, bool isHitStop);
 
-	void timeSlow(bool isJump, bool playerIsAlive);
+	void timeSlow(bool& isJump, bool& playerIsAlive);
 
 	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
 
-	void setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection);
+	void setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection);
 
 	void Warning(const Vector2& scroll, bool& playerIsAlive);
 

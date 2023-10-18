@@ -42,5 +42,5 @@ Vector2 SCROLL::getScroll()
 
 void SCROLL::debugPrint()
 {
-	Novice::ScreenPrintf(0, 20, "%f,%f", scroll.x, scroll.y);
+//	Novice::ScreenPrintf(0, 20, "%f,%f", scroll.x, scroll.y);
 }
