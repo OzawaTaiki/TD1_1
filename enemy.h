@@ -9,14 +9,20 @@ public:
 	Vector2 size;
 
 	float speed;
+
 	int slowTimer;
+	int warningCountDown;
+	int warningTimer;
 
 	bool isMove;
 	bool isSlow;
 	bool isHit;
+	bool isWarning;
 	bool isPopEffect;
 
 	int color = 0xf03c3cff;
+
+	int enemyGH[2] = { 0,0 };
 
 
 	ENEMY()
@@ -25,12 +31,18 @@ public:
 		size = { 128,128 };
 
 		speed = 5.0f;
+
 		slowTimer = 120;
+		warningCountDown = 60;
+		warningTimer = 70;
 
 		isMove = false;
 		isSlow = true;
 		isHit = false;
-	isPopEffect = false;
+		isWarning = true;
+		isPopEffect = false;
+
+		enemyGH[0] = Novice::LoadTexture("./Resources/images/Warning.png");
 	};
 
 	void draw(const Vector2 &scroll);
@@ -45,6 +57,6 @@ public:
 
 	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
 
-	void Respawn(bool& playerIsAlive);
+	void Warning(const Vector2& scroll, bool& playerIsAlive);
 
 };

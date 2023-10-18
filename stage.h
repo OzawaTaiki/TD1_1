@@ -144,7 +144,7 @@ public:
 
 	STAGE() {
 
-			GH[1] = Novice::LoadTexture("white1x1.png");
+		GH[1] = Novice::LoadTexture("white1x1.png");
 		GH[2] = Novice::LoadTexture("./Resources/images/Splinter.png");
 
 		GH[3] = Novice::LoadTexture("./Resources/map/up.png");
@@ -166,7 +166,7 @@ public:
 		color[1] = 0xffffffff;
 		color[2] = 0xffffffff;
 		color[3] = 0xaaaaaaff;
-		color[4] = 0x00ff00ff;
+		color[4] = 0xfc21c6ff;
 		loadStageNum = 0;
 
 	};

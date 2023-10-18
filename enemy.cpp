@@ -75,11 +75,32 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 
 }
-void ENEMY::Respawn(bool& playerIsAlive) {
+
+void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 	if (!playerIsAlive) {
-		pos.x = -200;
-		pos.y = 3000;
+		isWarning = true;
 	}
+
+	if (isWarning) {
+		warningCountDown--;
+	}
+
+	if (warningCountDown <= 0 && isWarning) {
+		warningTimer--;
+
+		if (warningCountDown % 6 == 0) {
+		Novice::DrawSprite(int(40 - scroll.x), int(2900 - scroll.y), enemyGH[0], 1.0f, 1.0f, 0.0f, 0xffffffff);
+		}
+
+		if (warningTimer <= 0) {
+			isWarning = false;
+			warningCountDown = 170;
+			warningTimer = 70;
+		}
+	}
+	Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
+	Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
+	Novice::ScreenPrintf(500, 80, "warningTimer = %d", warningTimer);
 }
 
 

@@ -38,33 +38,33 @@ void STAGE::draw(const Vector2& scroll)
 
 				//壁
 				if (field[i][j] == 4)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[3], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[3], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 5)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[4], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[4], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 6)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[5], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[5], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 7)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[6], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[6], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 8)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[7], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[7], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 9)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[8], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[8], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 10)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[9], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[9], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 11)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[10], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[10], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 12)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[11], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[11], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 13)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[12], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[12], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 14)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[13], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[13], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 15)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[14], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[14], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 16)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[15], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[15], 1.0f, 1.0f, 0, color[4]);
 				if (field[i][j] == 17)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[16], 1.0f, 1.0f, 0, 0xffffffff);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[16], 1.0f, 1.0f, 0, color[4]);
 
 				if (field[i][j] == 18)//加速する壁
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j] - 10]);

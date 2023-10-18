@@ -632,6 +632,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
 			ENEMY.slowTimer = 120;
+			ENEMY.warningCountDown = 60;
+			ENEMY.warningTimer = 70;
 			ENEMY.isMove = false;
 			ENEMY.isSlow = true;
 			ENEMY.isHit = false;
@@ -707,6 +709,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			STAGE.draw(SCROLL.getScroll());
 			if (scene == GAME) {
 				ENEMY.draw(SCROLL.getScroll());
+				ENEMY.Warning(SCROLL.getScroll(), PLYR.isAlive);
 				PLYR.draw(SCROLL.getScroll());
 				GAUGE.draw(PLYR.getPressT());
 
