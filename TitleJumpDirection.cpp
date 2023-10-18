@@ -1,6 +1,6 @@
 #include "TitlejumpDirection.h"
 
-void TjumpDirection::rotate(const Vector2& pos, float direction)
+void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isReload)
 {
 	if (!isPress)
 	{
@@ -18,9 +18,11 @@ void TjumpDirection::rotate(const Vector2& pos, float direction)
 	//Novice::DrawEllipse(int(RotateJumpDirectionVect.x + pos.x - scroll.x), int(RotateJumpDirectionVect.y + pos.y - scroll.y), 3, 3, 0, RED, kFillModeSolid);
 
 	if (!isRelease) {
-		for (int i = 0; i < Num; i++)
-		{
-			Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y), 20, 20, 0, 0xdd5050ff, kFillModeSolid);
+		if (!isReload) {
+			for (int i = 0; i < Num; i++)
+			{
+				Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y), 20, 20, 0, 0xdd5050ff, kFillModeSolid);
+			}
 		}
 	}
 	

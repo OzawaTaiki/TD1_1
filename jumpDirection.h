@@ -20,11 +20,18 @@ class jumpDirection
 	float t;
 	float addT;
 
+
 	float margin = 15.0f;
 	int Num = 15;
+	const int kMaxNum = 20;
+	const int kminNum = 3;
 
 	bool isPress;
 	bool isRelease;
+
+	int circleGH;
+	float circleGHSize;
+	float circleRadius;
 
 public:
 
@@ -41,9 +48,14 @@ public:
 		addT = 1.0f / (60.0f * 0.80f);
 		isPress = false;
 		isRelease = false;
+
+		
+		circleGH = Novice::LoadTexture("./Resources/images/circle.png");
+		circleGHSize = 32.0f;
+		circleRadius = 5.0f;
 	};
 
-	void rotate(const Vector2& pos, float direction, const Vector2& scroll);
+	void rotate(const Vector2& pos, float direction, const Vector2& scroll, const bool& isAlive, float numT);
 
 	Vector2 getNormalizeJumpVect();
 

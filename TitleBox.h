@@ -7,12 +7,12 @@
 
 
 struct Box {
-	Vector2 CPos;
-	Vector2 vertex[4];
-	Vector2 vel;
-	int Wsize;
-	int Hsize;
-	unsigned int color;
+	Vector2 CPos = { 0 };
+	Vector2 vertex[4] = { 0 };
+	Vector2 vel = { 0 };
+	int Wsize = 0;
+	int Hsize = 0;
+	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
 
@@ -38,8 +38,8 @@ struct Box {
 	}
 
 	void DrawUpDate() {
-
 		if (isDraw) {
+
 			Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
 				Wsize, Hsize, 0.0f, color, kFillModeSolid);
 			/*

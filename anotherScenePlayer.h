@@ -7,16 +7,17 @@
 
 
 struct TitlePlayer {
-	Vector2 CPos;
-	Vector2 vertex[4];
+	Vector2 CPos = { 0 };
+	Vector2 vertex[4] = { 0 };
 	Vector2 vel = { 0 };
 	Vector2 acc = { 0.0 };
-	int radius;
-	unsigned int color;
+	int radius = 0;
+	unsigned int color=0;
 	float dir = 1;
 	bool isJump = false;
 	bool isRef = false;
 	bool canHit = true;
+	bool isReload = false;
 	int selectBigGH = Novice::LoadTexture("./Resources/images/select1.png");
 	int JumpTimer = 10;			//まっすぐ飛んでいく時間
 	void Init(Vector2 playerCenterPos, int playerRadius, unsigned int playerColor) {
@@ -25,11 +26,15 @@ struct TitlePlayer {
 		color = playerColor;
 	}
 
-	void jump(const Vector2& kJumpVect) {
-		if (!isJump) {
-			vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
+	void jump(const Vector2& kJumpVect,bool isSceneChange) {
+		if (!isSceneChange) {
+			if (!isJump) {
+				if (!isReload) {
+					vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
 
-			isJump = true;
+					isJump = true;
+				}
+			}
 		}
 	}
 
@@ -83,13 +88,23 @@ struct TitlePlayer {
 
 	void ReturnPlayer() {
 		if (!isJump &&
-			CPos.y >= 1200 ||
+			CPos.y >= 900 ||
 			radius <= 0) {
-			CPos = { 640.0f ,720.0f };
+			CPos = { 640.0f ,899.0f };
 			radius = 100;
 			JumpTimer = 10;
 			isRef = false;
-			canHit = true;
+			isReload = true;
+		}
+		if (isReload) {
+			if (CPos.y<=720) {
+				CPos.y = 720;
+				canHit = true;
+				isReload = false;
+			} else {
+				CPos.y -= 3;
+
+			}
 		}
 	}
 

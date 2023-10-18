@@ -116,10 +116,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyHitEffect.cpp" />
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="jumpDirection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerEffct.cpp" />
     <ClCompile Include="scroll.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="TitleJumpDirection.cpp" />
@@ -155,9 +157,13 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyHitEffect.h" />
+    <ClInclude Include="GameClearEffect.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="jumpDirection.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerEffect.h" />
+    <ClInclude Include="RefEffect.h" />
     <ClInclude Include="sceneChange.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="scroll.h" />

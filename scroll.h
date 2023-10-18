@@ -16,8 +16,10 @@ class SCROLL {
 public:
 	SCROLL() {
 
-		scrollXAxis = 640;
+		scrollXAxis = 700;
 		scrollYAxis = 164;
+		scrollXRand = 0;;
+		scrollYRand = 0;;
 
 		scroll = { 0,0 };
 
