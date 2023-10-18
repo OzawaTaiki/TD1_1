@@ -13,8 +13,7 @@ public:
 	bool isAppear[EEFFECT_MAX] = { 0 };
 
 
-	unsigned int color = 0xFF0000FF;
-	int whiteGH = Novice::LoadTexture("./NoviceResources/white1x1.png");
+	unsigned int color = 0xFFFFFFFF;
 
 public:
 	void UpDate(const bool& isHit, const Vector2& playerCPos);

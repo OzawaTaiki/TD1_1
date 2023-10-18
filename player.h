@@ -14,7 +14,7 @@ public:
 	bool isJump;
 	bool isAlive;
 	bool isGoal;
-
+	float jumpVel;
 	int lives;
 
 	bool isStun;
@@ -40,7 +40,7 @@ public:
 	float hitStopVelocity;
 
 	float dir = 1;
-
+	int GH;
 	int boundCount;
 
 	PLAYER()
@@ -49,7 +49,7 @@ public:
 		size = { 16,16 };
 		acceleration = { 0.00f,0.5f };
 		velocity = { 0,0 };
-
+		jumpVel = 0;
 		lives = 3;
 
 		isJump = false;
@@ -70,7 +70,7 @@ public:
 		isStun = false;
 		isShake = false;
 		isBlasted = false;
-
+		isHitStop = false;
 
 		stunTimer = 120;
 		blastTimer = 120;
@@ -80,6 +80,7 @@ public:
 		blastCountDwon = 30;
 		blastDistance = 0;
 
+		GH = Novice::LoadTexture("./Resources/images/player.png");
 	};
 
 	void draw(const Vector2& scroll);
@@ -94,6 +95,7 @@ public:
 
 	void Move();
 
+
 	void antiMove();
 
 	void Respawn(bool& isHit, Vector2& enemyPos);
@@ -104,7 +106,7 @@ public:
 
 	void dirUpdate();
 
-	void hitAction(int hitBlock, int maptchipSize);
+	void hitAction(int hitBlock, int maptchipSize, bool isHitPoint[],bool& isDraw);
 
 	void debugPrint();
 

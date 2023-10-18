@@ -5,7 +5,8 @@
 void PLAYER::draw(const Vector2& scroll)
 {
 	if (isAlive) {
-		Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, WHITE, kFillModeSolid);
+		//Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, WHITE, kFillModeWireFrame); 
+		Novice::DrawSprite(static_cast<int>((pos.x - size.x) - scroll.x), static_cast<int>((pos.y - size.y) - scroll.y), GH, 1.0f, 1.0f, 0.0f, 0xFFFFFFFF);
 	}
 }
 
@@ -58,6 +59,8 @@ void PLAYER::Move()
 
 }
 
+
+
 void PLAYER::antiMove()
 {
 	pos.x -= velocity.x;
@@ -68,6 +71,12 @@ void PLAYER::Respawn(bool& isHit, Vector2& enemyPos)
 {
 	if (isHit && lives >= 0) {
 		isAlive = false;
+		isBlasted = false;
+		blastTimer = 120;
+		blastCountDwon = 30;
+		blastDistance = 0;
+
+
 		if (!isAlive)
 		{
 			respawnTimer--;
@@ -103,9 +112,9 @@ void PLAYER::jump(const Vector2& kJumpVect)
 {
 	if (!isJump)
 	{
-		float localVelo = (1.0f - PressT) * minVelocity + PressT * maxVelocity;
+		jumpVel = (1.0f - PressT) * minVelocity + PressT * maxVelocity;
 
-		velocity = { kJumpVect.x * localVelo,kJumpVect.y * localVelo };
+		velocity = { kJumpVect.x * jumpVel,kJumpVect.y * jumpVel };
 
 		PressT = 0;
 		addT *= addT < 0 ? -1 : 1;
@@ -124,7 +133,7 @@ void PLAYER::dirUpdate()
 		MoveDir.y = velocity.y < 0 ? -1.0f : 1.0f;
 }
 
-void PLAYER::hitAction(int hitBlock, int maptchipSize)
+void PLAYER::hitAction(int hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw)
 {
 	Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
@@ -147,6 +156,27 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		if (localHit[i] == 3)
 			isGoal = true;
 	}
+	int HitCopy = localHit[0];
+	///aaaa
+	if (isJump) {
+		if (localHit[1] == 10 || localHit[1] == 11) {
+			isHitPoint[0] = true;
+			isDraw = true;
+		}
+		if (localHit[2] == 10 || localHit[2] == 11) {
+			isHitPoint[1] = true;
+			isDraw = true;
+		}
+		if (localHit[3] == 10 || localHit[3] == 11) {
+			isHitPoint[2] = true;
+			isDraw = true;
+		}
+		if (localHit[4] == 10 || localHit[4] == 11) {
+			isHitPoint[3] = true;
+			isDraw = true;
+		}
+	}
+
 
 	if ((dir < 0 && localHit[3] == 3) || (dir > 0 && localHit[2] == 3))
 	{
@@ -164,7 +194,6 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 					int a = int((pos.y / maptchipSize) - MoveDir.y);
 					pos.y = a * maptchipSize + size.y;
 
-					int HitCopy = localHit[0];
 					if (MoveDir.y < 0)
 					{
 						localHit[0] = 0;
@@ -186,8 +215,6 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 					int a = int((pos.x / maptchipSize) - MoveDir.x);
 					pos.x = a * maptchipSize + size.x;
 
-					int HitCopy = localHit[0];
-
 					if (MoveDir.x < 0)
 					{
 						localHit[0] = 0;
@@ -197,15 +224,67 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 						localHit[4] = 0;
 					} else if (MoveDir.x > 0)
 					{
-
 						localHit[0] = 0;
 						localHit[1] = 0;
 						localHit[2] = 0;
 						localHit[3] = HitCopy;
 						localHit[4] = 0;
 					}
+				} else if (localHit[2] >= 10 && localHit[2] < 20 &&
+					localHit[3] >= 10 && localHit[3] < 20)
+				{
+					if (localHit[1] >= 10 && localHit[1] < 20 ||
+						localHit[4] >= 10 && localHit[4] < 20)
+					{
+						if (MoveDir.x < 0)
+						{
+							pos.x += 30.0f;
+							localHit[0] = 0;
+							localHit[1] = 0;
+							localHit[2] = HitCopy;
+							localHit[3] = 0;
+							localHit[4] = 0;
+						} else if (MoveDir.x > 0)
+						{
+							pos.x -= 30.0f;
+							localHit[0] = 0;
+							localHit[1] = 0;
+							localHit[2] = 0;
+							localHit[3] = HitCopy;
+							localHit[4] = 0;
+						}
+					}
+				} else if (localHit[1] >= 10 && localHit[1] < 20 &&
+					localHit[4] >= 10 && localHit[4] < 20)
+				{
+					if (localHit[2] >= 10 && localHit[2] < 20 ||
+						localHit[3] >= 10 && localHit[3] < 20)
+					{
+						if (MoveDir.y < 0)
+						{
+							pos.y += 30.0f;
+
+							localHit[0] = 0;
+							localHit[1] = HitCopy;
+							localHit[2] = 0;
+							localHit[3] = 0;
+							localHit[4] = 0;
+						} else if (MoveDir.y > 0)
+						{
+							pos.y -= 30.0f;
+
+							localHit[0] = 0;
+							localHit[1] = 0;
+							localHit[2] = 0;
+							localHit[3] = 0;
+							localHit[4] = HitCopy;
+						}
+					}
+
 				}
 			}
+
+
 
 			if (MoveDir.x != 0 && (i == 2 || i == 3))
 			{
@@ -215,8 +294,8 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				{
 					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
 						//isShake = true;
-						isHitStop = true;
-						hitStopVelocity = 0.0f;
+						//isHitStop = true;
+						//hitStopVelocity = 0.0f;
 					} else {
 						isShake = false;
 						isHitStop = false;
@@ -226,7 +305,7 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 					switch (localHit[i])
 					{
 					case 10:
-						velocity.x *= -0.3f;
+						velocity.x *= -0.6f;
 						break;
 					case 11:
 						if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
@@ -254,10 +333,10 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 				if (isJump)
 				{
 
-					if (abs(int(velocity.y)) >= 16) {
+					if (abs(int(velocity.x)) >= 16 || abs(int(velocity.y)) >= 16) {
 						//isShake = true;
-						isHitStop = true;
-						hitStopVelocity = 0.0f;
+						//isHitStop = true;
+						//hitStopVelocity = 0.0f;
 					} else {
 						isShake = false;
 						isHitStop = false;
@@ -377,7 +456,11 @@ void PLAYER::hitAction(int hitBlock, int maptchipSize)
 		blastCountDwon = 30;
 		blastDistance = 0;
 	}
+
+
 }
+
+
 
 void PLAYER::debugPrint()
 {

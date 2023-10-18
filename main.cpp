@@ -24,6 +24,7 @@
 #include "GameClearEffect.h"
 #include "playerEffect.h"
 #include "enemyHitEffect.h"
+#include "RefEffect.h"
 
 const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
 
@@ -72,6 +73,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TjumpDirection SelectJD;
 
 	EnemyHitEffect enemyHitEffect;
+
+	RefEffect refEffect;
+
+
+	refEffect.timer = refEffect.timerMax;
 
 	/*--------------------------------------------------------------------*/
 	const int TITLEBOX_MAX = 2;
@@ -287,14 +293,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			//それぞれ当たった時の処理
 			if (SelectBox[8].isHit) {
-				SceneNo = 2;//ゲーム画面へ移動
+				SceneNo = 2;//1ゲーム画面へ移動
+				STAGE.loadStageNum = 0;
 				isChangeScene = true;
 			}
+			if (SelectBox[7].isHit) {
+				SceneNo = 2;//1ゲーム画面へ移動
+
+				isChangeScene = true;
+			}
+			if (SelectBox[6].isHit) {
+				SceneNo = 2;//1ゲーム画面へ移動
+				isChangeScene = true;
+			}
+
 			if (SelectBox[5].isHit) {
 				SelectBox[0].isR = true;//回転
 			}
 			if (SelectBox[4].isHit) {
 				SelectBox[0].isR = true;//回転
+			}
+			if (SelectBox[3].isHit) {
+				SceneNo = 2;//1ゲーム画面へ移動
+				isChangeScene = true;
+			}
+			if (SelectBox[2].isHit) {
+				SceneNo = 2;//1ゲーム画面へ移動
+				isChangeScene = true;
+			}
+			if (SelectBox[1].isHit) {
+				SceneNo = 2;//1ゲーム画面へ移動
+				isChangeScene = true;
 			}
 			if (SelectBox[0].isHit) {
 				SceneNo = 0;//タイトルに戻る
@@ -360,8 +389,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					return 0;
 				}
 
-				if (keys[DIK_R])
-					PLYR.isAlive = false;
+				if (keys[DIK_R]) {
+					PLYR.pos.x = 300.0f;	PLYR.isAlive = false;
+					PLYR.pos.y = 1500.0f;
+				}
 
 				//プレイヤーの操作	
 				if (keys[DIK_SPACE])
@@ -386,13 +417,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					STAGE.blasterPosSet(PLYR.pos, PLYR.size);
 				}
 
+				//PLYR.hitEffect(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), refEffect.isleftHit, refEffect.isrightHit, refEffect.isupHit, refEffect.islowHit, refEffect.isDraw);
+
+
+
 				//プレイヤーの衝突判定
-				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size), STAGE.getmapChipsize());
+				PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
+				refEffect.Appear(PLYR.jumpVel, PLYR.pos);
+				refEffect.DrawTimer();
+
+
+
+
 				PEffect.Move(PLYR.isJump, PLYR.isAlive, PLYR.pos);
 
 				//敵の移動処理
 				if (PLYR.respawnTimer >= 120) {
-					ENEMY.Move(PLYR.pos, PLYR.isStun, PLYR.isHitStop);
+					//ENEMY.Move(PLYR.pos, PLYR.isStun, PLYR.isHitStop);
 				}
 
 				ENEMY.timeSlow(PLYR.isJump);
@@ -699,17 +740,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAMEOVER:
 		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
+			Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+
 			STAGE.draw(SCROLL.getScroll());
 			if (scene == GAME) {
+				PEffect.Draw(SCROLL.getScroll());
+				enemyHitEffect.Draw(SCROLL.getScroll());
+
 				ENEMY.draw(SCROLL.getScroll());
 				PLYR.draw(SCROLL.getScroll());
+
+
 				GAUGE.draw(PLYR.getPressT());
 
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive);
 				PLYR.debugPrint();
 				score.DrawTimer();
-				PEffect.Draw(SCROLL.getScroll());
-				enemyHitEffect.Draw(SCROLL.getScroll());
+
+				refEffect.Draw(SCROLL.getScroll());
 
 			}
 #pragma endregion
@@ -737,7 +785,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
 		Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
-
+		Novice::ScreenPrintf(680, 100, "isDraw=%d", refEffect.isDraw);
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);
 		//シーンチェンジの下
@@ -761,6 +809,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Finalize();
 	return 0;
 }
-
 
 

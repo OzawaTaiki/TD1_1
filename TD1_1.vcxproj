@@ -163,6 +163,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="jumpDirection.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerEffect.h" />
+    <ClInclude Include="RefEffect.h" />
     <ClInclude Include="sceneChange.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="scroll.h" />

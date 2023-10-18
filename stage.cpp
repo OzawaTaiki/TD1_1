@@ -1,7 +1,5 @@
-﻿#include"stage.h"
+﻿#include "stage.h"
 #include <stdio.h>
-
-
 
 int STAGE::getmapChipsize()
 {
@@ -35,13 +33,15 @@ void STAGE::draw(const Vector2& scroll)
 				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);
 			} else if (field[i][j] == 3)
 			{
-				Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]] - 0x55);
+				Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]] - 0x55);//ゴール
 			} else if (field[i][j] < 20)//ブロック
 			{
 				if (field[i][j] == 12)
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);
-				else
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j] - 10]);
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[2], 1.0f, 1.0f, 0, color[field[i][j]]);//トゲ
+				if(field[i][j] == 11)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j] - 10]);//加速壁
+				if (field[i][j] == 10)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[0], 1.0f, 1.0f, 0, 0xFFFFFFFF);//壁
 			} else if (field[i][j] < 30)//アイテム
 			{
 				//Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[1], 31.0f, 31.0f, 0, color[field[i][j]]);
@@ -74,10 +74,19 @@ void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
 	}
 }
 
-int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
+int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velocity)
 {
 	unsigned int returnHitArr = 0;		//当たったブロック番号格納
-	int multiplyNum = 100000000;		//計算用
+
+	Vector2 prePos = getVectSub(velocity, pos); //前フレームのpos
+
+	const int num = 3;
+
+	Vector2 addVelo[num];			//カプセル途中判定用
+	for (int i = 1; i < num + 1; i++)
+	{
+		addVelo[i - 1] = getVectMultiply(velocity, (float)i / (float)num);
+	}
 
 	Vector2 vertex[5] =
 	{
@@ -88,19 +97,50 @@ int STAGE::collisionCheck(const Vector2& pos, const Vector2& size)
 		{0.0f,size.y},
 	};
 
-	for (int i = 0; i < 5; i++)
+	int itemHitPoint = 0;
+	int itemHitSubNum = 0;
+	for (int i = 0; i < num; i++)
 	{
-		int x = int((pos.x + vertex[i].x) / mapchipsize);
-		int y = int((pos.y + vertex[i].y) / mapchipsize);
+		int multiplyNum = 100000000;		//計算用
+		bool isContinue = true;
+		bool isGetItem = false;
+		returnHitArr = 0;
 
-		returnHitArr += field[y][x] * multiplyNum;
-		multiplyNum /= 100;
+		prePos = getVectAdd(prePos, addVelo[i]);
 
-		//アイテム撮ったとき消す
-		if (field[y][x] == 20 || field[y][x] == 21) {
-			field[y][x] = 0;
+		for (int j = 0; j < 5; j++)
+		{
+			int x = int((prePos.x + vertex[j].x) / mapchipsize);
+			int y = int((prePos.y + vertex[j].y) / mapchipsize);
+
+ 			returnHitArr += field[y][x] * multiplyNum;
+
+			if (field[y][x] >= 10 && field[y][x] < 20)
+			{
+				isContinue = false;
+				pos = prePos;
+			}
+
+			//アイテム取ったとき座標を保存
+			if (field[y][x] >= 20 && field[y][x] < 30) {
+				isGetItem = true;
+				itemHitPoint = field[y][x] * multiplyNum;
+				itemHitSubNum = multiplyNum;
+				if (field[y][x] != 22)
+					field[y][x] = 0;
+
+			}
+			multiplyNum /= 100;
 		}
-
+		if (!isContinue)
+		{
+			if (isGetItem)
+			{
+				returnHitArr -= returnHitArr / itemHitSubNum;
+				returnHitArr += itemHitPoint;
+			}
+			break;
+		}
 	}
 
 	return returnHitArr;

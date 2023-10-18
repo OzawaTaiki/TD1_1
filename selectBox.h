@@ -8,8 +8,8 @@
 
 const int BOX_MAX = 10;
 struct selectBox {
-	Vector2 CPos = {-1000,-1000};
-	Vector2 vertex[4];
+	Vector2 CPos = { -1000,-1000 };
+	Vector2 vertex[4] = { 0 };
 	int Wsize = 128;//150
 	int Hsize = 128;//150
 	unsigned int color = 0xFFFFFFFF;
@@ -21,10 +21,10 @@ struct selectBox {
 	float t = 0.0f;
 	float maxTheta = (-5.0f / 14.0f * float(M_PI));
 	float minTheta = 0;
-	bool isR;
+	bool isR = { 0 };
 	bool isHit = false;
 	bool isDraw = true;
-	int timer=35;
+	int timer = 35;
 	float velY = 0;
 	float accY = 1.4f;
 
