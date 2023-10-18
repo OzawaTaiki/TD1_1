@@ -11,11 +11,22 @@ public:
 	Vector2 size;
 	Vector2 acceleration;
 	Vector2 velocity;
+	float jumpVel;
+
+	float drawDir;
+
 	bool isJump;
 	bool isAlive;
 	bool isGoal;
 
+	int GH;
 	int lives;
+	const int maxLives = 3;
+	int crossGH;
+
+	Vector2 livesDrawPos;
+	Vector2 livesDrawSize;
+	float livesGHMargin;
 
 	bool isStun;
 	bool isShake;
@@ -43,23 +54,36 @@ public:
 
 	int boundCount;
 
+	Vector2 respawnPos;
+	bool isSetRespawnPos;
+
 	PLAYER()
 	{
 		pos = { 300.0f,3000.0f };
-		size = { 16,16 };
+		size = { 16.0f,16.0f };
 		acceleration = { 0.00f,0.5f };
 		velocity = { 0,0 };
 
+		jumpVel = 0;
+		drawDir = 1.0f;
+
+		GH = Novice::LoadTexture("./Resources/images/player.png");
 		lives = 3;
+		crossGH= Novice::LoadTexture("./Resources/images/redCross.png");
+
+		livesDrawPos = { 1114,20 };
+		livesDrawSize = { 32,32 };
+		livesGHMargin = 10;
 
 		isJump = false;
 		isAlive = true;
 		isGoal = false;
+		isHitStop = false;
 
 
 		MoveDir = { 1,0 };
 
-		PressT = 0;
+		PressT = 0.5f;
 		addT = 0.02f;
 		maxVelocity = 30.0f;
 		minVelocity = 1.0f;
@@ -80,6 +104,11 @@ public:
 		blastCountDwon = 30;
 		blastDistance = 0;
 
+		respawnPos = pos;
+
+		isSetRespawnPos = false;
+
+
 	};
 
 	void draw(const Vector2& scroll);
@@ -96,7 +125,7 @@ public:
 
 	void antiMove();
 
-	void Respawn(bool& isHit, Vector2& enemyPos);
+	void Respawn(bool& isHit, Vector2& enemyPos, const Vector2& enemyRespawnPos);
 
 	void gaugeControl();
 
@@ -104,7 +133,7 @@ public:
 
 	void dirUpdate();
 
-	void hitAction(int hitBlock, int maptchipSize);
+	void hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw);
 
 	void debugPrint();
 

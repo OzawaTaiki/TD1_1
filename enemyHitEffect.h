@@ -5,16 +5,15 @@
 const int EEFFECT_MAX = 8;
 class EnemyHitEffect {
 public:
-	Vector2 CPos[EEFFECT_MAX];
-	float size[EEFFECT_MAX];
-	Vector2 vel[EEFFECT_MAX];
-	Vector2 acc[EEFFECT_MAX];
+	Vector2 CPos[EEFFECT_MAX] = { 0 };
+	float size[EEFFECT_MAX] = { 0 };
+	Vector2 vel[EEFFECT_MAX] = { 0 };
+	Vector2 acc[EEFFECT_MAX] = { 0 };
 
 	bool isAppear[EEFFECT_MAX] = { 0 };
 
 
 	unsigned int color = 0xFF0000FF;
-	int whiteGH = Novice::LoadTexture("./NoviceResources/white1x1.png");
 
 public:
 	void UpDate(const bool& isHit, const Vector2& playerCPos);

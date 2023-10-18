@@ -157,5 +157,6 @@
     <ClInclude Include="GameClearEffect.h" />
     <ClInclude Include="playerEffect.h" />
     <ClInclude Include="enemyHitEffect.h" />
+    <ClInclude Include="RefEffect.h" />
   </ItemGroup>
 </Project>

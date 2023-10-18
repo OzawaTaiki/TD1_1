@@ -9,8 +9,9 @@
 class playerEffect {
 
 	Vector2 CPos[EFFECT_MAX] = { 0 };
+	Vector2 vertex[4][EFFECT_MAX] = { 0 };
 	float size[EFFECT_MAX] = { 0 };
-	int whiteGH = Novice::LoadTexture("./NoviceResources/white1x1.png");
+	int whiteGH = Novice::LoadTexture("./Resources/images/zanzou.png");
 	unsigned int color = 0xFFFFFFFF;
 	bool isDraw[EFFECT_MAX] = { 0 };
 	bool isPawn[EFFECT_MAX] = { 0 };
