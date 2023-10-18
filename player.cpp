@@ -165,8 +165,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		if (localHit[i] == 19 || localHit[i] == 20)//hari no toki death
 		{
 			isAlive = false;
-		}
-		else if (localHit[i] == 0)
+		} else if (localHit[i] == 0)
 			dir = -1;
 		else if (localHit[i] == 1)
 			dir = 1;
@@ -176,21 +175,13 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	int HitCopy = localHit[0];
 
 	if (isJump) {
-		if (localHit[1] == 10 || localHit[1] == 11) {
-			isHitPoint[0] = true;
-			isDraw = true;
-		}
-		if (localHit[2] == 10 || localHit[2] == 11) {
-			isHitPoint[1] = true;
-			isDraw = true;
-		}
-		if (localHit[3] == 10 || localHit[3] == 11) {
-			isHitPoint[2] = true;
-			isDraw = true;
-		}
-		if (localHit[4] == 10 || localHit[4] == 11) {
-			isHitPoint[3] = true;
-			isDraw = true;
+		for (int i = 1; i < 5; i++)
+		{
+			if (localHit[i] >= 3 && localHit[i] <= 18)
+			{
+				isHitPoint[i - 1] = true;
+				isDraw = true;
+			}
 		}
 	}
 
@@ -204,7 +195,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	{
 		for (int i = 0; i < 5; i++)
 		{
-			if (localHit[i] >= 4 && localHit[i] < 19)
+			if (localHit[i] >= 3 && localHit[i] < 19)
 			{
 				if (i == 0)
 				{//埋まってるとき
@@ -220,8 +211,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							localHit[2] = 0;
 							localHit[3] = 0;
 							localHit[4] = 0;
-						}
-						else if (MoveDir.y > 0)
+						} else if (MoveDir.y > 0)
 						{
 
 							localHit[0] = 0;
@@ -230,8 +220,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							localHit[3] = 0;
 							localHit[4] = HitCopy;
 						}
-					}
-					else if (MoveDir.x != 0 && (localHit[2] == 1 || localHit[3] == 1 || localHit[2] == 0 || localHit[3] == 0))
+					} else if (MoveDir.x != 0 && (localHit[2] == 1 || localHit[3] == 1 || localHit[2] == 0 || localHit[3] == 0))
 					{
 						int a = int((pos.x / maptchipSize) - MoveDir.x);
 						pos.x = a * maptchipSize + size.x;
@@ -243,8 +232,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							localHit[2] = HitCopy;
 							localHit[3] = 0;
 							localHit[4] = 0;
-						}
-						else if (MoveDir.x > 0)
+						} else if (MoveDir.x > 0)
 						{
 							localHit[0] = 0;
 							localHit[1] = 0;
@@ -252,12 +240,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							localHit[3] = HitCopy;
 							localHit[4] = 0;
 						}
-					}
-					else if (localHit[2] >= 4 && localHit[2] < 19 &&
+					} else if (localHit[2] >= 3 && localHit[2] < 19 &&
 						localHit[3] >= 4 && localHit[3] < 19)
 					{
-						if (localHit[1] >= 4 && localHit[1] < 19 ||
-							localHit[4] >= 4 && localHit[4] < 19)
+						if (localHit[1] >= 3 && localHit[1] < 19 ||
+							localHit[4] >= 3 && localHit[4] < 19)
 						{
 							if (MoveDir.x < 0)
 							{
@@ -267,8 +254,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 								localHit[2] = HitCopy;
 								localHit[3] = 0;
 								localHit[4] = 0;
-							}
-							else if (MoveDir.x > 0)
+							} else if (MoveDir.x > 0)
 							{
 								pos.x -= 30.0f;
 								localHit[0] = 0;
@@ -278,12 +264,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 								localHit[4] = 0;
 							}
 						}
-					}
-					else if (localHit[1] >= 4 && localHit[1] < 19 &&
-						localHit[4] >= 4 && localHit[4] < 19)
+					} else if (localHit[1] >= 3 && localHit[1] < 19 &&
+						localHit[4] >= 3 && localHit[4] < 19)
 					{
-						if (localHit[2] >= 4 && localHit[2] < 19 ||
-							localHit[3] >= 4 && localHit[3] < 19)
+						if (localHit[2] >= 3 && localHit[2] < 19 ||
+							localHit[3] >= 3 && localHit[3] < 19)
 						{
 							if (MoveDir.y < 0)
 							{
@@ -294,8 +279,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 								localHit[2] = 0;
 								localHit[3] = 0;
 								localHit[4] = 0;
-							}
-							else if (MoveDir.y > 0)
+							} else if (MoveDir.y > 0)
 							{
 								pos.y -= 30.0f;
 
@@ -323,29 +307,25 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							isShake = true;
 							isHitStop = true;
 							hitStopVelocity = 0.0f;
-						}
-						else {
+						} else {
 							isShake = false;
 							isHitStop = false;
 							hitStopVelocity = 1.0f;
 						}
 
-						if (localHit[i] >= 4 && localHit[i] < 19)
+						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
 							velocity.x *= -0.3f;
-						}
-						else if (localHit[i] == 18)
+						} else if (localHit[i] == 18)
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= -1.1f;
 								velocity.y *= 1.1f;
-							}
-							else {
+							} else {
 								velocity.x *= -1.0f;
 							}
 						}
-					}
-					else {
+					} else {
 						isShake = false;
 						isHitStop = false;
 						hitStopVelocity = 1.0f;
@@ -364,30 +344,26 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 							isShake = true;
 							isHitStop = true;
 							hitStopVelocity = 0.0f;
-						}
-						else {
+						} else {
 							isShake = false;
 							isHitStop = false;
 							hitStopVelocity = 1.0f;
 						}
 
 
-						if (localHit[i] >= 4 && localHit[i] < 19)
+						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
 							velocity.y *= -(0.9f - (0.25f * boundCount));
-						}
-						else if (localHit[i] == 18)
+						} else if (localHit[i] == 18)
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= 1.1f;
 								velocity.y *= -1.1f;
-							}
-							else {
+							} else {
 								velocity.y *= -1.0f;
 							}
 						}
-					}
-					else
+					} else
 					{
 						antiMove();
 						velocity.y = 0;
@@ -399,8 +375,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 					break;
 				}
 
-			}
-			else if (localHit[i] >= 20 && localHit[i] < 30)
+			} else if (localHit[i] >= 21 && localHit[i] < 30)
 			{
 				if (localHit[i] == 21) { // 加速アイテム
 					velocity.x *= 1.3f;
@@ -411,13 +386,13 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 					isStun = true;
 				}
 
-				if (localHit[i] == 23) { //大砲
+				if (localHit[i] == 23 || localHit[i] == 24) { //大砲
 					velocity.x = 0.0f;
 					velocity.y = 0.0f;
 					boundCount = 3;
 					isBlasted = true;
 				}
-				if (localHit[i] == 24)
+				if (localHit[i] == 25)
 				{
 					isSetRespawnPos = true;
 					respawnPos = pos;
@@ -463,8 +438,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	if (isStun && stunTimer >= 0)
 	{
 		stunTimer--;
-	}
-	else
+	} else
 	{
 		isStun = false;
 		stunTimer = 120;
@@ -479,8 +453,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		if (blastCountDwon <= 0) {
 			if (dir >= 1) {
 				pos.x += 25.0f;
-			}
-			else if (dir < 1) {
+			} else if (dir < 1) {
 				pos.x -= 25.0f;
 			}
 			blastDistance += 25;
@@ -488,8 +461,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 			velocity.x = 5.0f;
 		}
 
-	}
-	else
+	} else
 	{
 		isBlasted = false;
 		blastTimer = 120;

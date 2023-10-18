@@ -34,9 +34,11 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 	{
 		for (int j = drawMinX; j < drawMinX + drawMapchipX; j++)
 		{
-			if (field[i][j] > 2)
+			if (field[i][j] >= 2)
 			{
-				if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 25)//ブロック 大砲
+				if (field[i][j] == 2)
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
+				else if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 25)//ブロック 大砲
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, stageColor);
 
 				else if (field[i][j] == 18)//加速
@@ -116,14 +118,14 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 
 			returnHitArr += field[y][x] * multiplyNum;
 
-			if (field[y][x] >= 10 && field[y][x] < 20)
+			if (field[y][x] >= 3 && field[y][x] < 19)
 			{
 				isContinue = false;
 				pos = prePos;
 			}
 
 			//アイテム取ったとき座標を保存
-			if (field[y][x] >= 20 && field[y][x] < 30) {
+			if (field[y][x] >= 21 && field[y][x] < 25) {
 
 				isGetItem = true;
 
@@ -135,7 +137,7 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 				{
 					nowCheckPointColor = CheckPointColor[1];
 				}
-				
+
 
 			}
 			multiplyNum /= 100;

@@ -391,15 +391,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					PLYR.respawnPos = { 0,0 };
 				}
 
-				//プレイヤーのリスポーン
-				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
-				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
-					isChangeSceneGame = true;
-				}
+
 
 				if (PLYR.isGoal)
 				{
-					return 0;
+					SceneNo = 4;
+					isChangeScene = true;
 				}
 
 				//プレイヤーの操作	
@@ -428,9 +425,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//プレイヤーの衝突判定
 				if (!PLYR.isHitStop)
-					PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
+					PLYR.hitAction(STAGE.collisionCheck(PLYR.pos, PLYR.size, PLYR.velocity), STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw, ENEMY.isPopEffect, ENEMY. isHit,isChangeSceneGame);
 				else
-					PLYR.hitAction(0, STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw);
+					PLYR.hitAction(0, STAGE.getmapChipsize(), refEffect.isHitPoint, refEffect.isDraw,ENEMY.isPopEffect, ENEMY.isHit, isChangeSceneGame);
+
+				//プレイヤーのリスポーン
+				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
+				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
+					isChangeSceneGame = true;
+				}
 
 				refEffect.Appear(PLYR.jumpVel, PLYR.pos);
 				refEffect.DrawTimer();

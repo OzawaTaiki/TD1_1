@@ -30,7 +30,7 @@ public:
 
 	ENEMY()
 	{
-		pos = { -200.0f,3000.0f };
+		pos = { -500.0f,3000.0f };
 		size = { 128,128 };
 
 		speed = 5.0f;
