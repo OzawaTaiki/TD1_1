@@ -108,6 +108,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int SELECTBOX_MAX = 10;
 	Box SelectRogo;
 	Box gameOverRogo;
+	Box PressSpace;
 	selectBox SelectBox[10];
 	SelectBox[0].color = 0xFF0000FF;
 	//[9]=操作説明[8]＝１面[7]＝２面[6]＝３面[5]＝next
@@ -129,7 +130,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		120,
 		0xFF1111FF
 	);
-
+	//押してください
+	PressSpace.Init(
+		{ 640,560 },
+		720,
+		120,
+		0x000000FF
+	);
 
 
 
@@ -778,6 +785,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAME:
 		case GAMEOVER:
 		case GAMECLEAR:
+
 #pragma region"ゲームの描画処理"
 
 			Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);

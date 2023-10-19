@@ -34,14 +34,12 @@ void PLAYER::scoreDraw() {
 }
 
 void PLAYER::OverDraw() {
-	Novice::DrawSprite(660, 520, GH, 1, -1, 0, RED);
+	Novice::DrawSprite(660, 520, GH, 1, -1, 0, WHITE);
 	Novice::DrawSprite(660, 520, crossGH, 1, -1, 0, WHITE);
 	Novice::DrawSprite(1000, 420, GH, 1, -1, 0, WHITE);
 	Novice::DrawSprite(1000, 420, crossGH, 1, -1, 0, WHITE);
-	Novice::DrawSprite(200, 410, GH, -1, -1, 0, BLUE);
+	Novice::DrawSprite(200, 410, GH, -1, -1, 0, WHITE);
 	Novice::DrawSprite(200, 410, crossGH, -1, -1, 0, WHITE);
-
-
 }
 
 void PLAYER::score() {
