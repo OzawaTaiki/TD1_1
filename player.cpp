@@ -34,12 +34,40 @@ void PLAYER::scoreDraw() {
 }
 
 void PLAYER::OverDraw() {
-	Novice::DrawSprite(660, 520, GH, 1, -1, 0, WHITE);
-	Novice::DrawSprite(660, 520, crossGH, 1, -1, 0, WHITE);
-	Novice::DrawSprite(1000, 420, GH, 1, -1, 0, WHITE);
-	Novice::DrawSprite(1000, 420, crossGH, 1, -1, 0, WHITE);
-	Novice::DrawSprite(200, 410, GH, -1, -1, 0, WHITE);
-	Novice::DrawSprite(200, 410, crossGH, -1, -1, 0, WHITE);
+	if (isAlive) {
+		Novice::DrawSprite(int(pos.x - size.x), int(pos.y + size.y), GH, 1, -1, 0, WHITE);
+	}
+}
+
+void PLAYER::OverUpdate(bool& isHit) {
+	if (isAlive) {
+		velocity.y += acceleration.y;
+
+		pos.x += velocity.x * hitStopVelocity;
+		pos.y += velocity.y * hitStopVelocity;
+
+		if (pos.y >= 360) {
+
+
+			if (boundCount < 3) {
+				velocity.y *= -(0.6f - (0.25f * boundCount));
+				boundCount += 1;
+			} else {
+				pos.y = 360;
+				velocity = { 0,0 };
+			}
+
+
+		}
+
+	}
+	if (isHit) {
+		isAlive = false;
+		pos = { 640,-50 };
+		isHit = false;
+	}
+
+
 }
 
 void PLAYER::score() {
@@ -155,7 +183,7 @@ void PLAYER::jump(const Vector2& kJumpVect)
 
 		velocity = { kJumpVect.x * jumpVel ,kJumpVect.y * jumpVel };
 
-		PressT = 0.35f;
+		PressT = 0.28f;
 		addT *= addT < 0 ? -1 : 1;
 
 		isJump = true;

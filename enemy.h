@@ -10,20 +10,25 @@ public:
 
 	float speed;
 	int slowTimer;
+	float moveDirX;
+	float moveDirY;
 
 	int warningCountDown;
 	int warningTimer;
+	int animationTimer;
+	int animationCounter;
 
 	bool isMove;
 	bool isSlow;
 	bool isHit;
 	bool isPopEffect;
 	bool isWarning;
+	bool animSwitcher;
 	bool SCGO;
 
 	Vector2 respawnPos;
 
-	int enemyGH[2] = { 0 };
+	int enemyGH[3] = { 0 };
 
 
 	int color = 0xf03c3cff;
@@ -36,14 +41,20 @@ public:
 
 		speed = 5.0f;
 		slowTimer = 150;
-
+		moveDirX = 0.0f;
+		moveDirY = 0.0f;
 		warningCountDown = 60;
 		warningTimer = 70;
+		animationTimer = 0;
+		animationCounter = 0;
 
 		isMove = false;
 		isSlow = true;
 		isHit = false;
 		isPopEffect = false;
+		animSwitcher = false;
+		isWarning = false;
+		animSwitcher=false;
 		SCGO = true;
 
 		respawnPos = pos;
@@ -52,13 +63,14 @@ public:
 		isPopEffect = false;
 
 		enemyGH[0] = Novice::LoadTexture("./Resources/images/Warning.png");
+		enemyGH[1] = Novice::LoadTexture("./Resources/images/enemyLeft.png");
+		enemyGH[2] = Novice::LoadTexture("./Resources/images/enemyRight.png");
 	};
 
-	void draw(const Vector2& scroll);
-
+	void draw(const Vector2& scroll, bool& playerIsAlive);
 	void OVERDraw();
 
-	void OVERUp();
+	void OVERUp(bool& isAlive, int& BoundCount);
 
 	Vector2 getPos();
 

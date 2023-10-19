@@ -15,7 +15,11 @@ struct Box {
 	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
-	int GH;
+	int GH[10] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
+	 Novice::LoadTexture("./Resources/images/PRESSSPACE.png"),
+	};
+
+	int timer = 60;
 
 	void Init(Vector2 cpos, int WSize, int HSize, unsigned int Color) {
 		CPos = cpos;
@@ -37,6 +41,8 @@ struct Box {
 
 	}
 
+
+
 	void DrawUpDate() {
 		if (isDraw) {
 
@@ -52,9 +58,20 @@ struct Box {
 		}
 	}
 
-	void DrawSpriteUpdate() {
+	void DrawSpriteUpdate(int& DrawGH) {
 		Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
-			GH, 1.0f, 1.0f, 0.0f, color);
+			DrawGH, 1.0f, 1.0f, 0.0f, color);
+	}
+
+	void DrawSpriteUpdateT(int& DrawGH) {
+		timer-= 1;
+		if (timer <= 0) {
+			timer = 60;
+		}
+		if (timer>=10) {
+			Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
+				DrawGH, 1.0f, 1.0f, 0.0f, color);
+		}
 	}
 
 };

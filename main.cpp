@@ -122,21 +122,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		150,
 		0x1B162CFF
 	);
-
-
 	gameOverRogo.Init(
 		{ 640,160 },
 		720,
 		120,
 		0xFF1111FF
 	);
-	//押してください
-	PressSpace.Init(
-		{ 640,560 },
-		720,
-		120,
-		0x000000FF
-	);
+
 
 
 
@@ -180,7 +172,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	score.rankGH[3] = Novice::LoadTexture("./Resources/images/RankC.png");
 
 
-	gameOverRogo.GH = Novice::LoadTexture("./Resources/images/GAMEOVER.png");
+
 
 	const int PAPER_MAX = 64;
 	EffectPaper effectpaper[PAPER_MAX];
@@ -477,7 +469,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (scene == GAME) {
 					//リザルトの時間測定する
-					score.TimeCount();
+					score.TimeCount(PLYR.isAlive,PLYR.isGoal);
 					//仮置き、ゲームオーバー
 					if (keys[DIK_3] && !preKeys[DIK_3]) {
 						SceneNo = 3;
@@ -503,7 +495,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームオーバーの更新処理"
 
 			if (scene == GAMEOVER) {
-				ENEMY.OVERUp();
+
+				ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
+				enemyHitEffect.UpDate(ENEMY.isHit, PLYR.isHitToge, PLYR.pos);
+				enemyHitEffect.Reset();
+				PLYR.OverUpdate(ENEMY.isHit);
+				ENEMY.OVERUp(PLYR.isAlive,PLYR.boundCount);
+				PressSpace.Init({ 640,560 }, 640, 100, 0xFFFFFFFF);
+
 				//セレクト画面へ戻る
 				if (!isChangeScene) {
 					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
@@ -528,6 +527,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//時間に応じてスコアを表示
 				score.result();
 				SCROLL.update(PLYR.getPos(), PLYR.isShake);	//セレクト画面へ戻る
+				PressSpace.Init({ 640,610 },640,100,0xFFFFFFFF);
+
 
 				if (!isChangeScene) {
 					if (keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
@@ -686,7 +687,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.isGoal = false;
 			PLYR.isHitToge = false;
 			PLYR.MoveDir = { 1,0 };
-			PLYR.PressT = 0.35f;
+			PLYR.PressT = 0.28f;
 			PLYR.addT = 0.02f;
 			PLYR.maxVelocity = 30.0f;
 			PLYR.minVelocity = 1.0f;
@@ -723,8 +724,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (scene == GAMEOVER) {//GAMEOVER時に
 				ENEMY.SCGO = true;
-				ENEMY.pos = { -500.0f,360.0f };
-
+				ENEMY.pos = { -500.0f,360.0f };	
+				PLYR.pos = { 640.0f,-50.0f };
+				PLYR.isAlive = true;
+				ENEMY.isHit = false;
 			}
 			if (scene == SELECT) {//GAMEとCLEARの間でリセットするとスコアを表示できないため
 				score.ClearTimer = 0;
@@ -789,7 +792,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームの描画処理"
 
 			Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
-
+			score.DrawResultTimer(STAGE.stageColor);
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {
 				PEffect.Draw(SCROLL.getScroll());
@@ -797,7 +800,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				refEffect.Draw(SCROLL.getScroll());
 
-				ENEMY.draw(SCROLL.getScroll());
+				ENEMY.draw(SCROLL.getScroll(),PLYR.isAlive);
 				ENEMY.Warning(SCROLL.getScroll(), PLYR.isAlive);
 
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());
@@ -813,10 +816,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region"ゲームオーバーの描画処理"
 			if (scene == GAMEOVER) {
+
+				/*変更*/
 				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000F0, kFillModeSolid);
-				gameOverRogo.DrawSpriteUpdate();
+				gameOverRogo.DrawSpriteUpdate(gameOverRogo.GH[0]);
 				ENEMY.OVERDraw();
 				PLYR.OverDraw();
+				PressSpace.DrawSpriteUpdateT(PressSpace.GH[1]);
+				enemyHitEffect.OverDraw();
+
+				/*ここまで*/
 			}
 #pragma endregion
 
@@ -826,25 +835,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000EE, kFillModeSolid);
 				score.result();//rank表示
+
 				PLYR.scoreDraw();
+
 				score.DrawResultTimer(STAGE.stageColor);//クリアタイム表示
 				for (int i = 0; i < PAPER_MAX; i++) {
 					effectpaper[i].DrawUpDate();
 				}
+
+				PressSpace.DrawSpriteUpdateT(PressSpace.GH[1]);
+
 			}
 			break;
 		}
 #pragma endregion
 
-		//Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
-		//Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
+		Novice::ScreenPrintf(1000, 80, "isHit = %d", ENEMY.isHit);
+		Novice::ScreenPrintf(1000, 100, "Alive = %d",PLYR.isAlive);
+		Novice::ScreenPrintf(1000, 120, "timer = %d");
 
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);
 		//シーンチェンジの下
 		changeLow.DrawSpriteUpdate(changeUp.sceneChangeLowGH);
 
-
+		
 		///
 		/// ↑描画処理ここまで
 		///

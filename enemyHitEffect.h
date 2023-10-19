@@ -11,13 +11,15 @@ public:
 	Vector2 acc[EEFFECT_MAX] = { 0 };
 
 	bool isAppear[EEFFECT_MAX] = { 0 };
-
+	
+	int GH = Novice::LoadTexture("./Resources/images/diedEffect.png");
 
 	unsigned int color = 0xFF0000FF;
 
 public:
-	void UpDate(const bool& isHit, const bool& isHitToge, const Vector2& playerCPos);
-
+	void UpDate( bool& isHit, const bool& isHitToge, const Vector2& playerCPos);
+	void Reset();
 	void Draw(const Vector2& scroll);
+	void OverDraw();
 
 };

@@ -21,15 +21,17 @@ struct Score {
 	int rankGH[4] = { 0 };
 	int tentenGH = Novice::LoadTexture("./Resources/images/tenten.png");
 
-	void TimeCount() {
-		ClearTimer += 1;
-		if (ClearTimer == 60) {
-			ClearTimerS++;
-			ClearTimer = 0;
-		}
-		if (ClearTimerS == 60) {
-			ClearTimerM++;
-			ClearTimerS = 0;
+	void TimeCount(bool& playerAlive, bool& isGoal) {
+		if (playerAlive&&!isGoal) {
+			ClearTimer += 1;
+			if (ClearTimer == 60) {
+				ClearTimerS++;
+				ClearTimer = 0;
+			}
+			if (ClearTimerS == 60) {
+				ClearTimerM++;
+				ClearTimerS = 0;
+			}
 		}
 	}
 
@@ -84,7 +86,7 @@ struct Score {
 
 		for (int i = 0; i < 8; i++) {
 			numberPos[i].x = 356.0f + (static_cast<int>(i) * 71);
-			numberPos[i].y = 100.0f;
+			numberPos[i].y = 100.0f;//元々100
 			if (i != 2 && i != 5) {
 				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1, 1, 0.0f, StageColor);
 			} else {

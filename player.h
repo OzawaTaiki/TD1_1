@@ -119,6 +119,9 @@ public:
 
 	void OverDraw();
 
+	void OverUpdate(bool& isHit);
+
+
 	void score();
 
 	Vector2 getPos();

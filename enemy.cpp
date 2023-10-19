@@ -1,26 +1,93 @@
 ﻿#include "enemy.h"
 
-void ENEMY::draw(const Vector2& scroll) {
-	Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
+void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive) {
+
+	if (playerIsAlive) {
+		animationTimer++;
+
+		if (animationTimer % 8 == 0) {
+			animationCounter += 256;
+		}
+	} else {
+		animationTimer = 0;
+	}
+
+	if (animationCounter >= 1024) {
+		animationCounter = 0;
+	}
+
+	if (moveDirX > 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - scroll.x - size.x), int(pos.y - scroll.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[1],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	} else if (moveDirX < 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - scroll.x - size.x), int(pos.y - scroll.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[2],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	}
+
+
 }
 
 void ENEMY::OVERDraw() {
-	Novice::DrawEllipse(int(pos.x), int(pos.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
-}
+	animationTimer++;
 
-void ENEMY::OVERUp() {
-	if (SCGO) {
-		pos = { -500,360 };
-		SCGO = false;
+	if (animationTimer % 8 == 0) {
+		animationCounter += 256;
 	}
 
+
+	if (animationCounter >= 1024) {
+		animationCounter = 0;
+	}
+
+	if (moveDirX > 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - size.x), int(pos.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[1],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	} else if (moveDirX < 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - size.x), int(pos.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[2],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	}
+}
+
+
+void ENEMY::OVERUp(bool & isAlive,int &BoundCount) {
+	if (SCGO) {
+		pos = { -500,360 };
+		isAlive = true;
+		BoundCount = 0;
+		isHit = false;
+		isPopEffect = false;
+	
+		SCGO = false;
+	}
 	pos.x += speed;
 
 	if (pos.x >= 1680) {
 		SCGO = true;
 	}
-	Novice::ScreenPrintf(500, 80, "SCGO = %d", SCGO);
-	Novice::ScreenPrintf(500, 120, "ENEMY.pos= %f,%f", pos.x,pos.y);
 }
 
 Vector2 ENEMY::getPos()
@@ -36,8 +103,8 @@ Vector2 ENEMY::getSize()
 void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 {
 	//敵の移動角度の計算
-	float moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
-	float moveDirY = sinf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
+	moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
+	moveDirY = sinf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
 
 	//敵の移動
 	if (!isStun && !isHitStop) {
@@ -65,13 +132,13 @@ void ENEMY::timeSlow(bool& isJump, bool& playerIsAlive)
 			slowTimer--;
 		} else {
 			speed = 5.0f;
-			slowTimer = 150;
+			slowTimer = 120;
 		}
 
 	} else {
 		speed = 0.0f;
 		isSlow = true;
-		slowTimer = 150;
+		slowTimer = 120;
 	}
 }
 
@@ -82,9 +149,11 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	if (distance <= size.x + playerSize.x) {
 		isHit = true;
 		isPopEffect = true;
-	} else {
-		isHit = false;
 	}
+
+	//else はバグの原因になるので削除
+	//無くてもゲーム自体は問題なく動作します
+
 	//Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 }
 
@@ -129,7 +198,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 			warningTimer = 70;
 		}
 	}
-	//Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
-	//Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
-	//Novice::ScreenPrintf(500, 80, "warningTimer = %d", warningTimer);
+	Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
+	Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
+	Novice::ScreenPrintf(500, 80, "warningTimer = %d", warningTimer);
 }
