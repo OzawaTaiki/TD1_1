@@ -8,7 +8,7 @@ void EnemyHitEffect::UpDate(const bool& isHit, const bool& isHitToge, const Vect
 				acc[i] = { 0.0f,0.8f };
 				vel[i].x = static_cast<float>(rand() % 31 - 15);
 				vel[i].y = static_cast<float>(rand() % 31 - 15);
-				size[i] = static_cast<float>(20.0f);
+				size[i] = static_cast<float>(16.0f);
 				isAppear[i] = true;
 			}
 		}

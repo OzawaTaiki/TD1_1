@@ -70,6 +70,7 @@ void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
 			{ //大砲
 				pos.x = float(mapchipsize * j + size.x);
 				pos.y = float(mapchipsize * i + size.y);
+
 			}
 		}
 	}

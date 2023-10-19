@@ -12,7 +12,7 @@ struct TitlePlayer {
 	Vector2 vel = { 0 };
 	Vector2 acc = { 0.0 };
 	int radius = 0;
-	unsigned int color=0;
+	unsigned int color = 0;
 	float dir = 1;
 	bool isJump = false;
 	bool isRef = false;
@@ -26,7 +26,7 @@ struct TitlePlayer {
 		color = playerColor;
 	}
 
-	void jump(const Vector2& kJumpVect,bool isSceneChange) {
+	void jump(const Vector2& kJumpVect, bool isSceneChange) {
 		if (!isSceneChange) {
 			if (!isJump) {
 				if (!isReload) {
@@ -70,7 +70,7 @@ struct TitlePlayer {
 
 		}
 
-		if (CPos.y >= 1400 &&
+		if (CPos.y >= 850 &&
 			isJump) {
 			isJump = false;
 			vel = { 0,0 };
@@ -88,16 +88,17 @@ struct TitlePlayer {
 
 	void ReturnPlayer() {
 		if (!isJump &&
-			CPos.y >= 900 ||
+			CPos.y >= 850 ||
 			radius <= 0) {
-			CPos = { 640.0f ,899.0f };
+			CPos = { 640.0f ,849.0f };
 			radius = 100;
 			JumpTimer = 10;
 			isRef = false;
 			isReload = true;
 		}
+
 		if (isReload) {
-			if (CPos.y<=720) {
+			if (CPos.y <= 720) {
 				CPos.y = 720;
 				canHit = true;
 				isReload = false;

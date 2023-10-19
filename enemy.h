@@ -19,6 +19,7 @@ public:
 	bool isHit;
 	bool isPopEffect;
 	bool isWarning;
+	bool SCGO;
 
 	Vector2 respawnPos;
 
@@ -43,6 +44,7 @@ public:
 		isSlow = true;
 		isHit = false;
 		isPopEffect = false;
+		SCGO = true;
 
 		respawnPos = pos;
 
@@ -53,6 +55,10 @@ public:
 	};
 
 	void draw(const Vector2& scroll);
+
+	void OVERDraw();
+
+	void OVERUp();
 
 	Vector2 getPos();
 

@@ -15,7 +15,7 @@ struct Box {
 	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
-
+	int GH;
 
 	void Init(Vector2 cpos, int WSize, int HSize, unsigned int Color) {
 		CPos = cpos;
@@ -52,7 +52,7 @@ struct Box {
 		}
 	}
 
-	void DrawSpriteUpdate(int GH) {
+	void DrawSpriteUpdate() {
 		Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
 			GH, 1.0f, 1.0f, 0.0f, color);
 	}

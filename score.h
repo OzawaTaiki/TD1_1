@@ -58,7 +58,7 @@ struct Score {
 	}
 
 
-	void DrawResultTimer() {
+	void DrawResultTimer(unsigned int& StageColor) {
 		RClearTimerM = ClearTimerM;
 		RClearTimerS = ClearTimerS;
 		RClearTimer = ClearTimer;
@@ -86,9 +86,9 @@ struct Score {
 			numberPos[i].x = 356.0f + (static_cast<int>(i) * 71);
 			numberPos[i].y = 100.0f;
 			if (i != 2 && i != 5) {
-				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1, 1, 0.0f, 0xFFFFFFFF);
+				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1, 1, 0.0f, StageColor);
 			} else {
-				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), tentenGH, 1, 1, 0.0f, 0xFFFFFFFF);
+				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), tentenGH, 1, 1, 0.0f, StageColor);
 			}
 		}
 

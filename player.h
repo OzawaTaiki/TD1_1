@@ -115,6 +115,12 @@ public:
 
 	void draw(const Vector2& scroll);
 
+	void scoreDraw();
+
+	void OverDraw();
+
+	void score();
+
 	Vector2 getPos();
 
 	Vector2 getDir();

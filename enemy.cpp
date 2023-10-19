@@ -4,6 +4,25 @@ void ENEMY::draw(const Vector2& scroll) {
 	Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
 }
 
+void ENEMY::OVERDraw() {
+	Novice::DrawEllipse(int(pos.x), int(pos.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
+}
+
+void ENEMY::OVERUp() {
+	if (SCGO) {
+		pos = { -500,360 };
+		SCGO = false;
+	}
+
+	pos.x += speed;
+
+	if (pos.x >= 1680) {
+		SCGO = true;
+	}
+	Novice::ScreenPrintf(500, 80, "SCGO = %d", SCGO);
+	Novice::ScreenPrintf(500, 120, "ENEMY.pos= %f,%f", pos.x,pos.y);
+}
+
 Vector2 ENEMY::getPos()
 {
 	return pos;
@@ -26,8 +45,7 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 		pos.y -= float(moveDirY) * speed;
 
 		color = 0x00ff00ff;
-	}
-	else if (isStun) {
+	} else if (isStun) {
 		color = 0xf03c3cff;
 	}
 }
@@ -38,22 +56,19 @@ void ENEMY::timeSlow(bool& isJump, bool& playerIsAlive)
 	if (playerIsAlive) {
 		if (slowTimer <= 0) {
 			isSlow = false;
-		}
-		else if (isJump) {
+		} else if (isJump) {
 			isSlow = true;
 		}
 
 		if (!isJump && isSlow) {
 			speed = 0.5f;
 			slowTimer--;
-		}
-		else {
+		} else {
 			speed = 5.0f;
 			slowTimer = 150;
 		}
 
-	}
-	else {
+	} else {
 		speed = 0.0f;
 		isSlow = true;
 		slowTimer = 150;
@@ -67,8 +82,7 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	if (distance <= size.x + playerSize.x) {
 		isHit = true;
 		isPopEffect = true;
-	}
-	else {
+	} else {
 		isHit = false;
 	}
 	//Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
@@ -86,8 +100,7 @@ void ENEMY::setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirect
 			//YはPLYRと同じに
 			respawnPos.x = respwnDistance * PLYRDirection;
 			respawnPos.y = PLYRPos.y;
-		}
-		else
+		} else
 		{
 			respawnPos = pos;
 		}

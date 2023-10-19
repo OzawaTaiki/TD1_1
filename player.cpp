@@ -24,6 +24,32 @@ void PLAYER::draw(const Vector2& scroll)
 	}
 }
 
+void PLAYER::scoreDraw() {
+	for (int i = 0; i < maxLives; i++) {
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), GH, 2, 2, 0, WHITE);
+	}
+	for (int i = 0; i < (maxLives - lives); i++) {
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 2, 2, 0, WHITE);
+	}
+}
+
+void PLAYER::OverDraw() {
+	Novice::DrawSprite(660, 520, GH, 1, -1, 0, RED);
+	Novice::DrawSprite(660, 520, crossGH, 1, -1, 0, WHITE);
+	Novice::DrawSprite(1000, 420, GH, 1, -1, 0, WHITE);
+	Novice::DrawSprite(1000, 420, crossGH, 1, -1, 0, WHITE);
+	Novice::DrawSprite(200, 410, GH, -1, -1, 0, BLUE);
+	Novice::DrawSprite(200, 410, crossGH, -1, -1, 0, WHITE);
+
+
+}
+
+void PLAYER::score() {
+	livesDrawPos = { 484,30 };
+	livesDrawSize = { 64,64 };
+	livesGHMargin = 60;
+}
+
 Vector2 PLAYER::getPos()
 {
 	return pos;
