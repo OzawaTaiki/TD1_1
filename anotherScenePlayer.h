@@ -18,7 +18,6 @@ struct TitlePlayer {
 	bool isRef = false;
 	bool canHit = true;
 	bool isReload = false;
-	int selectBigGH = Novice::LoadTexture("./Resources/images/select1.png");
 	int JumpTimer = 10;			//まっすぐ飛んでいく時間
 	void Init(Vector2 playerCenterPos, int playerRadius, unsigned int playerColor) {
 		CPos = playerCenterPos;
