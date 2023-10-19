@@ -387,8 +387,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (keys[DIK_Q])
 				{
 					PLYR.pos = { 300.0f,3000.0f };
-					STAGE.loadStage(0);
-					PLYR.respawnPos = { 0,0 };
+					ENEMY.pos = { 1000.0f,3000.0f };;
 				}
 
 				//プレイヤーのリスポーン
@@ -659,17 +658,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.isGoal = false;
 			PLYR.isHitToge = false;
 			PLYR.MoveDir = { 1,0 };
-			PLYR.PressT = 0.35f;
+			PLYR.PressT = 0.28f;
 			PLYR.addT = 0.02f;
 			PLYR.maxVelocity = 30.0f;
 			PLYR.minVelocity = 1.0f;
-			PLYR.hitStopTimer = 5;
+			PLYR.hitStopTimer = 7;
 			PLYR.hitStopVelocity = 1.0f;
 			PLYR.boundCount = 0;
 			PLYR.isStun = false;
 			PLYR.isShake = false;
 			PLYR.isBlasted = false;
-			PLYR.stunTimer = 120;
+			PLYR.stunTimer = 180;
 			PLYR.blastTimer = 120;
 			PLYR.shakeTimer = 15;
 			PLYR.respawnTimer = 120;
@@ -686,6 +685,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.isSlow = true;
 			ENEMY.isHit = false;
 			ENEMY.isPopEffect = false;
+			ENEMY.isWarning = true;
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
 				enemyHitEffect.size[i] = 0;
@@ -761,7 +761,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				refEffect.Draw(SCROLL.getScroll());
 
-				ENEMY.draw(SCROLL.getScroll());
+				ENEMY.draw(SCROLL.getScroll(), PLYR.isAlive);
 				ENEMY.Warning(SCROLL.getScroll(), PLYR.isAlive);
 
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());

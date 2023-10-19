@@ -36,6 +36,9 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 		{
 			if (field[i][j] > 1)
 			{
+				if (field[i][j] == 2)//ゴール
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
+
 				if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 25)//ブロック 大砲
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, stageColor);
 
@@ -64,7 +67,7 @@ void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
 	{
 		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
 		{
-			if (field[i][j] == 23 || field[i][j] == 24)//大砲
+			if (field[i][j] == 23)//大砲
 			{ 
 				pos.x = float(mapchipsize * j + size.x);
 				pos.y = float(mapchipsize * i + size.y);

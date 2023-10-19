@@ -12,6 +12,8 @@ public:
 
 	bool isAppear[EEFFECT_MAX] = { 0 };
 
+	int GH = Novice::LoadTexture("./Resources/images/diedEffect.png");
+
 
 	unsigned int color = 0xFF0000FF;
 

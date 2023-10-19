@@ -1,7 +1,48 @@
 ﻿#include "enemy.h"
 
-void ENEMY::draw(const Vector2& scroll) {
-	Novice::DrawEllipse(int(pos.x - scroll.x), int(pos.y - scroll.y), int(size.x), int(size.y), 0, color, kFillModeSolid);
+void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive) {
+
+	if (playerIsAlive) {
+		
+		animationTimer++;
+		if (isSlow) {
+			if (animationTimer % 16 == 0) {
+				animationCounter += 256;
+			}
+		} else {
+			if (animationTimer % 8 == 0) {
+				animationCounter += 256;
+			}
+		}
+	} else {
+		animationTimer = 0;
+	}
+
+	if (animationCounter >= 1024) {
+		animationCounter = 0;
+	}
+
+	if (moveDirX > 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - scroll.x - size.x), int(pos.y - scroll.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[1],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	} else if (moveDirX < 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - scroll.x - size.x), int(pos.y - scroll.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[2],
+			((float)256 / (float)1024), 1,
+			0,
+			0xffffffff);
+	}
+
+
 }
 
 Vector2 ENEMY::getPos()
@@ -17,8 +58,8 @@ Vector2 ENEMY::getSize()
 void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 {
 	//敵の移動角度の計算
-	float moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
-	float moveDirY = sinf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
+	moveDirX = cosf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
+	moveDirY = sinf(atan2f(pos.y - playerPos.y, pos.x - playerPos.x));
 
 	//敵の移動
 	if (!isStun && !isHitStop) {
@@ -26,37 +67,33 @@ void ENEMY::Move(const Vector2& playerPos, bool isStun, bool isHitStop)
 		pos.y -= float(moveDirY) * speed;
 
 		color = 0x00ff00ff;
-	}
-	else if (isStun) {
+	} else if (isStun) {
 		color = 0xf03c3cff;
 	}
 }
 
-void ENEMY::timeSlow(bool isJump, bool playerIsAlive)
+void ENEMY::timeSlow(bool& isJump, bool& playerIsAlive)
 {
 
 	if (playerIsAlive) {
 		if (slowTimer <= 0) {
 			isSlow = false;
-		}
-		else if (isJump) {
+		} else if (isJump) {
 			isSlow = true;
 		}
 
 		if (!isJump && isSlow) {
 			speed = 0.5f;
 			slowTimer--;
-		}
-		else {
+		} else {
 			speed = 5.0f;
 			slowTimer = 120;
 		}
 
-	}
-	else {
+	} else {
 		speed = 0.0f;
 		isSlow = true;
-		slowTimer = 150;
+		slowTimer = 120;
 	}
 }
 
@@ -67,14 +104,13 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	if (distance <= size.x + playerSize.x) {
 		isHit = true;
 		isPopEffect = true;
-	}
-	else {
+	} else {
 		isHit = false;
 	}
 	Novice::ScreenPrintf(1000, 40, "isHit = %d", isHit);
 }
 
-void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection)
+void ENEMY::setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection)
 {
 	if (isSet)
 	{
@@ -86,8 +122,7 @@ void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirectio
 			//YはPLYRと同じに
 			respawnPos.x = respwnDistance * PLYRDirection;
 			respawnPos.y = PLYRPos.y;
-		}
-		else
+		} else
 		{
 			respawnPos = pos;
 		}

@@ -8,7 +8,7 @@ void EnemyHitEffect::UpDate(const bool& isHit, const bool& isHitToge, const Vect
 				acc[i] = { 0.0f,0.8f };
 				vel[i].x = static_cast<float>(rand() % 31 - 15);
 				vel[i].y = static_cast<float>(rand() % 31 - 15);
-				size[i] = static_cast<float>(20.0f);
+				size[i] = static_cast<float>(24.0f);
 				isAppear[i] = true;
 			}
 		}
@@ -27,7 +27,15 @@ void EnemyHitEffect::UpDate(const bool& isHit, const bool& isHitToge, const Vect
 void EnemyHitEffect::Draw(const Vector2& scroll) {
 	for (int i = 1; i < EEFFECT_MAX; i++) {
 
-		Novice::DrawBox(static_cast<int>((CPos[i].x - size[i] / 2) - scroll.x), static_cast<int>((CPos[i].y - size[i] / 2) - scroll.y),
-			static_cast<int>(size[i]), static_cast<int>(size[i]), 0.0f, color, kFillModeSolid);
+		/*Novice::DrawBox(
+			static_cast<int>((CPos[i].x - size[i] / 2) - scroll.x), static_cast<int>((CPos[i].y - size[i] / 2) - scroll.y),
+			static_cast<int>(size[i]), static_cast<int>(size[i]), 
+			0.0f, 
+			color,
+			kFillModeSolid);*/
+
+		Novice::DrawSprite(
+			static_cast<int>((CPos[i].x - size[i] / 2) - scroll.x), static_cast<int>((CPos[i].y - size[i] / 2) - scroll.y),
+			GH, 1.0f, 1.0f, 0.0f, 0xffffffff);
 	}
 }

@@ -89,7 +89,8 @@ public:
 		addT = 0.02f;
 		maxVelocity = 30.0f;
 		minVelocity = 1.0f;
-		hitStopTimer = 5;
+
+		hitStopTimer = 7;
 		hitStopVelocity = 1.0f;
 
 		boundCount = 0;
@@ -98,7 +99,7 @@ public:
 		isBlasted = false;
 
 
-		stunTimer = 120;
+		stunTimer = 180;
 		blastTimer = 120;
 		shakeTimer = 15;
 		respawnTimer = 120;

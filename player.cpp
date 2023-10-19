@@ -131,7 +131,7 @@ void PLAYER::jump(const Vector2& kJumpVect)
 
 		velocity = { kJumpVect.x * jumpVel ,kJumpVect.y * jumpVel };
 
-		PressT = 0.35f;
+		PressT = 0.28f;
 		addT *= addT < 0 ? -1 : 1;
 
 		isJump = true;
@@ -333,7 +333,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= -1.1f;
-								velocity.y *= 1.1f;
+								velocity.y *= 1.4f;
 							}
 							else {
 								velocity.x *= -1.0f;
@@ -369,7 +369,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
-							velocity.y *= -(0.9f - (0.25f * boundCount));
+							velocity.y *= -(0.6f - (0.25f * boundCount));
 						}
 						else if (localHit[i] == 18)
 						{
@@ -441,7 +441,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	{
 		isHitStop = false;
 		hitStopVelocity = 1.0f;
-		hitStopTimer = 5;
+		hitStopTimer = 7;
 	}
 
 	//画面揺れの時間制限処理
@@ -462,7 +462,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	else
 	{
 		isStun = false;
-		stunTimer = 120;
+		stunTimer = 180;
 	}
 
 	// 大砲の時間制限と移動処理
