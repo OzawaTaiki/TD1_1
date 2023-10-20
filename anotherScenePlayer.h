@@ -7,12 +7,12 @@
 
 
 struct TitlePlayer {
-	Vector2 CPos;
-	Vector2 vertex[4];
+	Vector2 CPos = { 0 };
+	Vector2 vertex[4] = { 0 };
 	Vector2 vel = { 0 };
 	Vector2 acc = { 0.0 };
-	int radius;
-	unsigned int color;
+	int radius = 0;
+	unsigned int color=0;
 	float dir = 1;
 	bool isJump = false;
 	bool isRef = false;

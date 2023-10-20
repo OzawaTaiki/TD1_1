@@ -7,24 +7,24 @@
 
 
 struct SceneChange {
-	Vector2 CPos;
-	int Wsize=1280;
-	int Hsize=720;
+	Vector2 CPos = { 0 };
+	int Wsize = 1280;
+	int Hsize = 720;
 	unsigned int color = 0xFFFFFFFF;
 	bool isDraw = true;
 	bool ischange = false;
 	float t = 0.0f;
 	float easeT = 0.0f;
-	float maxPos ;
-	float minPos ;
-	float dir=1;
+	float maxPos = 0;
+	float minPos = 0;
+	float dir = 1;
 	int timer = 10;
 
 
 	int sceneChangeUpGH = Novice::LoadTexture("./Resources/images/fangUp.png");
 	int sceneChangeLowGH = Novice::LoadTexture("./Resources/images/fangLow.png");
 
-	void Init(Vector2 cpos,float MaxPos,float MinPos) {
+	void Init(Vector2 cpos, float MaxPos, float MinPos) {
 		CPos = cpos;
 		maxPos = MaxPos;
 		minPos = MinPos;
@@ -51,7 +51,7 @@ struct SceneChange {
 
 	void DrawSpriteUpdate(int GH) {
 		Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
-			GH, 4.0f, 4.0f, 0.0f, color);
+			GH, 1.0f, 1.0f, 0.0f, color);
 	}
 
 };
