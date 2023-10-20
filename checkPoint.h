@@ -16,15 +16,6 @@ public:
 	int countTimer;
 
 
-	/*struct EFFECT
-	{
-		Vector2 pos;
-		float size;
-		Vector2 veloCity;
-		Vector2 acceleration;
-		unsigned int color;
-	};*/
-
 	const Vector2 kMaxPos = { 1280.0f - size.x,64 };
 	const Vector2 kMinPos = { 1280.0f,64 };
 
