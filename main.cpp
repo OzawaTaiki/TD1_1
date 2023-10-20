@@ -155,7 +155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Score score;//スコア表示
 
 
-	const int PAPER_MAX = 64;
+	const int PAPER_MAX = 32;
 	EffectPaper effectpaper[PAPER_MAX];
 
 
