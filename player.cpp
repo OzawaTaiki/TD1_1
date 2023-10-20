@@ -32,42 +32,32 @@ void PLAYER::scoreDraw() {
 		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 2, 2, 0, WHITE);
 	}
 }
-
 void PLAYER::OverDraw() {
 	if (isAlive) {
 		Novice::DrawSprite(int(pos.x - size.x), int(pos.y + size.y), GH, 1, -1, 0, WHITE);
 	}
 }
-
 void PLAYER::OverUpdate(bool& isHit) {
 	if (isAlive) {
 		velocity.y += acceleration.y;
-
 		pos.x += velocity.x * hitStopVelocity;
 		pos.y += velocity.y * hitStopVelocity;
-
 		if (pos.y >= 360) {
-
-
 			if (boundCount < 3) {
 				velocity.y *= -(0.6f - (0.25f * boundCount));
 				boundCount += 1;
-			} else {
+			}
+			else {
 				pos.y = 360;
 				velocity = { 0,0 };
 			}
-
-
 		}
-
 	}
 	if (isHit) {
 		isAlive = false;
 		pos = { 640,-50 };
 		isHit = false;
 	}
-
-
 }
 
 void PLAYER::score() {
@@ -151,6 +141,7 @@ void PLAYER::Respawn(bool& isHit, Vector2& enemyPos, const Vector2& enemyRespawn
 			isAlive = true;
 			isHit = false;
 			isHitToge = false;
+			isJump = true;
 			lives -= 1;
 			pos = respawnPos;
 			enemyPos = enemyRespawnPos;
@@ -219,9 +210,9 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		{
 			isAlive = false;
 			isHitToge = true;
-		} else if (localHit[i] == 0)
+		} else if (localHit[0] == 0)
 			dir = -1;
-		else if (localHit[i] == 1)
+		else if (localHit[0] == 1)
 			dir = 1;
 
 		if (localHit[i] == 2)
@@ -375,7 +366,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 						{
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= -1.1f;
-								velocity.y *= 1.4f;
+								velocity.y *= 1.3f;
 							} else {
 								velocity.x *= -1.0f;
 							}
@@ -519,6 +510,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	} else
 	{
 		isBlasted = false;
+		isSetBlastPos = false;
 		blastTimer = 120;
 		blastCountDwon = 30;
 		blastDistance = 0;
@@ -529,11 +521,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 void PLAYER::debugPrint()
 {
-	//Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
-	//Novice::ScreenPrintf(0, 40, "%f", PressT);
-	//Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
-	//Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
-	//Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
-	//Novice::ScreenPrintf(0, 260, "%d", boundCount);
-	//Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
+	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
+	Novice::ScreenPrintf(0, 40, "%f", PressT);
+	Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
+	Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
+	Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
+	Novice::ScreenPrintf(0, 260, "%d", boundCount);
+	Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
 }

@@ -8,7 +8,7 @@ void EnemyHitEffect::UpDate(bool& isHit, const bool& isHitToge, const Vector2& p
 				acc[i] = { 0.0f,0.8f };
 				vel[i].x = static_cast<float>(rand() % 31 - 15);
 				vel[i].y = static_cast<float>(rand() % 31 - 15);
-				size[i] = static_cast<float>(24.0f);
+				size[i] = static_cast<float>(20.0f);
 				isAppear[i] = true;
 			}
 		}
@@ -22,7 +22,6 @@ void EnemyHitEffect::UpDate(bool& isHit, const bool& isHitToge, const Vector2& p
 		}
 	}
 }
-
 void  EnemyHitEffect::Reset() {
 	for (int i = 0; i < 8; i++) {
 
@@ -40,14 +39,14 @@ void  EnemyHitEffect::Reset() {
 
 void EnemyHitEffect::Draw(const Vector2& scroll) {
 	for (int i = 1; i < EEFFECT_MAX; i++) {
-		Novice::DrawSprite(static_cast<int>((CPos[i].x - size[i] / 2) - scroll.x), static_cast<int>((CPos[i].y - size[i] / 2) - scroll.y),GH, 1.0f, 1.0f, 0.0f, 0xffffffff);
+		Novice::DrawSprite(static_cast<int>((CPos[i].x - size[i] / 2) - scroll.x), static_cast<int>((CPos[i].y - size[i] / 2) - scroll.y), GH, 1.0f, 1.0f, 0.0f, 0xffffffff);
 	}
 }
 
 void EnemyHitEffect::OverDraw() {
 	for (int i = 0; i < EEFFECT_MAX; i++) {
 		if (isAppear[i]) {
-			Novice::DrawSprite(static_cast<int>((CPos[i].x - size[i] / 2)), static_cast<int>((CPos[i].y - size[i] / 2) ), GH, 1.0f, 1.0f, 0.0f, 0xffffffff);
+			Novice::DrawSprite(static_cast<int>((CPos[i].x - size[i] / 2)), static_cast<int>((CPos[i].y - size[i] / 2)), GH, 1.0f, 1.0f, 0.0f, 0xffffffff);
 		}
 	}
 }

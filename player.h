@@ -33,6 +33,7 @@ public:
 	bool isShake;
 	bool isBlasted;
 	bool isHitStop;
+	bool isSetBlastPos;
 
 	int stunTimer;
 	int blastTimer;
@@ -96,6 +97,7 @@ public:
 		isStun = false;
 		isShake = false;
 		isBlasted = false;
+		isSetBlastPos = false;
 
 
 		stunTimer = 120;
@@ -115,13 +117,10 @@ public:
 
 	void draw(const Vector2& scroll);
 
+
 	void scoreDraw();
-
 	void OverDraw();
-
 	void OverUpdate(bool& isHit);
-
-
 	void score();
 
 	Vector2 getPos();

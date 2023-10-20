@@ -61,7 +61,6 @@ struct EffectPaper {
 	unsigned int color = 0;
 
 	int whiteGH = Novice::LoadTexture("./Resources/images/gameclearEF.png");
-
 	void rotate() {
 		rotateTheta += theta;
 

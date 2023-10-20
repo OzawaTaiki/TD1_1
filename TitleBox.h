@@ -64,11 +64,11 @@ struct Box {
 	}
 
 	void DrawSpriteUpdateT(int& DrawGH) {
-		timer-= 1;
+		timer -= 1;
 		if (timer <= 0) {
 			timer = 60;
 		}
-		if (timer>=10) {
+		if (timer >= 10) {
 			Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
 				DrawGH, 1.0f, 1.0f, 0.0f, color);
 		}

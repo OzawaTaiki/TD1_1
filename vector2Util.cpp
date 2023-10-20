@@ -54,6 +54,48 @@ Vector2 rotateVect(Vector2 a, float aSin, float aCos)
 	return { a.x * aCos - a.y * aSin,a.x * aSin + a.y * aCos };
 }
 
+bool crossCheck(const Vector2& a, const Vector2& b, const Vector2& c, const Vector2& d)
+{
+	float e = getCross(getVectSub(a, b), getVectSub(a, c));
+	float f = getCross(getVectSub(a, b), getVectSub(a, d));
+	float g = getCross(getVectSub(c, d), getVectSub(c, a));
+	float h = getCross(getVectSub(c, d), getVectSub(c, b));
+
+	if (e * f > 0 || g * h > 0)
+		return false;
+
+	return true;
+}
+
+Vector2 getCrossPos(const Vector2& a, const Vector2& b, const Vector2& c, const Vector2 d)
+{
+	if (!crossCheck(a, b, c, d))
+		return{ 0,0 };
+
+	Vector2 ab = getVectSub(a, b);
+	Vector2 cd = getVectSub(c, d);
+	float g = getCross(ab, cd);
+	if (g == 0)
+		return{ 0,0 };
+
+
+	float e, f;
+
+	e = getCross(getVectSub(a, c), getVectSub(c, d)) / g;
+	f = getCross(getVectSub(a, b), getVectSub(c, a)) / g;
+
+	if (e < 0 || e>1 || f < 0 || f>1)
+		return{ 0,0 };
+
+
+	Vector2 result;
+
+	result.x = a.x + e * ab.x;
+	result.y = a.y + e * ab.y;
+
+	return result;
+}
+
 void VectorVertex(Vector2 vertex[4], Vector2 CPos, float Wradius, float Hradius) {
 	vertex[0].x = CPos.x - Wradius;
 	vertex[0].y = CPos.y - Hradius;

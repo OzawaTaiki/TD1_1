@@ -10,6 +10,7 @@ public:
 
 	float speed;
 	int slowTimer;
+
 	float moveDirX;
 	float moveDirY;
 
@@ -41,8 +42,10 @@ public:
 
 		speed = 5.0f;
 		slowTimer = 150;
+
 		moveDirX = 0.0f;
 		moveDirY = 0.0f;
+
 		warningCountDown = 60;
 		warningTimer = 70;
 		animationTimer = 0;
@@ -52,15 +55,15 @@ public:
 		isSlow = true;
 		isHit = false;
 		isPopEffect = false;
-		animSwitcher = false;
 		isWarning = false;
-		animSwitcher=false;
-		SCGO = true;
+		animSwitcher = false;
 
 		respawnPos = pos;
 
 		isWarning = true;
 		isPopEffect = false;
+		animSwitcher = false;
+		SCGO = true;
 
 		enemyGH[0] = Novice::LoadTexture("./Resources/images/Warning.png");
 		enemyGH[1] = Novice::LoadTexture("./Resources/images/enemyLeft.png");
@@ -68,6 +71,7 @@ public:
 	};
 
 	void draw(const Vector2& scroll, bool& playerIsAlive);
+
 	void OVERDraw();
 
 	void OVERUp(bool& isAlive, int& BoundCount);
@@ -85,5 +89,9 @@ public:
 	void setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection);
 
 	void Warning(const Vector2& scroll, bool& playerIsAlive);
+
+	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll);
+
+	void debugPrint();
 
 };

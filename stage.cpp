@@ -38,9 +38,10 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 			{
 				if (field[i][j] == 2)
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
-				else if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 25)//ブロック 大砲
+				else if (field[i][j] == 3)//真っ黒
+					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), mapchipsize,mapchipsize, 0, 0x000000ff,kFillModeSolid);
+				else if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 23)//ブロック 大砲
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, stageColor);
-
 				else if (field[i][j] == 18)//加速
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
 
@@ -62,21 +63,19 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 
 void STAGE::blasterPosSet(Vector2& pos, const Vector2& size)
 {
-	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
-	{
-		for (int j = 0; j < kStageSizeX[loadStageNum]; j++)
-		{
-			if (field[i][j] == 23 || field[i][j] == 24)
-			{ //大砲
-				pos.x = float(mapchipsize * j + size.x);
-				pos.y = float(mapchipsize * i + size.y);
+	//大砲
+	pos.x = float(mapchipsize * blastX + size.x);
+	pos.y = float(mapchipsize * blastY + size.y);
 
-			}
-		}
-	}
 }
 
-int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velocity)//変更
+void STAGE::blastPosReset()
+{
+	blastX = -1;
+	blastY = -1;
+}
+
+int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velocity, float dir)//変更
 {
 	unsigned int returnHitArr = 0;		//当たったブロック番号格納
 
@@ -126,7 +125,7 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 			}
 
 			//アイテム取ったとき座標を保存
-			if (field[y][x] >= 21 && field[y][x] < 25) {
+			if (field[y][x] >= 21 && field[y][x] < 26) {
 
 				isGetItem = true;
 
@@ -134,9 +133,21 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 				itemHitPoint = field[y][x] * multiplyNum;
 				itemHitSubNum = multiplyNum;
 
+				if (field[y][x] == 23 || field[y][x] == 24)
+				{
+					if (blastX == -1)
+					{
+						blastX = x;
+						blastY = y;
+					}
+				}
 				if (field[y][x] == 25)
 				{
 					nowCheckPointColor = CheckPointColor[1];
+				}
+				else if (field[y][x] == 21 || field[y][x] == 22)
+				{
+					field[y][x] = (int)dir < 0 ? 0 : 1;
 				}
 
 

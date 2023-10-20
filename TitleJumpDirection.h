@@ -30,6 +30,7 @@ class TjumpDirection
 	float circleGHSize = 32.0f;
 	float circleRadius = 20.0f;
 
+
 public:
 
 	TjumpDirection() {
@@ -55,7 +56,7 @@ public:
 
 	Vector2 getNormalizeJumpVect();
 
-	void ButtonFlagReset(bool isJump, float CPosY, int radius);
+	void ButtonFlagReset(bool isJump,float CPosY,int radius);
 
 	void isReleaseFlag();
 
