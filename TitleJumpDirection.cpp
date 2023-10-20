@@ -19,9 +19,9 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 
 	if (!isRelease) {
 		if (!isReload) {
-			for (int i = 0; i < Num; i++)
+			for (int i = 3; i < Num; i++)
 			{
-				Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y), 20, 20, 0, 0xdd5050ff, kFillModeSolid);
+				Novice::DrawSprite(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - circleRadius ), int((normalizeJumpDirectionVect.y * i * margin) + pos.y - circleRadius ), circleGH, circleRadius * 6 / circleGHSize, circleRadius * 6 / circleGHSize, 0, 0xff0000ff);
 			}
 		}
 	}

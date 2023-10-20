@@ -26,6 +26,10 @@ class TjumpDirection
 	bool isPress;
 	bool isRelease;
 
+	int circleGH = Novice::LoadTexture("./Resources/images/circle.png");
+	float circleGHSize = 32.0f;
+	float circleRadius = 20.0f;
+
 public:
 
 	TjumpDirection() {
@@ -41,13 +45,17 @@ public:
 		addT = 1.0f / (120.0f * 0.80f);
 		isPress = false;
 		isRelease = false;
+
+		circleGH = Novice::LoadTexture("./Resources/images/circle.png");
+		circleGHSize = 32.0f;
+		circleRadius = 5.0f;
 	};
 
 	void rotate(const Vector2& pos, float direction, const bool& Reload);
 
 	Vector2 getNormalizeJumpVect();
 
-	void ButtonFlagReset(bool isJump,float CPosY,int radius);
+	void ButtonFlagReset(bool isJump, float CPosY, int radius);
 
 	void isReleaseFlag();
 
