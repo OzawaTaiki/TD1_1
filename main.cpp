@@ -771,7 +771,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[i].DrawUpDate(i);
 			}
 			SelectJD.rotate(SPlayer.CPos, SPlayer.dir, SPlayer.isReload);
-			SelectRogo.DrawUpDate();
+			SelectRogo.DrawSpriteUpdateSELECT(SelectRogo.GH[2]);
 			SPlayer.draw();
 #pragma endregion
 			break;

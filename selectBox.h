@@ -27,7 +27,16 @@ struct selectBox {
 	float velY = 0;
 	float accY = 1.4f;
 	int GH[10] = {
-		Novice::LoadTexture("./Resources/images/select1.png"),
+		Novice::LoadTexture("./Resources/images/selectBack.png"),
+		Novice::LoadTexture("./Resources/images/select6.png"),
+		Novice::LoadTexture("./Resources/images/select5.png"),
+		Novice::LoadTexture("./Resources/images/select4.png"),
+		Novice::LoadTexture("./Resources/images/selectMoveLeft.png"),
+		Novice::LoadTexture("./Resources/images/selectMoveRight.png"),
+		Novice::LoadTexture("./Resources/images/select3.png"),
+		Novice::LoadTexture("./Resources/images/select2.png"),
+	Novice::LoadTexture("./Resources/images/select1.png"),
+	Novice::LoadTexture("./Resources/images/select0.png")
 
 	};
 
@@ -35,7 +44,7 @@ struct selectBox {
 	void DrawUpDate(int Num) {
 
 		if (isDraw) {
-			Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2), Wsize, Hsize, 0.0f, 0xFFFFFFFF, kFillModeSolid);
+			//Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2), Wsize, Hsize, 0.0f, 0xFFFFFFFF, kFillModeSolid);
 			Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2), GH[Num], 1.0f, 1.0f, 0.0f, color);
 		}
 	}
