@@ -6,6 +6,7 @@
 class ENEMY {
 public:
 	Vector2 pos;
+
 	Vector2 size;
 
 	float speed;
@@ -73,8 +74,10 @@ public:
 	void draw(const Vector2& scroll, bool& playerIsAlive);
 
 	void OVERDraw();
+	void TitleDraw();
 
 	void OVERUp(bool& isAlive, int& BoundCount);
+	void TitleUp();
 
 	Vector2 getPos();
 

@@ -39,6 +39,38 @@ void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive) {
 	}
 }
 
+void ENEMY::TitleDraw() {
+	animationTimer++;
+
+	if (animationTimer % 8 == 0) {
+		animationCounter += 256;
+	}
+
+
+	if (animationCounter >= 1024) {
+		animationCounter = 0;
+	}
+	if (moveDirX > 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - size.x), int(pos.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[1],
+			((float)256 / (float)1024)/2, 1.0f,
+			0,
+			0xffffffff);
+	}
+	else if (moveDirX < 0) {
+		Novice::DrawSpriteRect(
+			int(pos.x - size.x), int(pos.y - size.y),
+			animationCounter, 0,
+			256, 256,
+			enemyGH[2],
+			((float)256 / (float)1024)*0.8f, 0.8f,
+			0,
+			0xffffffff);
+	}
+}
 void ENEMY::OVERDraw() {
 	animationTimer++;
 
@@ -50,7 +82,6 @@ void ENEMY::OVERDraw() {
 	if (animationCounter >= 1024) {
 		animationCounter = 0;
 	}
-
 	if (moveDirX > 0) {
 		Novice::DrawSpriteRect(
 			int(pos.x - size.x), int(pos.y - size.y),
@@ -60,8 +91,7 @@ void ENEMY::OVERDraw() {
 			((float)256 / (float)1024), 1,
 			0,
 			0xffffffff);
-	}
-	else if (moveDirX < 0) {
+	} else if (moveDirX < 0) {
 		Novice::DrawSpriteRect(
 			int(pos.x - size.x), int(pos.y - size.y),
 			animationCounter, 0,
@@ -90,7 +120,21 @@ void ENEMY::OVERUp(bool& isAlive, int& BoundCount) {
 		SCGO = true;
 	}
 }
+void ENEMY::TitleUp() {
+	if (SCGO) {
+		pos = { -500,400 };
+		size = {64,64};
+		isHit = false;
+		isPopEffect = false;
 
+		SCGO = false;
+	}
+	pos.x += speed;
+
+	if (pos.x >= 1680) {
+		SCGO = true;
+	}
+}
 
 Vector2 ENEMY::getPos()
 {

@@ -52,7 +52,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAMEOVER,
 		GAMECLEAR
 	};
-	SCENE scene = SELECT;
+	SCENE scene = TITLE;
 	int SceneNo = 0;
 	bool isChangeScene = false;
 	bool isChangeSceneGame = false;
@@ -64,7 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SCROLL SCROLL;
 	GAUGE GAUGE;
 	ENEMY ENEMY;
-
+	ENEMY.moveDirX=-1.0f;
 	jumpDirection JD;
 
 	playerEffect PEffect;
@@ -81,7 +81,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*--------------------------------------------------------------------*/
 	const int TITLEBOX_MAX = 2;
 	Box TitleRogo;
-	Box TitleBox[2];//[0]=セレクト画面へ[1]=ゲーム終了
+	Box Smail;
+	Box TitleBox[2];//[0]=セレクト画面へ[1]=ゲーム終
+	Box Line[2];
+
 	TitlePlayer TPlayer;
 	//タイトルロゴ
 	TitleRogo.Init(
@@ -105,7 +108,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		100,
 		0xFFFFFFFF
 	);
+	/*Smail.Init(
+		{ 1000,150 },
+		150,
+		150,
+		0xfc21c6cc
+	);
+	*/
 
+	Line[0].Init(
+	{ 640,308 },
+	1280,
+	3,
+	0xfc21c666
+);
+	Line[1].Init(
+		{ 640,591 },
+		1280,
+		3,
+		0xfc21c666
+	);
 
 	const int SELECTBOX_MAX = 10;
 	Box SelectRogo;
@@ -204,6 +226,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		if (keys[DIK_1] && preKeys[DIK_1]) {
+			Line[0].CPos.y -= 1;
+		}
+		if (keys[DIK_2] && preKeys[DIK_2]) {
+			Line[0].CPos.y += 1;
+		}
+		if (keys[DIK_3] && preKeys[DIK_3]) {
+			Line[1].CPos.y -= 1;
+		}
+		if (keys[DIK_4] && preKeys[DIK_4]) {
+			Line[1].CPos.y += 1;
+		}
+		if (keys[DIK_5] && preKeys[DIK_5]) {
+			ENEMY.pos.y -= 1;
+		}
+		if (keys[DIK_6] && preKeys[DIK_6]) {
+			ENEMY.pos.y += 1;
+		}
+
 		switch (scene) {
 		case TITLE:
 #pragma region"タイトルの更新処理"
@@ -217,7 +258,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			TPlayer.Move();
-
+			ENEMY.TitleUp();//試し
 			/*当たり判定用の四辺を求める*/
 				//Playerの四辺
 			VectorVertex(TPlayer.vertex, TPlayer.CPos, static_cast<float>(TPlayer.radius), static_cast<float>(TPlayer.radius));
@@ -243,7 +284,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			Novice::ScreenPrintf(0, 100, "%d,%d", TitleBox[0].isHit, TitleBox[1].isHit);
+			Novice::ScreenPrintf(0, 100, "[0]%f,[1]%f,enemy%f", Line[0].CPos.y, Line[1].CPos.y,ENEMY.pos.y);
 			if (TitleBox[0].isHit) {
 				SceneNo = 1;//セレクト画面へ移動
 				isChangeScene = true;
@@ -264,7 +305,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//リセット（タイトルと同じ）
 			SPlayer.ReturnPlayer();
 			SelectJD.ButtonFlagReset(SPlayer.isJump, SPlayer.CPos.y, SPlayer.radius);
-			
+
 			Manual.CPos = { SelectBox[9].CPos.x, SelectBox[9].CPos.y - 100 };
 			turnLeft.CPos = { SelectBox[4].CPos.x, SelectBox[4].CPos.y - 100 };
 			turnRight.CPos = { SelectBox[5].CPos.x, SelectBox[5].CPos.y - 100 };
@@ -459,8 +500,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				}
-				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -805,18 +845,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case TITLE:
 #pragma region"タイトルの描画処理"
-			TitleBox[0].DrawSpriteUpdate(TitleBox[0].GH[4]);
-			TitleBox[1].DrawSpriteUpdate(TitleBox[1].GH[5]);
+			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
+			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
+			ENEMY.TitleDraw();//試し
+
+			TitleBox[0].DrawSpriteUpdateSELECT(TitleBox[0].GH[4]);
+			TitleBox[1].DrawSpriteUpdateSELECT(TitleBox[1].GH[5]);
+		//	Smail.DrawSpriteUpdate(Smail.GH[9]);
+
+
 			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
 			TPlayer.draw();
 			TitleRogo.DrawSpriteUpdate(TitleRogo.GH[6]);
+
 #pragma endregion
 			break;
 		case SELECT:
 #pragma region"セレクトの描画処理"
+			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
+			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
+			
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				SelectBox[i].DrawUpDate(i);
 			}
+
+
 			Manual.DrawSpriteUpdate(Manual.GH[3]);
 
 
