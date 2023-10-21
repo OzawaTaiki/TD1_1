@@ -9,6 +9,7 @@ int STAGE::getmapChipsize()
 void STAGE::loadStage(int stageNum)
 {
 	loadStageNum = stageNum;
+	loadStageNum = 1;
 
 	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{
@@ -149,8 +150,6 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 				{
 					field[y][x] = (int)dir < 0 ? 0 : 1;
 				}
-
-
 			}
 			multiplyNum /= 100;
 		}

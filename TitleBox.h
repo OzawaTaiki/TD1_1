@@ -25,7 +25,6 @@ struct Box {
 
 	 Novice::LoadTexture("./Resources/images/1~3.png"),
 	 Novice::LoadTexture("./Resources/images/4~6.png"),
-
 	};
 
 	int timer = 60;
@@ -84,23 +83,22 @@ struct Box {
 	}
 
 	void DrawSpriteUpdateSELECT(int& DrawGH) {
-		int shineColor= 0xfc21c6cc;
+		int shineColor = 0xfc21c6cc;
 		int saveColor = 0x1B162CFF;
 		timer -= 1;
 		if (timer <= 0) {
-			timer = 800;	
-	
+			timer = 800;
 		}
 		color = saveColor;
-		if ((timer <= 600&&timer>=520)||
-		(timer <= 500&&timer>=480)||
-		(timer <= 450&&timer>=430)||
-		(timer <= 420&&timer>=65)
+		if ((timer <= 600 && timer >= 520) ||
+			(timer <= 500 && timer >= 480) ||
+			(timer <= 450 && timer >= 430) ||
+			(timer <= 420 && timer >= 65)
 			) {
 			color = shineColor;
 		}
 		Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
-				DrawGH, 1.0f, 1.0f, 0.0f, color);
+			DrawGH, 1.0f, 1.0f, 0.0f, color);
 	}
 
 };

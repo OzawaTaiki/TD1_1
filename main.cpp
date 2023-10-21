@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TitlePlayer TPlayer;
 	//タイトルロゴ
 	TitleRogo.Init(
-		{ 640,50 },
+		{ 640,150 },
 		800,
 		150,
 		0xfc21c6cc
@@ -112,7 +112,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Box gameOverRogo;
 	Box PressSpace;
 	Box Manual;
-	Box turnLeft;//1~3
+	Box turnLeft;//1~3	
 	Box turnRight;//4~6
 	selectBox SelectBox[10];
 	//SelectBox[0].color = 0xFF0000FF;
@@ -135,14 +135,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		0xFF1111FF
 	);
 
-
 	Manual.Init(
 		{ SelectBox[9].CPos.x,SelectBox[9].CPos.y - 200 },
 		256,
 		64,
 		0xfc21c6cc
 	);
-
 	turnLeft.Init(
 		{ SelectBox[5].CPos.x,SelectBox[5].CPos.y - 200 },
 		256,
@@ -155,7 +153,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		64,
 		0xfc21c6cc
 	);
-
 
 	SPlayer.Init(//セレクト画面のプレイヤー
 		{ 640,720 },
@@ -192,7 +189,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	//ステージのロード
-	STAGE.loadStage(1);
+	STAGE.loadStage(0);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -242,7 +239,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							//当たったエフェクト表示（仮置き）
 							TPlayer.canHit = false;//一つの選択肢に当たったあと、別の選択肢に当たらないようにするフラグ
 							TPlayer.isRef = true;//当たった時跳ね返るフラグ
-
 						}
 					}
 				}
@@ -257,6 +253,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SceneNo = 5;//ゲームを終了させる
 				isChangeScene = true;
 			}
+
+
+
 #pragma endregion
 			break;
 		case SELECT:
@@ -265,7 +264,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//リセット（タイトルと同じ）
 			SPlayer.ReturnPlayer();
 			SelectJD.ButtonFlagReset(SPlayer.isJump, SPlayer.CPos.y, SPlayer.radius);
-
+			
 			Manual.CPos = { SelectBox[9].CPos.x, SelectBox[9].CPos.y - 100 };
 			turnLeft.CPos = { SelectBox[4].CPos.x, SelectBox[4].CPos.y - 100 };
 			turnRight.CPos = { SelectBox[5].CPos.x, SelectBox[5].CPos.y - 100 };
@@ -322,11 +321,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (SelectBox[7].isHit) {
 				SceneNo = 2;//1ゲーム画面へ移動
+				STAGE.loadStageNum = 1;
 
 				isChangeScene = true;
 			}
 			if (SelectBox[6].isHit) {
 				SceneNo = 2;//1ゲーム画面へ移動
+				STAGE.loadStageNum = 0;
 				isChangeScene = true;
 			}
 
@@ -337,14 +338,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[0].isR = true;//回転
 			}
 			if (SelectBox[3].isHit) {
+				STAGE.loadStageNum = 0;
+				STAGE.loadStageNum = 0;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[2].isHit) {
+				STAGE.loadStageNum = 0;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[1].isHit) {
+				STAGE.loadStageNum = 0;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
@@ -352,6 +357,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SceneNo = 0;//タイトルに戻る
 				isChangeScene = true;
 			}
+
+
 			/*選択肢に自機を当てると選択肢が落下する処理*/
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				if (SelectBox[i].isHit) {
@@ -394,6 +401,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
+			STAGE.loadStage(STAGE.loadStageNum);
+
 			//イージング
 			SelectBox[0].theta = (1.0f - SelectBox[0].t) * SelectBox[0].minTheta + SelectBox[0].t * SelectBox[0].maxTheta;
 			break;
@@ -408,13 +417,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (keys[DIK_R] && !preKeys[DIK_R])
 				{
-					PLYR.isHitToge = true;
+					PLYR.isAlive = false;
 					ENEMY.isHit = true;
 					PLYR.lives++;
 				}
 				if (keys[DIK_Q])
 				{
-					PLYR.pos = { 3929.408203f,2767 };
+					ENEMY.pos = { 3929.408203f,2767 };
 					//      STAGE.loadStage(0);
 					PLYR.respawnPos = { 0,0 };
 				}
@@ -450,7 +459,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				}
+				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -698,6 +708,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			/*ゲームで必要なリセット*/
 			PLYR.pos = { 300.0f,3000.0f };
+			PLYR.SetStartPos(STAGE.loadStageNum);
 			PLYR.size = { 16,16 };
 			PLYR.acceleration = { 0.00f,0.5f };
 			PLYR.velocity = { 0,0 };
@@ -725,7 +736,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.blastDistance = 0;
 			PLYR.respawnPos = { 300,3000 };
 
-			ENEMY.pos = { 2000.0f,3000.0f };
+			ENEMY.pos = { -500.0f,3000.0f };
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
 			ENEMY.slowTimer = 150;
@@ -787,7 +798,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+
 		Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+
 		switch (scene)
 		{
 		case TITLE:
@@ -819,7 +832,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
 
-			Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
+			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
 			score.DrawBGTimer();
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {

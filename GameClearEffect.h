@@ -29,7 +29,7 @@ Matrix2x2 MakeRotateMatrix(float theta) {
 	return rotateMatrix;
 }
 
-enum colorType{
+enum colorType {
 	REDCOLOR,
 	ORANGECOLOR,
 	YELLOWCOLOR,
@@ -113,8 +113,8 @@ struct EffectPaper {
 		if (colorRandNum == PURPLECOLOR) {
 			color = 0xD55FE4FF;//紫色
 		}
-	
-		
+
+
 	}
 	void DrawUpDate() {
 		Novice::DrawQuad(static_cast<int>(rotateLeftTop.x), static_cast<int>(rotateLeftTop.y),

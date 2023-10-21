@@ -158,7 +158,7 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	}
 }
 
-void ENEMY::setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection)
+void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection)
 {
 	if (isSet)
 	{
@@ -168,7 +168,7 @@ void ENEMY::setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirect
 		{//敵と自機のｘ距離が respwnDistance より小さいとき
 			//リスポーンposXを respwnDistance 分だけ離す
 			//YはPLYRと同じに
-			respawnPos.x = respwnDistance * PLYRDirection;
+			respawnPos.x = PLYRPos.x + (respwnDistance * PLYRDirection);
 			respawnPos.y = PLYRPos.y;
 		}
 		else
@@ -204,6 +204,9 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 
 void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scroll)
 {
+	if (isWarning)
+		return;
+
 	Vector2 scsPlayerPos = getVectSub(scroll, playerPos);
 	Vector2 scsEnemyPos = getVectSub(scroll, pos);
 
@@ -213,17 +216,57 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 	if ((scsEnemyPos.x + size.x <= 0 || scsEnemyPos.x - size.x >= 1280) ||
 		(scsEnemyPos.y + size.y <= 0 || scsEnemyPos.y - size.y >= 720))
 	{
-		Novice::ScreenPrintf(500, 100, "true");
 
-		//倍率計算
-		float maxSize = 64;
-		float minSize = 4;
+		float maxSize = 128;
+		float minSize = 32;
 
 		Vector2 localSize = { 32,32 };
 
-		Vector2 normalizeEtoP = getNormalizeVect(EtoPDis);
-		Vector2 max = getVectMultiply(normalizeEtoP, 1000.0f);
-		float localT = getDot(EtoPDis, normalizeEtoP) / getLength(max);
+		//倍率計算
+		//交差判定，交点計算
+
+		Vector2 windowPos[4] = {
+			{0,0},
+			{1280,0},
+			{0,720},
+			{1280,720}
+		};
+
+		int crossDir = 0;
+		Vector2 drawPos = { 0,0 };
+
+		Vector2 normalizeVect = { 0,0 };
+
+		if (drawPos.x == 0 && drawPos.y == 0)
+		{//left
+			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[0], windowPos[2]);
+			normalizeVect = getNormalizeVect(getVectSub(pos, drawPos));
+			crossDir = 1;
+		}
+
+		if (drawPos.x == 0 && drawPos.y == 0)
+		{//up
+			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[0], windowPos[1]);
+			normalizeVect = getNormalizeVect(getVectSub(pos, drawPos));
+			crossDir = 2;
+		}
+
+		if (drawPos.x == 0 && drawPos.y == 0)
+		{//right
+			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[1], windowPos[3]);
+			normalizeVect = getNormalizeVect(getVectSub(pos, drawPos));
+			crossDir = 3;
+		}
+
+		if (drawPos.x == 0 && drawPos.y == 0)
+		{//bottom
+			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[2], windowPos[3]);
+			normalizeVect = getNormalizeVect(getVectSub(pos, drawPos));
+			crossDir = 4;
+		}
+
+		Vector2 max = getVectMultiply(normalizeVect, 1000.0f);
+		float localT = fabsf(getDot(EtoPDis, normalizeVect) / getLength(max));
 
 		localT = localT > 1 ? 1 : (localT < 0 ? 0 : localT);
 
@@ -239,55 +282,47 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 			{drawSize.x / 2,drawSize.y / 2},
 		};
 
-		//交差判定，交点計算
-
-		Vector2 windowPos[4] = {
-			{0,0},
-			{1280,0},
-			{0,720},
-			{1280,720}
-		};
-
-		int crossDir = 0;
-		Vector2 drawPos = { 0,0 };
-
-		if (drawPos.x == 0 && drawPos.y == 0)
-		{//left
-			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[0], windowPos[2]);
-			crossDir = 1;
-		}
-
-		if (drawPos.x == 0 && drawPos.y == 0)
-		{//up
-			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[0], windowPos[1]);
-			crossDir = 2;
-		}
-
-		if (drawPos.x == 0 && drawPos.y == 0)
-		{//right
-			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[1], windowPos[3]);
-			crossDir = 3;
-		}
-
-		if (drawPos.x == 0 && drawPos.y == 0)
-		{//bottom
-			drawPos = getCrossPos(scsPlayerPos, scsEnemyPos, windowPos[2], windowPos[3]);
-			crossDir = 4;
-		}
-
 		switch (crossDir)
 		{
 		case 1:
-			Novice::DrawEllipse(int(drawPos.x + drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+			//Novice::DrawEllipse(int(drawPos.x + drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+
+			Novice::DrawQuad(int(drawPos.x + drawSize.x / 2 + vertex[0].x), int(drawPos.y + vertex[0].y),
+				int(drawPos.x + drawSize.x / 2 + vertex[1].x), int(drawPos.y + vertex[1].y),
+				int(drawPos.x + drawSize.x / 2 + vertex[2].x), int(drawPos.y + vertex[2].y),
+				int(drawPos.x + drawSize.x / 2 + vertex[3].x), int(drawPos.y + vertex[3].y),
+				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+
 			break;
 		case 2:
-			Novice::DrawEllipse(int(drawPos.x), int(drawPos.y + drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+			//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y + drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+
+			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + drawSize.y / 2 + vertex[0].y),
+				int(drawPos.x + vertex[1].x), int(drawPos.y + drawSize.y / 2 + vertex[1].y),
+				int(drawPos.x + vertex[2].x), int(drawPos.y + drawSize.y / 2 + vertex[2].y),
+				int(drawPos.x + vertex[3].x), int(drawPos.y + drawSize.y / 2 + vertex[3].y),
+				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+
 			break;
 		case 3:
-			Novice::DrawEllipse(int(drawPos.x - drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+			//Novice::DrawEllipse(int(drawPos.x - drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+
+			Novice::DrawQuad(int(drawPos.x - drawSize.x / 2 + vertex[0].x), int(drawPos.y + vertex[0].y),
+				int(drawPos.x - drawSize.x / 2 + vertex[1].x), int(drawPos.y + vertex[1].y),
+				int(drawPos.x - drawSize.x / 2 + vertex[2].x), int(drawPos.y + vertex[2].y),
+				int(drawPos.x - drawSize.x / 2 + vertex[3].x), int(drawPos.y + vertex[3].y),
+				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+
 			break;
 		case 4:
-			Novice::DrawEllipse(int(drawPos.x), int(drawPos.y - drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+			//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y - drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
+
+			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y - drawSize.y / 2 + vertex[0].y),
+				int(drawPos.x + vertex[1].x), int(drawPos.y - drawSize.y / 2 + vertex[1].y),
+				int(drawPos.x + vertex[2].x), int(drawPos.y - drawSize.y / 2 + vertex[2].y),
+				int(drawPos.x + vertex[3].x), int(drawPos.y - drawSize.y / 2 + vertex[3].y),
+				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+
 			break;
 		default:
 			break;

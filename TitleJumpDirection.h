@@ -56,7 +56,7 @@ public:
 
 	Vector2 getNormalizeJumpVect();
 
-	void ButtonFlagReset(bool isJump,float CPosY,int radius);
+	void ButtonFlagReset(bool isJump, float CPosY, int radius);
 
 	void isReleaseFlag();
 

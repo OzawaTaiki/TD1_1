@@ -25,7 +25,7 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 			}
 		}
 	}
-	
+
 
 	Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
 	Novice::ScreenPrintf(0, 320, "%.1f,%.1f", pos.x, pos.y);
@@ -37,10 +37,10 @@ Vector2 TjumpDirection::getNormalizeJumpVect()
 	return normalizeJumpDirectionVect;
 }
 
-void TjumpDirection::ButtonFlagReset(bool isJump, float CPosY, int radius){
-	if (!isJump && isRelease||
+void TjumpDirection::ButtonFlagReset(bool isJump, float CPosY, int radius) {
+	if (!isJump && isRelease ||
 		CPosY >= 1200 ||
-		radius <= 0){
+		radius <= 0) {
 		isRelease = false;
 	}
 }
@@ -54,5 +54,3 @@ void TjumpDirection::isPressFlag()
 {
 	isPress = true;
 }
-
-

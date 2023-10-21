@@ -1,7 +1,7 @@
 ﻿#pragma once
+#include <Novice.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <Novice.h>
 #include <Vector2.h>
 #include"vector2Util.h"
 
@@ -37,7 +37,8 @@ struct TitlePlayer {
 
 					if (vel.x >= 3.0f) {
 						DrawAria = 200;
-					} else if (vel.x <= -3.0f) {
+					}
+					else if (vel.x <= -3.0f) {
 						DrawAria = 400;
 					}
 					isJump = true;
@@ -66,7 +67,8 @@ struct TitlePlayer {
 
 			if (canHit) {
 				radius -= 2;
-			} else {
+			}
+			else {
 				radius += 3;
 
 			}
@@ -94,9 +96,6 @@ struct TitlePlayer {
 			isJump = false;
 			vel = { 0,0 };
 		}
-
-
-
 	}
 
 	void ReturnPlayer() {
@@ -116,7 +115,8 @@ struct TitlePlayer {
 				CPos.y = 720;
 				canHit = true;
 				isReload = false;
-			} else {
+			}
+			else {
 				CPos.y -= 3;
 
 			}

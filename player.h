@@ -60,6 +60,8 @@ public:
 	Vector2 respawnPos;
 	bool isSetRespawnPos;
 
+	Vector2 startPos[7];
+
 	PLAYER()
 	{
 		pos = { 300.0f,3000.0f };
@@ -72,7 +74,7 @@ public:
 
 		GH = Novice::LoadTexture("./Resources/images/player.png");
 		lives = 3;
-		crossGH= Novice::LoadTexture("./Resources/images/redCross.png");
+		crossGH = Novice::LoadTexture("./Resources/images/redCross.png");
 
 		livesDrawPos = { 1114,20 };
 		livesDrawSize = { 32,32 };
@@ -112,11 +114,19 @@ public:
 
 		isSetRespawnPos = false;
 
+		startPos[0] = { 300,3000 };
+		startPos[1] = { 300,3000 };
+		startPos[2] = { 300,3000 };
+		startPos[3] = { 300,3000 };
+		startPos[4] = { 300,3000 };
+		startPos[5] = { 300,3000 };
+		startPos[6] = { 300,3000 };
 
 	};
 
 	void draw(const Vector2& scroll);
 
+	void SetStartPos(int stageNum);
 
 	void scoreDraw();
 	void OverDraw();

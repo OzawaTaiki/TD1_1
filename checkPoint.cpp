@@ -40,5 +40,4 @@ void checkPoint::update()
 
 	float easedT = -(cosf(float(M_PI) * t) - 1.0f) / 2.0f;
 	pos.x = (1.0f - easedT) * kMinPos.x + easedT * kMaxPos.x;
-
 }
