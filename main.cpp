@@ -225,26 +225,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-
-		if (keys[DIK_1] && preKeys[DIK_1]) {
-			Line[0].CPos.y -= 1;
-		}
-		if (keys[DIK_2] && preKeys[DIK_2]) {
-			Line[0].CPos.y += 1;
-		}
-		if (keys[DIK_3] && preKeys[DIK_3]) {
-			Line[1].CPos.y -= 1;
-		}
-		if (keys[DIK_4] && preKeys[DIK_4]) {
-			Line[1].CPos.y += 1;
-		}
-		if (keys[DIK_5] && preKeys[DIK_5]) {
-			ENEMY.pos.y -= 1;
-		}
-		if (keys[DIK_6] && preKeys[DIK_6]) {
-			ENEMY.pos.y += 1;
-		}
-
 		switch (scene) {
 		case TITLE:
 #pragma region"タイトルの更新処理"
@@ -845,6 +825,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case TITLE:
 #pragma region"タイトルの描画処理"
+			Line[0].CPos.y = 308;
+			Line[1].CPos.y = 591;
+
 			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
 			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
 			ENEMY.TitleDraw();//試し
@@ -862,6 +845,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		case SELECT:
 #pragma region"セレクトの描画処理"
+			Line[0].CPos.y = 259;
+			Line[1].CPos.y = 586;
 			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
 			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
 			

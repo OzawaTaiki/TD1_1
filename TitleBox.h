@@ -90,7 +90,7 @@ struct Box {
 		int saveColor = 0x1B162CFF;
 		timer -= 1;
 		if (timer <= 0) {
-			timer = 700;
+			timer = 600;
 		}
 		color = saveColor;
 		if ((timer <= 600 && timer >= 520) ||
