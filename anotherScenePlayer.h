@@ -35,9 +35,9 @@ struct TitlePlayer {
 				if (!isReload) {
 					vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
 
-					if (vel.x >= 1.0f) {
+					if (vel.x >= 3.0f) {
 						DrawAria = 200;
-					} else if (vel.x <= -1.0f) {
+					} else if (vel.x <= -3.0f) {
 						DrawAria = 400;
 					}
 					isJump = true;

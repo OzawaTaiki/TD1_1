@@ -18,6 +18,14 @@ struct Box {
 	int GH[10] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
 	 Novice::LoadTexture("./Resources/images/PRESSSPACE.png"),
 	 Novice::LoadTexture("./Resources/images/stageSelect.png"),
+	 Novice::LoadTexture("./Resources/images/Manual.png"),
+	 Novice::LoadTexture("./Resources/images/Game.png"),
+	 Novice::LoadTexture("./Resources/images/Exit.png"),
+	 Novice::LoadTexture("./Resources/images/TitleRogo.png"),
+
+	 Novice::LoadTexture("./Resources/images/1~3.png"),
+	 Novice::LoadTexture("./Resources/images/4~6.png"),
+
 	};
 
 	int timer = 60;

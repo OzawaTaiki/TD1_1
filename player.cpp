@@ -46,8 +46,7 @@ void PLAYER::OverUpdate(bool& isHit) {
 			if (boundCount < 3) {
 				velocity.y *= -(0.6f - (0.25f * boundCount));
 				boundCount += 1;
-			}
-			else {
+			} else {
 				pos.y = 360;
 				velocity = { 0,0 };
 			}
@@ -210,11 +209,13 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		{
 			isAlive = false;
 			isHitToge = true;
-		} else if (localHit[0] == 0)
-			dir = -1;
-		else if (localHit[0] == 1)
-			dir = 1;
-
+		} else if (!isBlasted)
+		{
+			if (localHit[0] == 0)
+				dir = -1;
+			else if (localHit[0] == 1)
+				dir = 1;
+		}
 		if (localHit[i] == 2)
 			isGoal = true;
 	}
@@ -437,6 +438,12 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 					velocity.y = 0.0f;
 					boundCount = 3;
 					isBlasted = true;
+
+					if (localHit[i] == 23)
+						dir = -1;
+					if (localHit[i] == 24)
+						dir = 1;
+			
 				}
 				if (localHit[i] == 25)
 				{
@@ -447,7 +454,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		}
 	}
 
-	if (localHit[4] >= 4 && localHit[4] < 19 && isJump)
+	if (localHit[4] >= 3 && localHit[4] < 19 && isJump)
 	{
 		boundCount++;
 
@@ -497,14 +504,16 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		isJump = true;
 
 		if (blastCountDwon <= 0) {
-			if (dir >= 1) {
+			if (dir > 0) {
 				pos.x += 25.0f;
-			} else if (dir < 1) {
+				velocity.x = 5.0f;
+			} else if (dir < 0) {
 				pos.x -= 25.0f;
+				velocity.x = -5.0f;
 			}
 			blastDistance += 25;
 			blastTimer--;
-			velocity.x = 5.0f;
+
 		}
 
 	} else

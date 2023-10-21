@@ -85,10 +85,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TitlePlayer TPlayer;
 	//タイトルロゴ
 	TitleRogo.Init(
-		{ 640,150 },
+		{ 640,50 },
 		800,
 		150,
-		0x1B162CFF
+		0xfc21c6cc
 	);
 	//タイトル画面の選択肢（[0]セレクト[1]ゲーム終了）
 	for (int i = 0; i < TITLEBOX_MAX; i++) {
@@ -96,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{ (340.0f + 600.0f * i),450 },
 			300,
 			300,
-			0x1B162CFF
+			0xfc21c6cc
 		);
 	}
 
@@ -111,6 +111,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Box SelectRogo;
 	Box gameOverRogo;
 	Box PressSpace;
+	Box Manual;
+	Box turnLeft;//1~3
+	Box turnRight;//4~6
 	selectBox SelectBox[10];
 	//SelectBox[0].color = 0xFF0000FF;
 	//[9]=操作説明[8]＝１面[7]＝２面[6]＝３面[5]＝next
@@ -131,6 +134,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		120,
 		0xFF1111FF
 	);
+
+
+	Manual.Init(
+		{ SelectBox[9].CPos.x,SelectBox[9].CPos.y - 200 },
+		256,
+		64,
+		0xfc21c6cc
+	);
+
+	turnLeft.Init(
+		{ SelectBox[5].CPos.x,SelectBox[5].CPos.y - 200 },
+		256,
+		64,
+		0xfc21c6cc
+	);
+	turnRight.Init(
+		{ SelectBox[4].CPos.x,SelectBox[4].CPos.y - 200 },
+		256,
+		64,
+		0xfc21c6cc
+	);
+
+
 	SPlayer.Init(//セレクト画面のプレイヤー
 		{ 640,720 },
 		100,
@@ -166,7 +192,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	//ステージのロード
-	STAGE.loadStage(0);
+	STAGE.loadStage(1);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -216,6 +242,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							//当たったエフェクト表示（仮置き）
 							TPlayer.canHit = false;//一つの選択肢に当たったあと、別の選択肢に当たらないようにするフラグ
 							TPlayer.isRef = true;//当たった時跳ね返るフラグ
+
 						}
 					}
 				}
@@ -238,6 +265,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//リセット（タイトルと同じ）
 			SPlayer.ReturnPlayer();
 			SelectJD.ButtonFlagReset(SPlayer.isJump, SPlayer.CPos.y, SPlayer.radius);
+
+			Manual.CPos = { SelectBox[9].CPos.x, SelectBox[9].CPos.y - 100 };
+			turnLeft.CPos = { SelectBox[4].CPos.x, SelectBox[4].CPos.y - 100 };
+			turnRight.CPos = { SelectBox[5].CPos.x, SelectBox[5].CPos.y - 100 };
+
 			//選択画面の自機ジャンプ
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SelectJD.isReleaseFlag();
@@ -356,6 +388,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						SelectBox[i].velY = 0.0f;
 						SelectBox[i].isDraw = true;
 						SPlayer.canHit = true;
+						SelectBox[i].color = 0xfc21c6FF;
 						SelectBox[i].isHit = false;
 						SelectBox[i].timer = 35;//このタイマーはずらすと復活する瞬間が回転中に見えてしまうので注意
 					}
@@ -417,8 +450,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				}
-				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -659,6 +691,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < BOX_MAX; i++) {
 				SelectBox[i].isHit = false;
 				SelectBox[i].velY = 0;
+				SelectBox[i].theta = 0.0f;
+				SelectBox[i].t = 0.0f;
 			}
 
 
@@ -691,7 +725,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.blastDistance = 0;
 			PLYR.respawnPos = { 300,3000 };
 
-			ENEMY.pos = { -500.0f,3000.0f };
+			ENEMY.pos = { 2000.0f,3000.0f };
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
 			ENEMY.slowTimer = 150;
@@ -701,6 +735,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.isSlow = true;
 			ENEMY.isHit = false;
 			ENEMY.isPopEffect = false;
+			ENEMY.moveDirX = -1.0f;
 			ENEMY.respawnPos = ENEMY.pos;
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
@@ -757,12 +792,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case TITLE:
 #pragma region"タイトルの描画処理"
-			for (int i = 0; i < TITLEBOX_MAX; i++) {
-				TitleBox[i].DrawUpDate();
-			}
+			TitleBox[0].DrawSpriteUpdate(TitleBox[0].GH[4]);
+			TitleBox[1].DrawSpriteUpdate(TitleBox[1].GH[5]);
 			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
 			TPlayer.draw();
-			TitleRogo.DrawUpDate();
+			TitleRogo.DrawSpriteUpdate(TitleRogo.GH[6]);
 #pragma endregion
 			break;
 		case SELECT:
@@ -770,6 +804,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				SelectBox[i].DrawUpDate(i);
 			}
+			Manual.DrawSpriteUpdate(Manual.GH[3]);
+
+
+			turnLeft.DrawSpriteUpdate(Manual.GH[7]);
+			turnRight.DrawSpriteUpdate(Manual.GH[8]);
 			SelectJD.rotate(SPlayer.CPos, SPlayer.dir, SPlayer.isReload);
 			SelectRogo.DrawSpriteUpdateSELECT(SelectRogo.GH[2]);
 			SPlayer.draw();
