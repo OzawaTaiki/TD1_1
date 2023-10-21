@@ -29,7 +29,7 @@ Matrix2x2 MakeRotateMatrix(float theta) {
 	return rotateMatrix;
 }
 
-enum colorType{
+enum colorType {
 	REDCOLOR,
 	ORANGECOLOR,
 	YELLOWCOLOR,
@@ -60,8 +60,7 @@ struct EffectPaper {
 	int colorRandNum = rand() % 6;
 	unsigned int color = 0;
 
-	int whiteGH = Novice::LoadTexture("./NoviceResources/white1x1.png");
-
+	int whiteGH = Novice::LoadTexture("./Resources/images/gameclearEF.png");
 	void rotate() {
 		rotateTheta += theta;
 
@@ -114,14 +113,14 @@ struct EffectPaper {
 		if (colorRandNum == PURPLECOLOR) {
 			color = 0xD55FE4FF;//紫色
 		}
-	
-		
+
+
 	}
 	void DrawUpDate() {
 		Novice::DrawQuad(static_cast<int>(rotateLeftTop.x), static_cast<int>(rotateLeftTop.y),
 			static_cast<int>(rotateRightTop.x), static_cast<int>(rotateRightTop.y),
 			static_cast<int>(rotateLeftBottom.x), static_cast<int>(rotateLeftBottom.y),
 			static_cast<int>(rotateRightBottom.x), static_cast<int>(rotateRightBottom.y),
-			0, 0, 1, 1, whiteGH, color);
+			0, 0, 51, 51, whiteGH, color);
 	}
 };

@@ -11,7 +11,7 @@ struct selectBox {
 	Vector2 vertex[4] = { 0 };
 	int Wsize = 128;//150
 	int Hsize = 128;//150
-	unsigned int color = 0xFFFFFFFF;
+	unsigned int color = 0xfc21c6ff;
 	float dir = 1;
 	float theta = 0.0f;
 	Vector2 originPos = { 640,1590 };//{640,1490}
@@ -26,22 +26,27 @@ struct selectBox {
 	int timer = 35;
 	float velY = 0;
 	float accY = 1.4f;
+	int GH[10] = {
+		Novice::LoadTexture("./Resources/images/selectBack.png"),
+		Novice::LoadTexture("./Resources/images/select6.png"),
+		Novice::LoadTexture("./Resources/images/select5.png"),
+		Novice::LoadTexture("./Resources/images/select4.png"),
+		Novice::LoadTexture("./Resources/images/selectMoveLeft.png"),
+		Novice::LoadTexture("./Resources/images/selectMoveRight.png"),
+		Novice::LoadTexture("./Resources/images/select3.png"),
+		Novice::LoadTexture("./Resources/images/select2.png"),
+	Novice::LoadTexture("./Resources/images/select1.png"),
+	Novice::LoadTexture("./Resources/images/select0.png")
+
+	};
 
 
-	void DrawUpDate() {
+	void DrawUpDate(int Num) {
 
 		if (isDraw) {
-			Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
-				Wsize, Hsize, 0.0f, color, kFillModeSolid);
-			/*
-			Novice::DrawQuad(static_cast<int>(vertex[0].x), static_cast<int>(vertex[0].y),
-				static_cast<int>(vertex[1].x), static_cast<int>(vertex[1].y),
-				static_cast<int>(vertex[2].x), static_cast<int>(vertex[2].y),
-				static_cast<int>(vertex[3].x), static_cast<int>(vertex[3].y),
-				0, 0, 256, 256, selectBigGH, 0xFFFFFFFF);
-		*/
+			//Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2), Wsize, Hsize, 0.0f, 0xFFFFFFFF, kFillModeSolid);
+			Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2), GH[Num], 1.0f, 1.0f, 0.0f, color);
 		}
 	}
 
 };
-

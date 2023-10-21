@@ -1,7 +1,7 @@
 ﻿#pragma once
+#include <Novice.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <Novice.h>
 #include <Vector2.h>
 #include"vector2Util.h"
 
@@ -12,27 +12,37 @@ struct TitlePlayer {
 	Vector2 vel = { 0 };
 	Vector2 acc = { 0.0 };
 	int radius = 0;
-	unsigned int color=0;
+	unsigned int color = 0;
 	float dir = 1;
 	bool isJump = false;
 	bool isRef = false;
 	bool canHit = true;
 	bool isReload = false;
-	int selectBigGH = Novice::LoadTexture("./Resources/images/select1.png");
 	int JumpTimer = 10;			//まっすぐ飛んでいく時間
+
+	int GH = Novice::LoadTexture("./Resources/images/player-sheet.png");
+	int DrawAria = 0;
+
 	void Init(Vector2 playerCenterPos, int playerRadius, unsigned int playerColor) {
 		CPos = playerCenterPos;
 		radius = playerRadius;
 		color = playerColor;
 	}
 
-	void jump(const Vector2& kJumpVect,bool isSceneChange) {
+	void jump(const Vector2& kJumpVect, bool isSceneChange) {
 		if (!isSceneChange) {
 			if (!isJump) {
 				if (!isReload) {
 					vel = { kJumpVect.x * 14 ,kJumpVect.y * 14 };
 
+					if (vel.x >= 3.0f) {
+						DrawAria = 200;
+					}
+					else if (vel.x <= -3.0f) {
+						DrawAria = 400;
+					}
 					isJump = true;
+
 				}
 			}
 		}
@@ -57,7 +67,8 @@ struct TitlePlayer {
 
 			if (canHit) {
 				radius -= 2;
-			} else {
+			}
+			else {
 				radius += 3;
 
 			}
@@ -65,12 +76,16 @@ struct TitlePlayer {
 			if (isRef) {
 				vel.x *= 1.0f;
 				vel.y *= -1.0f;
+
+				DrawAria = 600;
+
+
 				isRef = false;
 			}
 
 		}
 
-		if (CPos.y >= 1400 &&
+		if (CPos.y >= 850 &&
 			isJump) {
 			isJump = false;
 			vel = { 0,0 };
@@ -81,27 +96,27 @@ struct TitlePlayer {
 			isJump = false;
 			vel = { 0,0 };
 		}
-
-
-
 	}
 
 	void ReturnPlayer() {
 		if (!isJump &&
-			CPos.y >= 900 ||
+			CPos.y >= 850 ||
 			radius <= 0) {
-			CPos = { 640.0f ,899.0f };
+			CPos = { 640.0f ,849.0f };
 			radius = 100;
 			JumpTimer = 10;
 			isRef = false;
 			isReload = true;
+			DrawAria = 0;
 		}
+
 		if (isReload) {
-			if (CPos.y<=720) {
+			if (CPos.y <= 720) {
 				CPos.y = 720;
 				canHit = true;
 				isReload = false;
-			} else {
+			}
+			else {
 				CPos.y -= 3;
 
 			}
@@ -109,15 +124,9 @@ struct TitlePlayer {
 	}
 
 	void draw() {
-		Novice::DrawEllipse(static_cast<int>(CPos.x), static_cast<int>(CPos.y), radius, radius, 0.0f, color, kFillModeSolid);
-		/*
-		Novice::DrawQuad(static_cast<int>(vertex[0].x), static_cast<int>(vertex[0].y),
-			static_cast<int>(vertex[1].x), static_cast<int>(vertex[1].y),
-			static_cast<int>(vertex[2].x), static_cast<int>(vertex[2].y),
-			static_cast<int>(vertex[3].x), static_cast<int>(vertex[3].y),
-			0, 0, 256, 256, selectBigGH, 0xFFFFFFFF);
-			*/
-
+		//Novice::DrawEllipse(static_cast<int>(CPos.x), static_cast<int>(CPos.y), radius, radius, 0.0f, color, kFillModeSolid);
+		Novice::DrawSpriteRect(static_cast<int>(CPos.x - radius), static_cast<int>(CPos.y - radius), DrawAria, 0, 200, 200, GH, float(radius / 400.0f), float(radius / 100.0f), 0.0f, 0xFFFFFFFF);
+		Novice::ScreenPrintf(1000, 40, "vel.x= %f,vel.y=%f", vel.x, vel.y);
 	}
 
 };

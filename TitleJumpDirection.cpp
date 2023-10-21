@@ -19,13 +19,13 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 
 	if (!isRelease) {
 		if (!isReload) {
-			for (int i = 0; i < Num; i++)
+			for (int i = 3; i < Num; i++)
 			{
-				Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y), 20, 20, 0, 0xdd5050ff, kFillModeSolid);
+				Novice::DrawSprite(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - circleRadius), int((normalizeJumpDirectionVect.y * i * margin) + pos.y - circleRadius), circleGH, circleRadius * 6 / circleGHSize, circleRadius * 6 / circleGHSize, 0, 0xff0000ff);
 			}
 		}
 	}
-	
+
 
 	Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
 	Novice::ScreenPrintf(0, 320, "%.1f,%.1f", pos.x, pos.y);
@@ -37,10 +37,10 @@ Vector2 TjumpDirection::getNormalizeJumpVect()
 	return normalizeJumpDirectionVect;
 }
 
-void TjumpDirection::ButtonFlagReset(bool isJump, float CPosY, int radius){
-	if (!isJump && isRelease||
+void TjumpDirection::ButtonFlagReset(bool isJump, float CPosY, int radius) {
+	if (!isJump && isRelease ||
 		CPosY >= 1200 ||
-		radius <= 0){
+		radius <= 0) {
 		isRelease = false;
 	}
 }
@@ -54,5 +54,3 @@ void TjumpDirection::isPressFlag()
 {
 	isPress = true;
 }
-
-

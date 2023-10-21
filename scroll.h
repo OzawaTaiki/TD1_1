@@ -17,7 +17,7 @@ public:
 	SCROLL() {
 
 		scrollXAxis = 700;
-		scrollYAxis = 164;
+		scrollYAxis = 400;
 		scrollXRand = 0;;
 		scrollYRand = 0;;
 

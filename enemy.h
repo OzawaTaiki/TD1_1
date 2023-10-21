@@ -86,7 +86,7 @@ public:
 
 	void CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize);
 
-	void setRespawnPos(bool& isSet, const Vector2& PLYRPos, float& PLYRDirection);
+	void setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection);
 
 	void Warning(const Vector2& scroll, bool& playerIsAlive);
 
