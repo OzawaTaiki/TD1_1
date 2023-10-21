@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TitlePlayer TPlayer;
 	//タイトルロゴ
 	TitleRogo.Init(
-		{ 640,150 },
+		{ 640,50 },
 		800,
 		150,
 		0xfc21c6cc
