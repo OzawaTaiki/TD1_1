@@ -6,7 +6,6 @@
 class ENEMY {
 public:
 	Vector2 pos;
-
 	Vector2 size;
 
 	float speed;
@@ -29,17 +28,19 @@ public:
 	bool SCGO;
 
 	Vector2 respawnPos;
+	bool isSetRespawnPos;
+
+	Vector2 startPos[7];
 
 	int enemyGH[3] = { 0 };
 
 
 	int color = 0xf03c3cff;
-	Vector2 startPos[7];
+
 
 	ENEMY()
 	{
 		pos = { -500.0f,3000.0f };
-		//pos = { -500.0f,300.0f };
 		size = { 128,128 };
 
 		speed = 5.0f;
@@ -61,6 +62,7 @@ public:
 		animSwitcher = false;
 
 		respawnPos = pos;
+		isSetRespawnPos = false;
 
 		isWarning = true;
 		isPopEffect = false;
@@ -70,7 +72,7 @@ public:
 		startPos[0] = { -500.0f,3000.0f };
 		startPos[1] = { -500.0f,3000.0f };
 		startPos[2] = { -500.0f,3000.0f };
-		startPos[3] = { -500.0f,0.0f };
+		startPos[3] = { -500.0f,3000.0f };
 		startPos[4] = { -500.0f,3000.0f };
 		startPos[5] = { -500.0f,3000.0f };
 		startPos[6] = { -500.0f,3000.0f };
@@ -83,12 +85,14 @@ public:
 
 	void SetStartPos(int stageNum);
 
-	void draw(const Vector2& scroll, bool& playerIsAlive, bool& Jump, bool& isStun);
+	void draw(const Vector2& scroll, bool& playerIsAlive, bool isJump, bool isStun);
 
 	void OVERDraw();
+
 	void TitleDraw();
 
 	void OVERUp(bool& isAlive, int& BoundCount);
+
 	void TitleUp();
 
 	Vector2 getPos();
@@ -108,5 +112,6 @@ public:
 	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll);
 
 	void debugPrint();
+
 
 };

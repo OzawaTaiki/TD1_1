@@ -47,4 +47,6 @@ public:
 
 	void update();
 
+	void reset();
+
 };

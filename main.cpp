@@ -26,7 +26,7 @@
 #include "RefEffect.h"
 #include "checkPoint.h"
 
-const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_タイトル";
+const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_Neon_Reflections";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -81,18 +81,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*--------------------------------------------------------------------*/
 	const int TITLEBOX_MAX = 2;
 	Box TitleRogo;
-	Box Smail;
-	Box TitleBox[2];//[0]=セレクト画面へ[1]=ゲーム終
+	Box TitleBox[2];//[0]=セレクト画面へ[1]=ゲーム終了
 	Box Line[2];
-
 	TitlePlayer TPlayer;
 	//タイトルロゴ
 	TitleRogo.Init(
 		{ 640,50 },
 		800,
 		150,
-		0xFFFFFFFF
-		//0xfc21c6cc
+		0xffffffff
 	);
 	//タイトル画面の選択肢（[0]セレクト[1]ゲーム終了）
 	for (int i = 0; i < TITLEBOX_MAX; i++) {
@@ -109,26 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		100,
 		0xFFFFFFFF
 	);
-	/*Smail.Init(
-		{ 1000,150 },
-		150,
-		150,
-		0xfc21c6cc
-	);
-	*/
 
-	Line[0].Init(
-		{ 640,308 },
-		1280,
-		3,
-		0xfc21c666
-	);
-	Line[1].Init(
-		{ 640,591 },
-		1280,
-		3,
-		0xfc21c666
-	);
 
 	const int SELECTBOX_MAX = 10;
 	Box SelectRogo;
@@ -211,8 +189,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*--------------------------------------------------------------------*/
 #pragma endregion
 
-				//ステージのロード
-	STAGE.loadStage(STAGE.loadStageNum);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -227,7 +203,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-
 		switch (scene) {
 		case TITLE:
 #pragma region"タイトルの更新処理"
@@ -241,7 +216,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			TPlayer.Move();
-			ENEMY.TitleUp();//試し
+			ENEMY.TitleUp();
+
 			/*当たり判定用の四辺を求める*/
 				//Playerの四辺
 			VectorVertex(TPlayer.vertex, TPlayer.CPos, static_cast<float>(TPlayer.radius), static_cast<float>(TPlayer.radius));
@@ -267,7 +243,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			//Novice::ScreenPrintf(0, 100, "[0]%f,[1]%f,enemy%f", Line[0].CPos.y, Line[1].CPos.y,ENEMY.pos.y);
+			Novice::ScreenPrintf(0, 100, "%d,%d", TitleBox[0].isHit, TitleBox[1].isHit);
 			if (TitleBox[0].isHit) {
 				SceneNo = 1;//セレクト画面へ移動
 				isChangeScene = true;
@@ -360,7 +336,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (SelectBox[4].isHit) {
 				SelectBox[0].isR = true;//回転
-			}
+			} 
 			if (SelectBox[3].isHit) {
 				STAGE.loadStageNum = 3;
 				SceneNo = 2;//1ゲーム画面へ移動
@@ -380,6 +356,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SceneNo = 0;//タイトルに戻る
 				isChangeScene = true;
 			}
+
+
 
 
 			/*選択肢に自機を当てると選択肢が落下する処理*/
@@ -425,6 +403,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			STAGE.loadStage(STAGE.loadStageNum);
+			checkpoint.reset();
 
 			//イージング
 			SelectBox[0].theta = (1.0f - SelectBox[0].t) * SelectBox[0].minTheta + SelectBox[0].t * SelectBox[0].maxTheta;
@@ -446,8 +425,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				if (keys[DIK_Q])
 				{
-					ENEMY.pos = { 3929.408203f,2767 };
-					//      STAGE.loadStage(0);
+					ENEMY.pos = { 3929,2767 };
 					PLYR.respawnPos = { 0,0 };
 				}
 
@@ -482,7 +460,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				}
+				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -693,6 +672,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//リセットの中身
 #pragma region"リセット"
 		if (isReset) {
+
 			/*タイトルで必要なリセット*/
 			for (int i = 0; i < 2; i++) {
 				TitleBox[i].isHit = false;
@@ -726,12 +706,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			/*ゲームで必要なリセット*/
-			PLYR.pos = { 300.0f,3000.0f };
 			PLYR.SetStartPos(STAGE.loadStageNum);
 			PLYR.size = { 16,16 };
 			PLYR.acceleration = { 0.00f,0.5f };
 			PLYR.velocity = { 0,0 };
-
 			PLYR.isJump = false;
 			PLYR.isAlive = true;
 			PLYR.isGoal = false;
@@ -753,12 +731,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.respawnTimer = 120;
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
-			//PLYR.respawnPos = { 300,3000 };
-			PLYR.isSetRespawnPos = false;
 
-			STAGE.nowCheckPointColor = STAGE.CheckPointColor[0];
-			;
-			ENEMY.pos = { -500.0f,3000.0f };
 			ENEMY.SetStartPos(STAGE.loadStageNum);
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
@@ -771,6 +744,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.isPopEffect = false;
 			ENEMY.moveDirX = -1.0f;
 			ENEMY.respawnPos = ENEMY.pos;
+			ENEMY.isSetRespawnPos = false;
+
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
 				enemyHitEffect.size[i] = 0;
@@ -786,17 +761,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ENEMY.isHit = false;
 			}
 
-			checkpoint.pos = { 1280,64 };
-			checkpoint.isDraw = false;
-			checkpoint.t = 0;
-			checkpoint.addT = 0.04f;
-			checkpoint.time = 120;
-			checkpoint.countTimer = checkpoint.time;
-
 			if (scene == SELECT) {//GAMEとCLEARの間でリセットするとスコアを表示できないため
 				score.ClearTimer = 0;
 				score.ClearTimerS = 0;
 				score.ClearTimerM = 0;
+
 				PLYR.lives = 3;
 				PLYR.livesDrawPos = { 1114,20 };
 				PLYR.livesDrawSize = { 32,32 };
@@ -814,10 +783,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				enemyHitEffect.vel[i] = { 0,0 };
 				enemyHitEffect.acc[i] = { 0,0.8f };
 				enemyHitEffect.isAppear[i] = false;
-				STAGE.loadStage(STAGE.loadStageNum);
-				isResetGame = false;
 			}
-
+			isResetGame = false;
+			STAGE.loadStage(STAGE.loadStageNum);
+			STAGE.reset();
 		}
 #pragma endregion
 
@@ -829,7 +798,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		//Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+		Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
 
 		switch (scene)
 		{
@@ -849,7 +818,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
 			TPlayer.draw();
 			TitleRogo.DrawSpriteUpdate(TitleRogo.GH[6]);
-
 #pragma endregion
 			break;
 		case SELECT:
@@ -881,7 +849,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
 			score.DrawBGTimer();
-
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {
 				PEffect.Draw(SCROLL.getScroll());
@@ -889,7 +856,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				refEffect.Draw(SCROLL.getScroll());
 
-				ENEMY.draw(SCROLL.getScroll(), PLYR.isAlive,PLYR.isJump,PLYR.isStun);
+				ENEMY.draw(SCROLL.getScroll(), PLYR.isAlive, PLYR.isJump, PLYR.isStun);
 				ENEMY.Warning(SCROLL.getScroll(), PLYR.isAlive);
 
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());

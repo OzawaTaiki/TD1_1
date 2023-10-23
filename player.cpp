@@ -94,32 +94,10 @@ float PLAYER::getPressT()
 
 void PLAYER::Move()
 {
-	//float absVeloX = velocity.x < 0 ? -velocity.x : velocity.x;
-	//float absVeloY = velocity.y < 0 ? -velocity.y : velocity.y;
-
-	//if (isJump)
-	//{
-	//	velocity.x -= acceleration.x * MoveDir.x;
-	//	//if (absVeloY > 0.5f)
-	//	velocity.y += acceleration.y;
-
-	//}
-	//else
-	//{
 	velocity.y += acceleration.y;
-	//}
-
-	//velocity.x = absVeloX < 0.075f ? 0 : velocity.x;
-
-	/*if ((absVeloX < 0.05f && absVeloY < 0.5f) && isJump)
-	{
-		isJump = false;
-		velocity = { 0,0 };
-	}*/
 
 	pos.x += velocity.x * hitStopVelocity;
 	pos.y += velocity.y * hitStopVelocity;
-
 }
 
 void PLAYER::antiMove()
@@ -180,7 +158,7 @@ void PLAYER::jump(const Vector2& kJumpVect)
 
 		velocity = { kJumpVect.x * jumpVel ,kJumpVect.y * jumpVel };
 
-		PressT = 0.28f;
+		PressT = 0.18f;
 		addT *= addT < 0 ? -1 : 1;
 
 		isJump = true;
@@ -199,7 +177,7 @@ void PLAYER::dirUpdate()
 
 void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw)
 {
-	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
+	Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
 	isSetRespawnPos = false;
 
@@ -478,7 +456,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		}
 	}
 
-	if (localHit[4] >= 3 && localHit[4] < 19 && isJump)
+	if (localHit[4] >= 3 && localHit[4] < 18 && isJump)
 	{
 		boundCount++;
 
@@ -556,11 +534,60 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 void PLAYER::debugPrint()
 {
-	//Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
-	//Novice::ScreenPrintf(0, 40, "%f", PressT);
-	//Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
-	//Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
-	//Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
-	//Novice::ScreenPrintf(0, 260, "%d", boundCount);
-	//Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
+	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
+	Novice::ScreenPrintf(0, 40, "%f", PressT);
+	Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
+	Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
+	Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
+	Novice::ScreenPrintf(0, 260, "%d", boundCount);
+	Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
+}
+
+void PLAYER::reset()
+{
+	pos = { 300.0f,3000.0f };
+	size = { 16.0f,16.0f };
+	velocity = { 0,0 };
+
+	jumpVel = 0;
+	drawDir = 1.0f;
+
+	lives = 3;
+
+	livesDrawPos = { 1114,20 };
+	livesDrawSize = { 32,32 };
+	livesGHMargin = 10;
+
+	isJump = false;
+	isAlive = true;
+	isGoal = false;
+	isHitStop = false;
+	isHitToge = false;
+
+	MoveDir = { 1,0 };
+
+	PressT = 0.15f;
+	addT = 0.018f;
+	hitStopTimer = 5;
+	hitStopVelocity = 1.0f;
+
+	boundCount = 0;
+	isStun = false;
+	isShake = false;
+	isBlasted = false;
+	isSetBlastPos = false;
+
+
+	stunTimer = 120;
+	blastTimer = 120;
+	shakeTimer = 15;
+	respawnTimer = 120;
+
+	blastCountDwon = 30;
+	blastDistance = 0;
+
+	respawnPos = pos;
+
+	isSetRespawnPos = false;
+
 }

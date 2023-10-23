@@ -1,19 +1,22 @@
 ﻿#include "enemy.h"
 
-void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive, bool& Jump, bool& isStun) {
+void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive, bool isJump, bool isStun) {
 
-	if (playerIsAlive&&!isStun) {
+	if (playerIsAlive && !isStun) {
 		animationTimer++;
-		if (isSlow && !isStun) {
 
-			if (animationTimer % 24 == 0) {
+		if (isSlow && !isJump)
+		{
+			if (animationTimer % 24 == 0)
 				animationCounter += 256;
-			}
-		} else if (!isSlow || Jump) {
+		}
+		else if (!isSlow || isJump)
+		{
 			if (animationTimer % 8 == 0) {
 				animationCounter += 256;
 			}
 		}
+
 	}
 	else {
 		animationTimer = 0;
@@ -62,7 +65,7 @@ void ENEMY::TitleDraw() {
 			animationCounter, 0,
 			256, 256,
 			enemyGH[1],
-			((float)256 / (float)1024)/2, 1.0f,
+			((float)256 / (float)1024) / 2, 1.0f,
 			0,
 			0xffffffff);
 	}
@@ -72,11 +75,13 @@ void ENEMY::TitleDraw() {
 			animationCounter, 0,
 			256, 256,
 			enemyGH[2],
-			((float)256 / (float)1024)*0.8f, 0.8f,
+			((float)256 / (float)1024) * 0.8f, 0.8f,
 			0,
 			0xffffffff);
 	}
 }
+
+
 void ENEMY::OVERDraw() {
 	animationTimer++;
 
@@ -88,6 +93,7 @@ void ENEMY::OVERDraw() {
 	if (animationCounter >= 1024) {
 		animationCounter = 0;
 	}
+
 	if (moveDirX > 0) {
 		Novice::DrawSpriteRect(
 			int(pos.x - size.x), int(pos.y - size.y),
@@ -97,7 +103,8 @@ void ENEMY::OVERDraw() {
 			((float)256 / (float)1024), 1,
 			0,
 			0xffffffff);
-	} else if (moveDirX < 0) {
+	}
+	else if (moveDirX < 0) {
 		Novice::DrawSpriteRect(
 			int(pos.x - size.x), int(pos.y - size.y),
 			animationCounter, 0,
@@ -126,10 +133,11 @@ void ENEMY::OVERUp(bool& isAlive, int& BoundCount) {
 		SCGO = true;
 	}
 }
+
 void ENEMY::TitleUp() {
 	if (SCGO) {
 		pos = { -500,400 };
-		size = {64,64};
+		size = { 64,64 };
 		isHit = false;
 		isPopEffect = false;
 
@@ -141,6 +149,13 @@ void ENEMY::TitleUp() {
 		SCGO = true;
 	}
 }
+
+void ENEMY::SetStartPos(int stageNum)
+{
+	pos = startPos[stageNum];
+	respawnPos = pos;
+}
+
 
 Vector2 ENEMY::getPos()
 {
@@ -208,19 +223,12 @@ void ENEMY::CollisionToPlayer(const Vector2& playerPos, Vector2& playerSize) {
 	}
 }
 
-void ENEMY::SetStartPos(int stageNum)
-{
-	pos = startPos[stageNum];
-	respawnPos = pos;
-}
-
-
-
 void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirection)
 {
-	if (isSet)
+	if (isSet && !isSetRespawnPos)
 	{
 		float respwnDistance = 500.0f;
+		isSetRespawnPos = true;
 
 		if (fabsf(PLYRPos.x - pos.x) <= respwnDistance)
 		{//敵と自機のｘ距離が respwnDistance より小さいとき
@@ -388,9 +396,9 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 		//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
 		//Novice::DrawQuad(int(pos.x+vertex[0].x),int(pos.y+vertex[0].y))
 
-		//Novice::ScreenPrintf(500, 120, "%.1f,%.1f", drawSize.x, drawSize.y);
+		Novice::ScreenPrintf(500, 120, "%.1f,%.1f", drawSize.x, drawSize.y);
 	}
-	//Novice::ScreenPrintf(500, 160, "scroll = %.1f,%.1f", scroll.x, scroll.y);
+	Novice::ScreenPrintf(500, 160, "scroll = %.1f,%.1f", scroll.x, scroll.y);
 }
 
 
@@ -404,6 +412,7 @@ void ENEMY::debugPrint()
 	//Novice::ScreenPrintf(500, 60, "warningCountDown = %d", warningCountDown);
 	//Novice::ScreenPrintf(500, 40, "isWarning = %d", isWarning);
 	//Novice::ScreenPrintf(0, 700, "%d", slowTimer);
-	//Novice::ScreenPrintf(500, 140, "enemyPos = %.1f,%.1f", pos.x, pos.y);
+	Novice::ScreenPrintf(500, 140, "enemyPos = %.1f,%.1f", pos.x, pos.y);
+	Novice::ScreenPrintf(500, 300, "enemyRespawnPos = %.1f,%.1f", respawnPos.x, respawnPos.y);
 
 }

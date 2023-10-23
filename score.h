@@ -10,8 +10,9 @@ struct Score {
 	int RClearTimer = 0;
 	int RClearTimerS = 0;//秒
 	int RClearTimerM = 0;//分
-
-	int kCheckRankTimeM[7][3] = {
+	//秒
+	//S,A,B
+	int kCheckRankTimeS[7][3] = {
 		{17,25,40},
 		{17,20,25},
 		{17,20,25},
@@ -19,6 +20,17 @@ struct Score {
 		{17,20,25},
 		{17,20,25},
 		{17,20,25}
+	};
+	//分
+	//S,A,B
+	int kCheckRankTimeM[7][3] = {
+		{0,0,0},
+		{0,0,0},
+		{0,0,0},
+		{0,0,0},
+		{0,0,0},
+		{0,0,0},
+		{0,0,0}
 	};
 
 	int eachNumber[8];
@@ -72,7 +84,7 @@ struct Score {
 	void result(int loadStage) {
 		//ランクを出す
 		for (int i = 0; i < 3; i++)
-			if (ClearTimerS <= kCheckRankTimeM[loadStage][i])
+			if (ClearTimerS <= kCheckRankTimeS[loadStage][i] && ClearTimerM <= kCheckRankTimeM[loadStage][i])
 			{
 				Novice::DrawSprite(static_cast<int>(resultRankCPos.x - rankSize), static_cast<int>(resultRankCPos.y - rankSize), rankGH[i], 1.5f, 1.5f, 0.0f, color[i]);
 				break;
@@ -85,7 +97,7 @@ struct Score {
 
 	void DrawTimer() {
 
-		//Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
+		Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
 
 	}
 
@@ -118,10 +130,10 @@ struct Score {
 			numberPos[i].x = 64.0f + (static_cast<int>(i - 1) * 70 * 2.5f);
 			numberPos[i].y = 100.0f;
 			if (i != 2 && i != 5) {
-				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 2.5f, 4.0f, 0.0f, 0x444444FF);
+				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 2.5f, 4.0f, 0.0f, 0x333333ff);
 			}
 			else {
-				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), tentenGH, 2.5f, 4.0f, 0.0f, 0x444444FF);
+				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), tentenGH, 2.5f, 4.0f, 0.0f, 0x333333ff);
 			}
 		}
 	}

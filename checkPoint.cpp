@@ -15,19 +15,19 @@ void checkPoint::draw()
 	if (isDraw)
 		update();
 
-	Novice::DrawSprite(int(pos.x), int(pos.y), GH, 1.0f, 1.0f, 0, WHITE);
+	Novice::DrawSprite(int(pos.x), int(pos.y), GH, 1, 1, 0, WHITE);
 }
 
 void checkPoint::update()
 {
 	t += addT;
 
-	if (t >= 1.0f)
-	{	
+	if (t >= 1)
+	{
 		t = 1;
 		countTimer--;
 	}
-	if (countTimer <= 0.0f)
+	if (countTimer <= 0)
 	{
 		countTimer = time;
 		addT *= -1;
@@ -40,4 +40,14 @@ void checkPoint::update()
 
 	float easedT = -(cosf(float(M_PI) * t) - 1.0f) / 2.0f;
 	pos.x = (1.0f - easedT) * kMinPos.x + easedT * kMaxPos.x;
+}
+
+void checkPoint::reset()
+{
+	pos = { 1280,64 };
+	isDraw = false;
+	t = 0;
+	addT = 0.04f;
+	time = 120;
+	countTimer = time;
 }
