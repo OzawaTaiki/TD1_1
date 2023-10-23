@@ -118,7 +118,7 @@ struct Score {
 			numberPos[i].x = 64.0f + (static_cast<int>(i - 1) * 70 * 2.5f);
 			numberPos[i].y = 100.0f;
 			if (i != 2 && i != 5) {
-				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1.5f, 4.0f, 0.0f, 0x444444FF);
+				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 2.5f, 4.0f, 0.0f, 0x444444FF);
 			}
 			else {
 				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), tentenGH, 2.5f, 4.0f, 0.0f, 0x444444FF);

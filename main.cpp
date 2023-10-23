@@ -722,8 +722,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < BOX_MAX; i++) {
 				SelectBox[i].isHit = false;
 				SelectBox[i].velY = 0;
-				SelectBox[i].theta = 0.0f;
-				SelectBox[i].t = 0.0f;
 			}
 
 
@@ -831,7 +829,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+		//Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
 
 		switch (scene)
 		{

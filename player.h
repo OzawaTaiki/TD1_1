@@ -117,7 +117,7 @@ public:
 		startPos[0] = { 300,3000 };
 		startPos[1] = { 300,3000 };
 		startPos[2] = { 300,3000 };
-		startPos[3] = { 100,200 };
+		startPos[3] = { 300,3000 };
 		startPos[4] = { 300,3000 };
 		startPos[5] = { 300,3000 };
 		startPos[6] = { 300,3000 };
