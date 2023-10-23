@@ -367,12 +367,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isChangeScene = true;
 			}
 			if (SelectBox[2].isHit) {
-				STAGE.loadStageNum = 5;
+				STAGE.loadStageNum = 4;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[1].isHit) {
-				STAGE.loadStageNum = 6;
+				STAGE.loadStageNum = 5;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
@@ -882,6 +882,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームの描画処理"
 
 			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
+			score.DrawBGTimer();
 
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {
@@ -904,7 +905,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PLYR.debugPrint();
 				ENEMY.debugPrint();
 
-				score.DrawBGTimer();
+
 			}
 #pragma endregion
 
