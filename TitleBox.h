@@ -27,7 +27,7 @@ struct Box {
 	 Novice::LoadTexture("./Resources/images/4~6.png"),
 	 Novice::LoadTexture("./Resources/images/smail.png"),
 	 Novice::LoadTexture("./Resources/images/tittleLine.png"),
-	
+
 	};
 
 	int timer = 60;
