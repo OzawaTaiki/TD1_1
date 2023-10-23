@@ -498,7 +498,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	{
 		isHitStop = false;
 		hitStopVelocity = 1.0f;
-		hitStopTimer = 5;
+		hitStopTimer = 4;
 	}
 
 	//画面揺れの時間制限処理
@@ -508,7 +508,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 	if (shakeTimer <= 0) {
 		isShake = false;
-		shakeTimer = 15;
+		shakeTimer = 10;
 	}
 
 	// 敵スタンアイテムの時間制限処理
@@ -519,7 +519,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 	else
 	{
 		isStun = false;
-		stunTimer = 120;
+		stunTimer = 180;
 	}
 
 	// 大砲の時間制限と移動処理

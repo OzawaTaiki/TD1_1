@@ -102,7 +102,7 @@ public:
 		isSetBlastPos = false;
 
 
-		stunTimer = 120;
+		stunTimer = 180;
 		blastTimer = 120;
 		shakeTimer = 15;
 		respawnTimer = 120;

@@ -83,7 +83,7 @@ public:
 
 	void SetStartPos(int stageNum);
 
-	void draw(const Vector2& scroll, bool& playerIsAlive);
+	void draw(const Vector2& scroll, bool& playerIsAlive, bool& Jump, bool& isStun);
 
 	void OVERDraw();
 	void TitleDraw();

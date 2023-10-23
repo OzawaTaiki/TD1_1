@@ -211,7 +211,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*--------------------------------------------------------------------*/
 #pragma endregion
 
-
+				//ステージのロード
+	STAGE.loadStage(STAGE.loadStageNum);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -225,8 +226,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-			//ステージのロード
-		STAGE.loadStage(STAGE.loadStageNum);
+
 
 		switch (scene) {
 		case TITLE:
@@ -367,12 +367,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isChangeScene = true;
 			}
 			if (SelectBox[2].isHit) {
-				STAGE.loadStageNum = 1;
+				STAGE.loadStageNum = 5;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[1].isHit) {
-				STAGE.loadStageNum = 1;
+				STAGE.loadStageNum = 6;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
@@ -739,19 +739,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.isGoal = false;
 			PLYR.isHitToge = false;
 			PLYR.MoveDir = { 1,0 };
-			PLYR.PressT = 0.35f;
-			PLYR.addT = 0.02f;
+			PLYR.PressT = 0.15f;
+			PLYR.addT = 0.018f;
 			PLYR.maxVelocity = 30.0f;
 			PLYR.minVelocity = 1.0f;
-			PLYR.hitStopTimer = 5;
+			PLYR.hitStopTimer = 4;
 			PLYR.hitStopVelocity = 1.0f;
 			PLYR.boundCount = 0;
 			PLYR.isStun = false;
 			PLYR.isShake = false;
 			PLYR.isBlasted = false;
-			PLYR.stunTimer = 120;
+			PLYR.stunTimer = 180;
 			PLYR.blastTimer = 120;
-			PLYR.shakeTimer = 15;
+			PLYR.shakeTimer = 10;
 			PLYR.respawnTimer = 120;
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
@@ -882,7 +882,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームの描画処理"
 
 			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
-			score.DrawBGTimer();
+
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {
 				PEffect.Draw(SCROLL.getScroll());
@@ -890,7 +890,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				refEffect.Draw(SCROLL.getScroll());
 
-				ENEMY.draw(SCROLL.getScroll(), PLYR.isAlive);
+				ENEMY.draw(SCROLL.getScroll(), PLYR.isAlive,PLYR.isJump,PLYR.isStun);
 				ENEMY.Warning(SCROLL.getScroll(), PLYR.isAlive);
 
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());
@@ -904,7 +904,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PLYR.debugPrint();
 				ENEMY.debugPrint();
 
-
+				score.DrawBGTimer();
 			}
 #pragma endregion
 

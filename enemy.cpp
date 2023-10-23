@@ -1,12 +1,18 @@
 ﻿#include "enemy.h"
 
-void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive) {
+void ENEMY::draw(const Vector2& scroll, bool& playerIsAlive, bool& Jump, bool& isStun) {
 
-	if (playerIsAlive) {
+	if (playerIsAlive&&!isStun) {
 		animationTimer++;
+		if (isSlow && !isStun) {
 
-		if (animationTimer % 8 == 0) {
-			animationCounter += 256;
+			if (animationTimer % 24 == 0) {
+				animationCounter += 256;
+			}
+		} else if (!isSlow || Jump) {
+			if (animationTimer % 8 == 0) {
+				animationCounter += 256;
+			}
 		}
 	}
 	else {
@@ -220,7 +226,7 @@ void ENEMY::setRespawnPos(bool isSet, const Vector2& PLYRPos, float PLYRDirectio
 		{//敵と自機のｘ距離が respwnDistance より小さいとき
 			//リスポーンposXを respwnDistance 分だけ離す
 			//YはPLYRと同じに
-			respawnPos.x = PLYRPos.x + (respwnDistance * PLYRDirection);
+			respawnPos.x = PLYRPos.x + (respwnDistance * -PLYRDirection);
 			respawnPos.y = PLYRPos.y;
 		}
 		else

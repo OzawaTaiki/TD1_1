@@ -2,8 +2,8 @@
 
 void SCROLL::update(const Vector2& pos, bool isShake)
 {
-	scrollXRand = rand() % 7 - 3;
-	scrollYRand = rand() % 7 - 3;
+	scrollXRand = rand() % 5 - 2;
+	scrollYRand = rand() % 5 - 2;
 
 
 	if (!isShake) {
