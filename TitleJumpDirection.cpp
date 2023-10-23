@@ -27,8 +27,8 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 	}
 
 
-	Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
-	Novice::ScreenPrintf(0, 320, "%.1f,%.1f", pos.x, pos.y);
+	//Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
+	//Novice::ScreenPrintf(0, 320, "%.1f,%.1f", pos.x, pos.y);
 
 }
 

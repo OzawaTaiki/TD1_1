@@ -88,8 +88,8 @@ public:
 
 		MoveDir = { 1,0 };
 
-		PressT = 0.5f;
-		addT = 0.02f;
+		PressT = 0.15f;
+		addT = 0.018f;
 		maxVelocity = 30.0f;
 		minVelocity = 1.0f;
 		hitStopTimer = 5;
@@ -110,18 +110,18 @@ public:
 		blastCountDwon = 30;
 		blastDistance = 0;
 
-		respawnPos = pos;
+
 
 		isSetRespawnPos = false;
 
 		startPos[0] = { 300,3000 };
 		startPos[1] = { 300,3000 };
 		startPos[2] = { 300,3000 };
-		startPos[3] = { 300,3000 };
+		startPos[3] = { 100,200 };
 		startPos[4] = { 300,3000 };
 		startPos[5] = { 300,3000 };
 		startPos[6] = { 300,3000 };
-
+		respawnPos = pos;
 	};
 
 	void draw(const Vector2& scroll);

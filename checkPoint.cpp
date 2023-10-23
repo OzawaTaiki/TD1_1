@@ -15,19 +15,19 @@ void checkPoint::draw()
 	if (isDraw)
 		update();
 
-	Novice::DrawSprite(int(pos.x), int(pos.y), GH, 200, 50, 0, WHITE);
+	Novice::DrawSprite(int(pos.x), int(pos.y), GH, 1.0f, 1.0f, 0, WHITE);
 }
 
 void checkPoint::update()
 {
 	t += addT;
 
-	if (t >= 1)
-	{
+	if (t >= 1.0f)
+	{	
 		t = 1;
 		countTimer--;
 	}
-	if (countTimer <= 0)
+	if (countTimer <= 0.0f)
 	{
 		countTimer = time;
 		addT *= -1;

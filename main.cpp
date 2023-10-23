@@ -64,7 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SCROLL SCROLL;
 	GAUGE GAUGE;
 	ENEMY ENEMY;
-	ENEMY.moveDirX=-1.0f;
+	ENEMY.moveDirX = -1.0f;
 	jumpDirection JD;
 
 	playerEffect PEffect;
@@ -91,7 +91,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 640,50 },
 		800,
 		150,
-		0xfc21c6cc
+		0xFFFFFFFF
+		//0xfc21c6cc
 	);
 	//タイトル画面の選択肢（[0]セレクト[1]ゲーム終了）
 	for (int i = 0; i < TITLEBOX_MAX; i++) {
@@ -117,11 +118,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	*/
 
 	Line[0].Init(
-	{ 640,308 },
-	1280,
-	3,
-	0xfc21c666
-);
+		{ 640,308 },
+		1280,
+		3,
+		0xfc21c666
+	);
 	Line[1].Init(
 		{ 640,591 },
 		1280,
@@ -210,8 +211,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*--------------------------------------------------------------------*/
 #pragma endregion
 
-	//ステージのロード
-	STAGE.loadStage(0);
+
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -225,6 +225,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+			//ステージのロード
+		STAGE.loadStage(STAGE.loadStageNum);
+
 		switch (scene) {
 		case TITLE:
 #pragma region"タイトルの更新処理"
@@ -264,7 +267,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			Novice::ScreenPrintf(0, 100, "[0]%f,[1]%f,enemy%f", Line[0].CPos.y, Line[1].CPos.y,ENEMY.pos.y);
+			//Novice::ScreenPrintf(0, 100, "[0]%f,[1]%f,enemy%f", Line[0].CPos.y, Line[1].CPos.y,ENEMY.pos.y);
 			if (TitleBox[0].isHit) {
 				SceneNo = 1;//セレクト画面へ移動
 				isChangeScene = true;
@@ -341,14 +344,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isChangeScene = true;
 			}
 			if (SelectBox[7].isHit) {
-				SceneNo = 2;//1ゲーム画面へ移動
+				SceneNo = 2;//2ゲーム画面へ移動
 				STAGE.loadStageNum = 1;
 
 				isChangeScene = true;
 			}
 			if (SelectBox[6].isHit) {
-				SceneNo = 2;//1ゲーム画面へ移動
-				STAGE.loadStageNum = 0;
+				SceneNo = 2;//3ゲーム画面へ移動
+				STAGE.loadStageNum = 2;
 				isChangeScene = true;
 			}
 
@@ -359,18 +362,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[0].isR = true;//回転
 			}
 			if (SelectBox[3].isHit) {
-				STAGE.loadStageNum = 0;
-				STAGE.loadStageNum = 0;
+				STAGE.loadStageNum = 3;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[2].isHit) {
-				STAGE.loadStageNum = 0;
+				STAGE.loadStageNum = 1;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
 			if (SelectBox[1].isHit) {
-				STAGE.loadStageNum = 0;
+				STAGE.loadStageNum = 1;
 				SceneNo = 2;//1ゲーム画面へ移動
 				isChangeScene = true;
 			}
@@ -691,7 +693,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//リセットの中身
 #pragma region"リセット"
 		if (isReset) {
-
 			/*タイトルで必要なリセット*/
 			for (int i = 0; i < 2; i++) {
 				TitleBox[i].isHit = false;
@@ -732,7 +733,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.size = { 16,16 };
 			PLYR.acceleration = { 0.00f,0.5f };
 			PLYR.velocity = { 0,0 };
-			PLYR.lives = 3;
+
 			PLYR.isJump = false;
 			PLYR.isAlive = true;
 			PLYR.isGoal = false;
@@ -754,9 +755,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.respawnTimer = 120;
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
-			PLYR.respawnPos = { 300,3000 };
+			//PLYR.respawnPos = { 300,3000 };
+			PLYR.isSetRespawnPos = false;
 
+			STAGE.nowCheckPointColor = STAGE.CheckPointColor[0];
+			;
 			ENEMY.pos = { -500.0f,3000.0f };
+			ENEMY.SetStartPos(STAGE.loadStageNum);
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
 			ENEMY.slowTimer = 150;
@@ -783,11 +788,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ENEMY.isHit = false;
 			}
 
+			checkpoint.pos = { 1280,64 };
+			checkpoint.isDraw = false;
+			checkpoint.t = 0;
+			checkpoint.addT = 0.04f;
+			checkpoint.time = 120;
+			checkpoint.countTimer = checkpoint.time;
+
 			if (scene == SELECT) {//GAMEとCLEARの間でリセットするとスコアを表示できないため
 				score.ClearTimer = 0;
 				score.ClearTimerS = 0;
 				score.ClearTimerM = 0;
-
 				PLYR.lives = 3;
 				PLYR.livesDrawPos = { 1114,20 };
 				PLYR.livesDrawSize = { 32,32 };
@@ -805,6 +816,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				enemyHitEffect.vel[i] = { 0,0 };
 				enemyHitEffect.acc[i] = { 0,0.8f };
 				enemyHitEffect.isAppear[i] = false;
+				STAGE.loadStage(STAGE.loadStageNum);
 				isResetGame = false;
 			}
 
@@ -834,7 +846,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			TitleBox[0].DrawSpriteUpdateSELECT(TitleBox[0].GH[4]);
 			TitleBox[1].DrawSpriteUpdateSELECT(TitleBox[1].GH[5]);
-		//	Smail.DrawSpriteUpdate(Smail.GH[9]);
 
 
 			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
@@ -849,7 +860,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Line[1].CPos.y = 586;
 			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
 			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
-			
+
 			for (int i = 0; i < SELECTBOX_MAX; i++) {
 				SelectBox[i].DrawUpDate(i);
 			}

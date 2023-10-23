@@ -33,7 +33,7 @@ public:
 
 		pos = { 1280,64 };
 		isDraw = false;
-		GH = Novice::LoadTexture("white1x1.png");
+		GH = Novice::LoadTexture("./Resources/images/CP.png");
 		t = 0;
 		addT = 0.04f;
 		time = 120;

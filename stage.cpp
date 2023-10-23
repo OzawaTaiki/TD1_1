@@ -9,7 +9,7 @@ int STAGE::getmapChipsize()
 void STAGE::loadStage(int stageNum)
 {
 	loadStageNum = stageNum;
-	loadStageNum = 1;
+	//loadStageNum = 1;
 
 	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{

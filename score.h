@@ -85,7 +85,7 @@ struct Score {
 
 	void DrawTimer() {
 
-		Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
+		//Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
 
 	}
 
@@ -151,7 +151,7 @@ struct Score {
 		RClearTimer = RClearTimer % 1;
 
 		for (int i = 0; i < 8; i++) {
-			numberPos[i].x = 356.0f + (static_cast<int>(i - 1) * 71);
+			numberPos[i].x = 446.0f + (static_cast<int>(i - 1) * 71);
 			numberPos[i].y = 100.0f;
 			if (i != 2 && i != 5) {
 				Novice::DrawSprite(static_cast<int>(numberPos[i].x), static_cast<int>(numberPos[i].y), numberGH[eachNumber[i]], 1, 1, 0.0f, 0xffffffff);

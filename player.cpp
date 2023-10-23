@@ -199,7 +199,7 @@ void PLAYER::dirUpdate()
 
 void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw)
 {
-	Novice::ScreenPrintf(0, 100, "%d", hitBlock);
+	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
 	isSetRespawnPos = false;
 
@@ -556,11 +556,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 void PLAYER::debugPrint()
 {
-	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
-	Novice::ScreenPrintf(0, 40, "%f", PressT);
-	Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
-	Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
-	Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
-	Novice::ScreenPrintf(0, 260, "%d", boundCount);
-	Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
+	//Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
+	//Novice::ScreenPrintf(0, 40, "%f", PressT);
+	//Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
+	//Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
+	//Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
+	//Novice::ScreenPrintf(0, 260, "%d", boundCount);
+	//Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
 }
