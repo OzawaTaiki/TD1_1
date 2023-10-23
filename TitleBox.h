@@ -15,16 +15,19 @@ struct Box {
 	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
-	int GH[10] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
+	int GH[11] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
 	 Novice::LoadTexture("./Resources/images/PRESSSPACE.png"),
 	 Novice::LoadTexture("./Resources/images/stageSelect.png"),
 	 Novice::LoadTexture("./Resources/images/Manual.png"),
-	 Novice::LoadTexture("./Resources/images/Game.png"),
+	 Novice::LoadTexture("./Resources/images/start.png"),
 	 Novice::LoadTexture("./Resources/images/Exit.png"),
-	 Novice::LoadTexture("./Resources/images/TitleRogo.png"),
+	 Novice::LoadTexture("./Resources/images/gameTitle.png"),
 
 	 Novice::LoadTexture("./Resources/images/1~3.png"),
 	 Novice::LoadTexture("./Resources/images/4~6.png"),
+	 Novice::LoadTexture("./Resources/images/smail.png"),
+	 Novice::LoadTexture("./Resources/images/tittleLine.png"),
+
 	};
 
 	int timer = 60;
@@ -87,13 +90,13 @@ struct Box {
 		int saveColor = 0x1B162CFF;
 		timer -= 1;
 		if (timer <= 0) {
-			timer = 800;
+			timer = 600;
 		}
 		color = saveColor;
 		if ((timer <= 600 && timer >= 520) ||
 			(timer <= 500 && timer >= 480) ||
 			(timer <= 450 && timer >= 430) ||
-			(timer <= 420 && timer >= 65)
+			(timer <= 420 && timer >= 45)
 			) {
 			color = shineColor;
 		}

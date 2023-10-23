@@ -25,7 +25,7 @@ void jumpDirection::rotate(const Vector2& pos, float direction, const Vector2& s
 		if (isAlive) {
 			for (int i = 0; i < Num; i++)
 			{
-				Novice::DrawSprite(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - circleRadius - scroll.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y- circleRadius - scroll.y), circleGH, circleRadius * 2 / circleGHSize, circleRadius * 2 / circleGHSize, 0, 0xff0000ff);
+				Novice::DrawSprite(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - circleRadius - scroll.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y- circleRadius - scroll.y), circleGH, circleRadius * 2 / circleGHSize, circleRadius * 2 / circleGHSize, 0, 0xffffffff);
 				//Novice::DrawEllipse(int((normalizeJumpDirectionVect.x * i * margin) + pos.x - scroll.x), int((normalizeJumpDirectionVect.y * i * margin) + pos.y - scroll.y), 3, 3, 0, 0xdd5050ff, kFillModeSolid);
 			}
 		}

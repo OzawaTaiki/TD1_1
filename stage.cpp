@@ -9,7 +9,6 @@ int STAGE::getmapChipsize()
 void STAGE::loadStage(int stageNum)
 {
 	loadStageNum = stageNum;
-	loadStageNum = 1;
 
 	for (int i = 0; i < kStageSizeY[loadStageNum]; i++)
 	{
@@ -171,4 +170,11 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 
 	return returnHitArr;
 
+}
+
+void STAGE::reset()
+{
+	blastX = -1;
+	blastY = -1;
+	nowCheckPointColor = CheckPointColor[0];
 }

@@ -28,6 +28,9 @@ public:
 	bool SCGO;
 
 	Vector2 respawnPos;
+	bool isSetRespawnPos;
+
+	Vector2 startPos[7];
 
 	int enemyGH[3] = { 0 };
 
@@ -59,22 +62,38 @@ public:
 		animSwitcher = false;
 
 		respawnPos = pos;
+		isSetRespawnPos = false;
 
 		isWarning = true;
 		isPopEffect = false;
 		animSwitcher = false;
 		SCGO = true;
 
+		startPos[0] = { -500.0f,3000.0f };
+		startPos[1] = { -500.0f,3000.0f };
+		startPos[2] = { -500.0f,3000.0f };
+		startPos[3] = { -500.0f,3000.0f };
+		startPos[4] = { -500.0f,3000.0f };
+		startPos[5] = { -500.0f,3000.0f };
+		startPos[6] = { -500.0f,3000.0f };
+
+
 		enemyGH[0] = Novice::LoadTexture("./Resources/images/Warning.png");
 		enemyGH[1] = Novice::LoadTexture("./Resources/images/enemyLeft.png");
 		enemyGH[2] = Novice::LoadTexture("./Resources/images/enemyRight.png");
 	};
 
-	void draw(const Vector2& scroll, bool& playerIsAlive);
+	void SetStartPos(int stageNum);
+
+	void draw(const Vector2& scroll, bool& playerIsAlive, bool isJump, bool isStun);
 
 	void OVERDraw();
 
+	void TitleDraw();
+
 	void OVERUp(bool& isAlive, int& BoundCount);
+
+	void TitleUp();
 
 	Vector2 getPos();
 
@@ -93,5 +112,6 @@ public:
 	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll);
 
 	void debugPrint();
+
 
 };

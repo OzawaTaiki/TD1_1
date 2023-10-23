@@ -88,8 +88,8 @@ public:
 
 		MoveDir = { 1,0 };
 
-		PressT = 0.5f;
-		addT = 0.02f;
+		PressT = 0.15f;
+		addT = 0.018f;
 		maxVelocity = 30.0f;
 		minVelocity = 1.0f;
 		hitStopTimer = 5;
@@ -102,7 +102,7 @@ public:
 		isSetBlastPos = false;
 
 
-		stunTimer = 120;
+		stunTimer = 180;
 		blastTimer = 120;
 		shakeTimer = 15;
 		respawnTimer = 120;
@@ -116,9 +116,9 @@ public:
 
 		startPos[0] = { 300,3000 };
 		startPos[1] = { 300,3000 };
-		startPos[2] = { 300,3000 };
+		startPos[2] = { 200,2800 };
 		startPos[3] = { 300,3000 };
-		startPos[4] = { 300,3000 };
+		startPos[4] = { 200,3000 };
 		startPos[5] = { 300,3000 };
 		startPos[6] = { 300,3000 };
 
@@ -157,5 +157,6 @@ public:
 
 	void debugPrint();
 
+	void reset();
 
 };
