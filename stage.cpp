@@ -17,7 +17,6 @@ void STAGE::loadStage(int stageNum)
 			field[i][j] = stage[loadStageNum][i][j];
 		}
 	}
-
 }
 
 void STAGE::draw(const Vector2& pos, const Vector2& scroll)

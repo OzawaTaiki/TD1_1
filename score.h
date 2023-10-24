@@ -97,7 +97,7 @@ struct Score {
 
 	void DrawTimer() {
 
-		Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
+		//Novice::ScreenPrintf(640, 360, "%d:%d:%d", ClearTimerM, ClearTimerS, ClearTimer);
 
 	}
 

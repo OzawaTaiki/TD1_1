@@ -254,7 +254,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 	}
 
 	if (warningCountDown <= 0 && isWarning) {
-		warningTimer--;
+ 		warningTimer--;
 
 		if (warningCountDown % 6 == 0) {
 			Novice::DrawSprite(int(40 - scroll.x), int(2900 - scroll.y), enemyGH[0], 1.0f, 1.0f, 0.0f, 0xffffffff);
@@ -262,7 +262,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 
 		if (warningTimer <= 0) {
 			isWarning = false;
-			warningCountDown = 170;
+			warningCountDown = 60;
 			warningTimer = 70;
 		}
 	}
@@ -396,9 +396,9 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 		//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
 		//Novice::DrawQuad(int(pos.x+vertex[0].x),int(pos.y+vertex[0].y))
 
-		Novice::ScreenPrintf(500, 120, "%.1f,%.1f", drawSize.x, drawSize.y);
+		//Novice::ScreenPrintf(500, 120, "%.1f,%.1f", drawSize.x, drawSize.y);
 	}
-	Novice::ScreenPrintf(500, 160, "scroll = %.1f,%.1f", scroll.x, scroll.y);
+	//Novice::ScreenPrintf(500, 160, "scroll = %.1f,%.1f", scroll.x, scroll.y);
 }
 
 
@@ -414,5 +414,9 @@ void ENEMY::debugPrint()
 	//Novice::ScreenPrintf(0, 700, "%d", slowTimer);
 	Novice::ScreenPrintf(500, 140, "enemyPos = %.1f,%.1f", pos.x, pos.y);
 	Novice::ScreenPrintf(500, 300, "enemyRespawnPos = %.1f,%.1f", respawnPos.x, respawnPos.y);
+
+	Novice::ScreenPrintf(500, 400, "iswarning = %d", isWarning);
+	Novice::ScreenPrintf(500, 420, "count = %d", warningCountDown);
+	Novice::ScreenPrintf(500, 440, "timer = %d", warningTimer);
 
 }

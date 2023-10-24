@@ -177,7 +177,7 @@ void PLAYER::dirUpdate()
 
 void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw)
 {
-	Novice::ScreenPrintf(0, 100, "%d", hitBlock);
+	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
 	isSetRespawnPos = false;
 
