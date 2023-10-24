@@ -3,6 +3,7 @@
 #include <Novice.h>
 #include <Vector2.h>
 
+
 class PLAYER {
 
 public:
@@ -61,6 +62,27 @@ public:
 	bool isSetRespawnPos;
 
 	Vector2 startPos[7];
+
+	struct sound
+	{
+		int VoiceHandle;
+		int SoundHandle;
+		bool isSound;
+		float volume;
+	};
+
+	enum soundKinds
+	{
+		HitWall,
+		Reflection,
+		Jump,
+		Die,
+		Item,
+		EnterBlast,
+		OutBlast,
+		CheckPoint
+	};
+	sound sound[9];
 
 	PLAYER()
 	{
@@ -122,7 +144,23 @@ public:
 		startPos[5] = { 300,3000 };
 		startPos[6] = { 300,3000 };
 
-	};
+		for (int i = 0; i < 8; i++)
+		{
+			sound[i].isSound = false;
+			sound[i].VoiceHandle = -1;
+			sound[i].volume = 0.15f;
+		}
+
+		sound[HitWall].SoundHandle = Novice::LoadAudio("./Resources/sounds/hitWall.wav");
+		sound[Reflection].SoundHandle = Novice::LoadAudio("./Resources/sounds/hitReflection.wav");
+		sound[Jump].SoundHandle = Novice::LoadAudio("./Resources/sounds/smallJump.mp3");
+		sound[Die].SoundHandle = Novice::LoadAudio("./Resources/sounds/Die.wav");
+		sound[Item].SoundHandle = Novice::LoadAudio("./Resources/sounds/GetItem.wav");
+		sound[EnterBlast].SoundHandle = Novice::LoadAudio("./Resources/sounds/SEenterBlast.wav");
+		sound[OutBlast].SoundHandle = Novice::LoadAudio("./Resources/sounds/blaster1.mp3");
+		sound[CheckPoint].SoundHandle = Novice::LoadAudio("./Resources/sounds/cheakPoint.mp3");
+
+	}; 
 
 	void draw(const Vector2& scroll);
 

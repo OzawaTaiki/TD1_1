@@ -16,12 +16,79 @@ void PLAYER::draw(const Vector2& scroll)
 
 	for (int i = 0; i < maxLives; i++)
 	{
-		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), GH, 1, 1, 0, WHITE);
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), GH, 1.5f, 1.5f, 0, WHITE);
 	}
 	for (int i = 0; i < (maxLives - lives); i++)
 	{
-		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 1, 1, 0, WHITE);
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 1.5f, 1.5f, 0, WHITE);
 	}
+
+
+	if (sound[Jump].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[Jump].VoiceHandle) || sound[Jump].VoiceHandle == -1)
+		{
+			sound[Jump].isSound = false;
+			sound[Jump].VoiceHandle = Novice::PlayAudio(sound[Jump].SoundHandle, 0, 0.5f);
+		}
+	}
+
+	if (sound[Reflection].isSound)
+	{
+		sound[Reflection].isSound = false;
+		sound[Reflection].VoiceHandle = Novice::PlayAudio(sound[Reflection].SoundHandle, 0, 0.15f);
+	}
+	else if (sound[HitWall].isSound)
+	{
+		sound[HitWall].isSound = false;
+		sound[HitWall].VoiceHandle = Novice::PlayAudio(sound[HitWall].SoundHandle, 0, 0.15f);
+	}
+
+
+	if (sound[Item].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[Item].VoiceHandle) || sound[Item].VoiceHandle == -1)
+		{
+			sound[Item].isSound = false;
+			sound[Item].VoiceHandle = Novice::PlayAudio(sound[Item].SoundHandle, 0, 0.5f);
+		}
+	}
+
+	if (sound[EnterBlast].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[EnterBlast].VoiceHandle) || sound[EnterBlast].VoiceHandle == -1)
+		{
+			sound[EnterBlast].isSound = false;
+			sound[EnterBlast].VoiceHandle = Novice::PlayAudio(sound[EnterBlast].SoundHandle, 0, 0.5f);
+		}
+	}
+	else if (sound[OutBlast].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[OutBlast].VoiceHandle) || sound[OutBlast].VoiceHandle == -1)
+		{
+			sound[OutBlast].isSound = false;
+			sound[OutBlast].VoiceHandle = Novice::PlayAudio(sound[OutBlast].SoundHandle, 0, 0.25f);
+		}
+	}
+
+	if (sound[CheckPoint].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[CheckPoint].VoiceHandle) || sound[CheckPoint].VoiceHandle == -1)
+		{
+			sound[CheckPoint].isSound = false;
+			sound[CheckPoint].VoiceHandle = Novice::PlayAudio(sound[CheckPoint].SoundHandle, 0, 0.5f);
+		}
+	}
+
+	if (sound[Die].isSound)
+	{
+		if (!Novice::IsPlayingAudio(sound[Die].VoiceHandle) || sound[Die].VoiceHandle == -1)
+		{
+			sound[Die].isSound = false;
+			sound[Die].VoiceHandle = Novice::PlayAudio(sound[Die].SoundHandle, 0, 0.2f);
+		}
+	}
+
 }
 
 void PLAYER::SetStartPos(int stageNum)
@@ -115,6 +182,9 @@ void PLAYER::Respawn(bool& isHit, Vector2& enemyPos, const Vector2& enemyRespawn
 		blastCountDwon = 30;
 		blastDistance = 0;
 
+		if (respawnTimer == 120)
+			sound[Die].isSound = true;
+
 
 		if (!isAlive)
 		{
@@ -158,6 +228,8 @@ void PLAYER::jump(const Vector2& kJumpVect)
 
 		velocity = { kJumpVect.x * jumpVel ,kJumpVect.y * jumpVel };
 
+		sound[Jump].isSound = true;
+
 		PressT = 0.18f;
 		addT *= addT < 0 ? -1 : 1;
 
@@ -179,7 +251,6 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 {
 	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
-	isSetRespawnPos = false;
 
 	int localHit[5];
 
@@ -344,6 +415,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 					if (isJump)
 					{
+
 						if (abs(int(velocity.x)) >= 15 || abs(int(velocity.y)) >= 15) {
 							isShake = true;
 							isHitStop = true;
@@ -358,9 +430,13 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
 							velocity.x *= -0.3f;
+							sound[HitWall].isSound = true;
+
 						}
 						else if (localHit[i] == 18)
 						{
+							sound[Reflection].isSound = true;
+
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= -1.1f;
 								velocity.y *= 1.3f;
@@ -383,8 +459,10 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 					int a = int((pos.y / maptchipSize));
 					pos.y = a * maptchipSize + size.y;
 
+
 					if (isJump)
 					{
+
 						if (abs(int(velocity.x)) >= 15 || abs(int(velocity.y)) >= 15) {
 							isShake = true;
 							isHitStop = true;
@@ -399,10 +477,13 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 						if (localHit[i] >= 3 && localHit[i] < 18)
 						{
+							sound[HitWall].isSound = true;
 							velocity.y *= -(0.6f - (0.25f * boundCount));
 						}
 						else if (localHit[i] == 18)
 						{
+							sound[Reflection].isSound = true;
+
 							if (abs(int(velocity.x)) <= 30.0f && abs(int(velocity.y)) <= 30.0f) {
 								velocity.x *= 1.1f;
 								velocity.y *= -1.1f;
@@ -430,13 +511,20 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 				if (localHit[i] == 21) { // 加速アイテム
 					velocity.x *= 1.3f;
 					velocity.y *= 1.3f;
+					sound[Item].isSound = true;
+
 				}
 
 				if (localHit[i] == 22) { // 敵スタンアイテム
 					isStun = true;
+					sound[Item].isSound = true;
 				}
 
 				if (localHit[i] == 23 || localHit[i] == 24) { //大砲
+
+					if (!isBlasted)
+						sound[EnterBlast].isSound = true;
+
 					velocity.x = 0.0f;
 					velocity.y = 0.0f;
 					boundCount = 3;
@@ -449,8 +537,10 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 				}
 				if (localHit[i] == 25)
 				{
+					sound[CheckPoint].isSound = true;
 					isSetRespawnPos = true;
 					respawnPos = pos;
+
 				}
 			}
 		}
@@ -465,6 +555,7 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 			velocity = { 0,0 };
 			boundCount = 0;
 			isJump = false;
+			sound[HitWall].isSound = false;
 		}
 	}
 
@@ -507,6 +598,10 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		isJump = true;
 
 		if (blastCountDwon <= 0) {
+
+			if (blastTimer == 120)
+				sound[OutBlast].isSound = true;
+
 			if (dir > 0) {
 				pos.x += 25.0f;
 				velocity.x = 5.0f;

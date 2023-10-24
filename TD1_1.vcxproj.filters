@@ -68,6 +68,12 @@
     <ClCompile Include="enemyHitEffect.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="BGM.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="checkPoint.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -157,5 +163,14 @@
     <ClInclude Include="GameClearEffect.h" />
     <ClInclude Include="playerEffect.h" />
     <ClInclude Include="enemyHitEffect.h" />
+    <ClInclude Include="BGM.h" />
+    <ClInclude Include="checkPoint.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TD1_1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\images\player.ico" />
   </ItemGroup>
 </Project>

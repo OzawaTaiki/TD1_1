@@ -108,6 +108,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BGM.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp" />
@@ -130,6 +131,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anotherScenePlayer.h" />
+    <ClInclude Include="BGM.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h" />
@@ -165,6 +167,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="jumpDirection.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerEffect.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sceneChange.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="scroll.h" />
@@ -173,6 +176,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="TitleBox.h" />
     <ClInclude Include="TitleJumpDirection.h" />
     <ClInclude Include="vector2Util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TD1_1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\images\player.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
