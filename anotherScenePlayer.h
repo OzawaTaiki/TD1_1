@@ -126,7 +126,7 @@ struct TitlePlayer {
 	void draw() {
 		//Novice::DrawEllipse(static_cast<int>(CPos.x), static_cast<int>(CPos.y), radius, radius, 0.0f, color, kFillModeSolid);
 		Novice::DrawSpriteRect(static_cast<int>(CPos.x - radius), static_cast<int>(CPos.y - radius), DrawAria, 0, 200, 200, GH, float(radius / 400.0f), float(radius / 100.0f), 0.0f, 0xFFFFFFFF);
-		Novice::ScreenPrintf(1000, 40, "vel.x= %f,vel.y=%f", vel.x, vel.y);
+		//Novice::ScreenPrintf(1000, 40, "vel.x= %f,vel.y=%f", vel.x, vel.y);
 	}
 
 };

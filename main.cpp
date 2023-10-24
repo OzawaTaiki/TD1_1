@@ -107,6 +107,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		0xFFFFFFFF
 	);
 
+	Line[0].Init(
+		{ 640,308 },
+		1280,
+		3,
+		0xfc21c666
+	);
+	Line[1].Init(
+		{ 640,591 },
+		1280,
+		3,
+		0xfc21c666
+	);
+
 
 	const int SELECTBOX_MAX = 10;
 	Box SelectRogo;
@@ -243,7 +256,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			Novice::ScreenPrintf(0, 100, "%d,%d", TitleBox[0].isHit, TitleBox[1].isHit);
+			//Novice::ScreenPrintf(0, 100, "%d,%d", TitleBox[0].isHit, TitleBox[1].isHit);
 			if (TitleBox[0].isHit) {
 				SceneNo = 1;//セレクト画面へ移動
 				isChangeScene = true;
@@ -314,6 +327,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			//それぞれ当たった時の処理
+			if (SelectBox[9].isHit)
+			{
+				SceneNo = 2;
+				STAGE.loadStageNum = 6;
+				isChangeScene = true;
+			}
+
 			if (SelectBox[8].isHit) {
 				SceneNo = 2;//1ゲーム画面へ移動
 				STAGE.loadStageNum = 0;
@@ -403,6 +423,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			STAGE.loadStage(STAGE.loadStageNum);
+			STAGE.reset();
 			checkpoint.reset();
 
 			//イージング
@@ -745,6 +766,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.moveDirX = -1.0f;
 			ENEMY.respawnPos = ENEMY.pos;
 			ENEMY.isSetRespawnPos = false;
+			ENEMY.isWarning = true;
 
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
@@ -786,7 +808,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			isResetGame = false;
 			STAGE.loadStage(STAGE.loadStageNum);
-			STAGE.reset();
 		}
 #pragma endregion
 
@@ -831,9 +852,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[i].DrawUpDate(i);
 			}
 
-
 			Manual.DrawSpriteUpdate(Manual.GH[3]);
-
 
 			turnLeft.DrawSpriteUpdate(Manual.GH[7]);
 			turnRight.DrawSpriteUpdate(Manual.GH[8]);
@@ -862,13 +881,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());
 				PEffect.Draw(SCROLL.getScroll());
 				PLYR.draw(SCROLL.getScroll());
-				score.DrawTimer();
+				//score.DrawTimer();
 				enemyHitEffect.Draw(SCROLL.getScroll());
 				checkpoint.draw();
 				ENEMY.enemyToPlayerDistance(PLYR.pos, SCROLL.getScroll());
 
-				PLYR.debugPrint();
-				ENEMY.debugPrint();
+				//PLYR.debugPrint();
+				//ENEMY.debugPrint();
 
 
 			}
