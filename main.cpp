@@ -50,12 +50,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SELECT,
 		GAME,
 		GAMEOVER,
-		GAMECLEAR
+		GAMECLEAR,
+		MANUAL
 	};
 	SCENE scene = TITLE;
 	int SceneNo = 0;
 	bool isChangeScene = false;
 	bool isChangeSceneGame = false;
+
+	int manualNum = 0;
 
 	/*--------------------------------------------------------------------*/
 
@@ -189,6 +192,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	);
 
 
+	Box PlayerManual;
+	Box ItemManual;
+	float manualMax = 640;
+	float manualMin = -640;
+	float manualT = 1.0f;
+	bool isEaseManual = false;
+
+	PlayerManual.Init(
+		{ 640,330 },
+		1280,
+		720,
+		0xFFFFFFFF
+	);
+
+
+	ItemManual.Init(
+		{ PlayerManual.CPos.x + 640,330 },
+		1280,
+		720,
+		0xFFFFFFFF
+	);
+
+
+
+
+
+
+
 	Score score;//スコア表示
 
 
@@ -263,7 +294,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			if (TitleBox[1].isHit) {
-				SceneNo = 5;//ゲームを終了させる
+				SceneNo = 6;//ゲームを終了させる
 				isChangeScene = true;
 			}
 
@@ -329,8 +360,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//それぞれ当たった時の処理
 			if (SelectBox[9].isHit)
 			{
-				SceneNo = 2;
-				STAGE.loadStageNum = 6;
+				SceneNo = 5;
 				isChangeScene = true;
 			}
 
@@ -356,7 +386,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (SelectBox[4].isHit) {
 				SelectBox[0].isR = true;//回転
-			} 
+			}
 			if (SelectBox[3].isHit) {
 				STAGE.loadStageNum = 3;
 				SceneNo = 2;//1ゲーム画面へ移動
@@ -481,8 +511,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				}
-				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -561,6 +590,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
+
 #pragma endregion
 
 #pragma region"ゲームクリアの更新処理"
@@ -586,9 +616,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			break;
-		}
-#pragma endregion
 
+#pragma endregion
+			break;
+			
+
+		case MANUAL:
+			ItemManual.CPos.x = PlayerManual.CPos.x + 1280;
+			PressSpace.Init({ 640,640 }, 640, 100, 0xFFFFFFFF);
+			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] &&
+				!isEaseManual) {
+
+				if (manualNum == 1) {
+					SceneNo = 1;//セレクト画面へ移動
+					isChangeScene = true;
+					manualNum = 0;
+				} else {
+					manualNum += 1;
+
+				}
+			}
+
+
+			if (manualNum == 1 &&
+				PlayerManual.CPos.x == 640) {
+				isEaseManual = true;
+			}
+
+			if (isEaseManual) {
+				manualT -= 0.02f;
+				PlayerManual.CPos.x = (1.0f - manualT) * manualMin + manualT * manualMax;
+				if (manualT <= 0) {
+					manualT = 0;
+					isEaseManual = false;
+				}
+			}
+			Novice::ScreenPrintf(0, 0, "manualFrag=%d,manualNum=%d", isEaseManual, manualNum);
+			break;
+		}
 
 		//シーン切り替えしたときの処理
 #pragma region"シーン切り替え"
@@ -598,6 +663,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			changeLow.t += 0.02f * changeLow.dir;
 			changeLow.easeT = 1.0f - powf(1.0f - changeLow.t, 3.0f);
 			changeUp.easeT = 1.0f - powf(1.0f - changeUp.t, 3.0f);
+
 			changeLow.CPos.y = (1.0f - changeLow.easeT) * changeLow.minPos + changeLow.easeT * changeLow.maxPos;
 			changeUp.CPos.y = (1.0f - changeUp.easeT) * changeUp.minPos + changeUp.easeT * changeUp.maxPos;
 			//最大で停止
@@ -633,6 +699,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					scene = GAMECLEAR;
 				}
 				if (SceneNo == 5) {
+					scene = MANUAL;
+				}
+				if (SceneNo == 6) {
 					return 0;
 				}
 				isReset = true;//ここでリセット
@@ -709,7 +778,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				0xFFFFFFFF
 			);
 
+			manualMax = 640;
+			manualMin = -640;
+			manualT = 1.0f;
+			isEaseManual = false;
 
+			PlayerManual.Init(
+				{ 640,360 },
+				1280,
+				720,
+				0xFFFFFFFF
+			);
+
+
+			ItemManual.Init(
+				{ PlayerManual.CPos.x + 640,360 },
+				1280,
+				720,
+				0xFFFFFFFF
+			);
 			/*セレクトで必要なリセット*/
 			SPlayer.Init(
 				{ 640,720 },
@@ -789,9 +876,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				score.ClearTimerM = 0;
 
 				PLYR.lives = 3;
-				PLYR.livesDrawPos = { 1114,20 };
+				PLYR.livesDrawPos = { 1054,20 };
 				PLYR.livesDrawSize = { 32,32 };
-				PLYR.livesGHMargin = 10;
+				PLYR.livesGHMargin = 50;
 
 			}
 			isReset = false;//フラグを下す
@@ -918,9 +1005,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PressSpace.DrawSpriteUpdateT(PressSpace.GH[1]);
 			}
 			break;
-		}
-#pragma endregion
 
+#pragma endregion
+			break;
+		case MANUAL:
+			Line[0].CPos.y = 50;
+			Line[1].CPos.y = 670;
+
+
+			PlayerManual.DrawSpriteUpdate(Manual.GH[11]);
+			ItemManual.DrawSpriteUpdate(Manual.GH[12]);
+			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
+			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
+			PressSpace.DrawSpriteUpdateManual(PressSpace.GH[1],isEaseManual);
+			
+			break;
+		}
 		//Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
 		//Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
 

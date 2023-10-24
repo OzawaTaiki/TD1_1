@@ -15,7 +15,7 @@ struct Box {
 	unsigned int color = 0;
 	bool isDraw = true;
 	bool isHit = false;
-	int GH[11] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
+	int GH[13] = { Novice::LoadTexture("./Resources/images/GAMEOVER.png"),
 	 Novice::LoadTexture("./Resources/images/PRESSSPACE.png"),
 	 Novice::LoadTexture("./Resources/images/stageSelect.png"),
 	 Novice::LoadTexture("./Resources/images/Manual.png"),
@@ -27,6 +27,10 @@ struct Box {
 	 Novice::LoadTexture("./Resources/images/4~6.png"),
 	 Novice::LoadTexture("./Resources/images/smail.png"),
 	 Novice::LoadTexture("./Resources/images/tittleLine.png"),
+	 Novice::LoadTexture("./Resources/images/PlayerManual.png"),
+	 Novice::LoadTexture("./Resources/images/ItemManual.png"),
+
+
 
 	};
 
@@ -84,6 +88,20 @@ struct Box {
 				DrawGH, 1.0f, 1.0f, 0.0f, color);
 		}
 	}
+
+	void DrawSpriteUpdateManual(int& DrawGH,bool& isEase) {
+		timer -= 1;
+		if (timer <= 0) {
+			timer = 60;
+		}
+		if (!isEase) {
+			if (timer >= 10) {
+				Novice::DrawSprite(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
+					DrawGH, 1.0f, 1.0f, 0.0f, color);
+			}
+		}
+	}
+
 
 	void DrawSpriteUpdateSELECT(int& DrawGH) {
 		int shineColor = 0xfc21c6cc;

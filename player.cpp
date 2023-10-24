@@ -16,11 +16,11 @@ void PLAYER::draw(const Vector2& scroll)
 
 	for (int i = 0; i < maxLives; i++)
 	{
-		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), GH, 1, 1, 0, WHITE);
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), GH, 1.5f, 1.5f, 0, WHITE);
 	}
 	for (int i = 0; i < (maxLives - lives); i++)
 	{
-		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 1, 1, 0, WHITE);
+		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 1.5f, 1.5f, 0, WHITE);
 	}
 }
 
