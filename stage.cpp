@@ -126,7 +126,15 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 			int x = int((prePos.x + vertex[j].x) / mapchipsize);
 			int y = int((prePos.y + vertex[j].y) / mapchipsize);
 
+			if ((x < 0 || x >= 200) && (y < 0 || y >= 100))
+			{
+				x = 199;
+				y = 99;
+			}
+
 			returnHitArr += field[y][x] * multiplyNum;
+
+
 
 			if (field[y][x] >= 3 && field[y][x] < 19)
 			{

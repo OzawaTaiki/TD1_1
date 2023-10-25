@@ -36,6 +36,7 @@ public:
 
 
 	int color = 0xf03c3cff;
+	int stuntimer;
 
 
 	ENEMY()
@@ -82,6 +83,8 @@ public:
 		enemyGH[1] = Novice::LoadTexture("./Resources/images/enemyLeft.png");
 		enemyGH[2] = Novice::LoadTexture("./Resources/images/enemyRight.png");
 		enemyGH[3] = Novice::LoadTexture("./Resources/images/stunIcon.png");
+
+		stuntimer = 0;
 	};
 
 	void SetStartPos(int stageNum);

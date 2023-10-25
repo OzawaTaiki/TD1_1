@@ -27,7 +27,7 @@
 #include "checkPoint.h"
 #include "BGM.h"
 
-const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_Neon_Reflections";
+const char kWindowTitle[] = "1105_NeonReflections";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -262,7 +262,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TPlayer.ReturnPlayer();
 			TitleJD.ButtonFlagReset(TPlayer.isJump, TPlayer.CPos.y, TPlayer.radius);//ボタン系のフラグを元に戻す
 			//押すとその方向へ飛んでいく
-			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+			if (!isChangeScene && !keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				TitleJD.isReleaseFlag();
 				TPlayer.jump(TitleJD.getNormalizeJumpVect(), isChangeScene);
 				isSoundTitleJump = true;
@@ -324,11 +324,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			turnRight.CPos = { SelectBox[5].CPos.x, SelectBox[5].CPos.y - 100 };
 
 			//選択画面の自機ジャンプ
-			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+			if (!isChangeScene && keys[DIK_SPACE] && !preKeys[DIK_SPACE])
+			{
 				SelectJD.isReleaseFlag();
 				SPlayer.jump(SelectJD.getNormalizeJumpVect(), isChangeScene);
 				isSoundTitleJump = true;
 			}
+
 			//選択画面での自機の移動処理
 			SPlayer.Move();
 
@@ -479,7 +481,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			if (scene == GAME) {
-				
+
 				//プレイヤーのリスポーン
 				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
 				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
@@ -493,16 +495,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				//プレイヤーの操作	
-				if (keys[DIK_SPACE])
+				if(!isChangeScene)
 				{
-					JD.isPressFlag();
-					PLYR.gaugeControl();
-				}
+					if (keys[DIK_SPACE])
+					{
+						JD.isPressFlag();
+						PLYR.gaugeControl();
+					}
 
-				if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
-				{
-					JD.isReleaseFlag();
-					PLYR.jump(JD.getNormalizeJumpVect());
+					if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])
+					{
+						JD.isReleaseFlag();
+						PLYR.jump(JD.getNormalizeJumpVect());
+					}
 				}
 				//プレイヤーの座標更新
 				PLYR.dirUpdate();
@@ -551,11 +556,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SCROLL.update(PLYR.getPos(), PLYR.isShake);
 				JD.ButtonFlagReset(PLYR.isJump);
 
-
 				if (scene == GAME) {
 					//リザルトの時間測定する
 					score.TimeCount(PLYR.isAlive, PLYR.isGoal);
-					
+
 					if (PLYR.respawnTimer <= 60 &&//ここの秒数弄るとゲームオーバー前だけ時間を長くすることができる
 						PLYR.lives <= 0) {
 						SceneNo = 3;
@@ -614,7 +618,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ItemManual.CPos.x = PlayerManual.CPos.x + 1280;
 			PressSpace.Init({ 640,640 }, 640, 100, 0xFFFFFFFF);
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] &&
-				!isEaseManual) {
+				!isEaseManual&&!isChangeScene) {
 
 				isSoundhitBox = true;
 				if (manualNum == 1) {
@@ -626,7 +630,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				else {
 					manualNum += 1;
-
 				}
 			}
 
@@ -840,6 +843,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.respawnPos = ENEMY.pos;
 			ENEMY.isSetRespawnPos = false;
 			ENEMY.isWarning = true;
+			ENEMY.stuntimer = 0;
 
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };

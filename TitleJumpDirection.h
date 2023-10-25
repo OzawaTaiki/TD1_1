@@ -14,7 +14,7 @@ class TjumpDirection
 	Vector2 normalizeJumpDirectionVect;
 
 	float theta;
-	const float kMaxTheta = -(158.0f / 180.0f) * (float)M_PI;
+	const float kMaxTheta = -(164.0f / 180.0f) * (float)M_PI;
 	const float kMinTheta = -(25.0f / 180.0f) * (float)M_PI;
 
 	float t;

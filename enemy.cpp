@@ -387,12 +387,16 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 			int(drawPos.x + vertex[3].x), int(drawPos.y + vertex[3].y),
 			0, 0, 128, 128, enemyGH[0], WHITE);
 
-		if (isStun)
-			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + vertex[0].y - stunDrawaddPos),
-				int(drawPos.x + vertex[1].x), int(drawPos.y + vertex[1].y - stunDrawaddPos),
-				int(drawPos.x + vertex[2].x), int(drawPos.y + vertex[2].y - stunDrawaddPos),
-				int(drawPos.x + vertex[3].x), int(drawPos.y + vertex[3].y - stunDrawaddPos),
-				0, 0, 128, 128, enemyGH[3], WHITE);
+		if (isStun) {
+			stuntimer += 1;
+			if (stuntimer % 30 >= 0 && stuntimer % 30 <= 15) {
+				Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + vertex[0].y - stunDrawaddPos),
+					int(drawPos.x + vertex[1].x), int(drawPos.y + vertex[1].y - stunDrawaddPos),
+					int(drawPos.x + vertex[2].x), int(drawPos.y + vertex[2].y - stunDrawaddPos),
+					int(drawPos.x + vertex[3].x), int(drawPos.y + vertex[3].y - stunDrawaddPos),
+					0, 0, 128, 128, enemyGH[3], 0xff1c1cff);
+			}
+		}
 
 	}
 }

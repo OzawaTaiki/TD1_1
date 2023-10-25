@@ -61,13 +61,7 @@ struct Box {
 
 			Novice::DrawBox(static_cast<int>(CPos.x - Wsize / 2), static_cast<int>(CPos.y - Hsize / 2),
 				Wsize, Hsize, 0.0f, color, kFillModeSolid);
-			/*
-			Novice::DrawQuad(static_cast<int>(vertex[0].x), static_cast<int>(vertex[0].y),
-				static_cast<int>(vertex[1].x), static_cast<int>(vertex[1].y),
-				static_cast<int>(vertex[2].x), static_cast<int>(vertex[2].y),
-				static_cast<int>(vertex[3].x), static_cast<int>(vertex[3].y),
-				0, 0, 256, 256, selectBigGH, 0xFFFFFFFF);
-		*/
+			
 		}
 	}
 
