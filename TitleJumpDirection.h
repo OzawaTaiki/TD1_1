@@ -42,7 +42,7 @@ public:
 
 		theta = -(1.0f / 4.0f) * (float)M_PI;
 
-		t = 0.5f;
+		t = 0.2f;
 		addT = 1.0f / (120.0f * 0.80f);
 		isPress = false;
 		isRelease = false;

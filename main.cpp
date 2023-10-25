@@ -191,7 +191,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		360,
 		1080
 	);
-
 	Box PlayerManual;
 	Box ItemManual;
 	float manualMax = 640;
@@ -308,6 +307,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SceneNo = 6;//ゲームを終了させる
 				isChangeScene = true;
 			}
+
 
 #pragma endregion
 			break;
@@ -523,8 +523,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				}
-				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -636,15 +635,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PressSpace.Init({ 640,640 }, 640, 100, 0xFFFFFFFF);
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] &&
 				!isEaseManual) {
-
+				isSoundhitBox = true;
 				if (manualNum == 1) {
 					//SceneNo = 1;//セレクト画面へ移動
 					STAGE.loadStageNum = 6;
 					SceneNo = 2;//1ゲーム画面へ移動
 					isChangeScene = true;
 					manualNum = 0;
-				}
-				else {
+				} else {
 					manualNum += 1;
 
 				}
@@ -872,6 +870,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
 
+			PLYR.respawnPos = PLYR.pos;
+			PLYR.isSetRespawnPos = false;
+
 			ENEMY.SetStartPos(STAGE.loadStageNum);
 			ENEMY.size = { 128,128 };
 			ENEMY.speed = 5.0f;
@@ -886,6 +887,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ENEMY.respawnPos = ENEMY.pos;
 			ENEMY.isSetRespawnPos = false;
 			ENEMY.isWarning = true;
+
+			checkpoint.pos = { 1280,64 };
+			checkpoint.isDraw = false;
+			checkpoint.t = 0;
+			checkpoint.addT = 0.04f;
+			checkpoint.time = 120;
+			checkpoint.countTimer = checkpoint.time;
 
 			for (int i = 0; i < 8; i++) {
 				enemyHitEffect.CPos[i] = { 0,0 };
@@ -955,7 +963,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (!Novice::IsPlayingAudio(hitBoxVoiceHandle) || hitBoxVoiceHandle == -1)
 			{
 				isSoundhitBox = false;
-				hitBoxVoiceHandle = Novice::PlayAudio(hitBoxSoundHandle, 0, 0.15f);
+				hitBoxVoiceHandle = Novice::PlayAudio(hitBoxSoundHandle, 0, 0.4f);
 			}
 		}
 		if (isSoundTitleJump)
@@ -985,6 +993,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TitleBox[1].DrawSpriteUpdateSELECT(TitleBox[1].GH[5]);
 
 
+
 			TitleJD.rotate(TPlayer.CPos, TPlayer.dir, TPlayer.isReload);
 			TPlayer.draw();
 			TitleRogo.DrawSpriteUpdate(TitleRogo.GH[6]);
@@ -1008,6 +1017,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			turnLeft.DrawSpriteUpdate(Manual.GH[7]);
 			turnRight.DrawSpriteUpdate(Manual.GH[8]);
+
+
 			SelectJD.rotate(SPlayer.CPos, SPlayer.dir, SPlayer.isReload);
 			SelectRogo.DrawSpriteUpdateSELECT(SelectRogo.GH[2]);
 			SPlayer.draw();
