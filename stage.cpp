@@ -21,6 +21,8 @@ void STAGE::loadStage(int stageNum)
 
 void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 {
+	cpNum = 0;
+
 	int drawCenterX = (int)pos.x / mapchipsize;
 	int drawCenterY = (int)pos.y / mapchipsize;
 
@@ -38,7 +40,7 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 				if (field[i][j] == 2)
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
 				else if (field[i][j] == 3)//真っ黒
-					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), mapchipsize,mapchipsize, 0, 0x000000ff,kFillModeSolid);
+					Novice::DrawBox(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), mapchipsize, mapchipsize, 0, 0x000000ff, kFillModeSolid);
 				else if (field[i][j] <= 17 || field[i][j] == 24 || field[i][j] == 23)//ブロック 大砲
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, stageColor);
 				else if (field[i][j] == 18)//加速
@@ -54,7 +56,17 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, WHITE);
 
 				else if (field[i][j] == 25)//チェックポイント
-					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, nowCheckPointColor);
+				{
+					if (loadStageNum == 5)
+						if (i > 70)
+							cpNum = 0;
+						else
+							cpNum = 1;
+
+
+					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, nowCheckPointColor[cpNum]);
+					Novice::ScreenPrintf(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), "%d", cpNum);
+				}
 			}
 		}
 	}
@@ -102,6 +114,7 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 	bool isGetItem = false;
 	unsigned int getItemNum = 0;
 
+
 	for (int i = 0; i < num; i++)
 	{
 		int multiplyNum = 100000000;		//計算用
@@ -142,7 +155,16 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 				}
 				if (field[y][x] == 25)
 				{
-					nowCheckPointColor = CheckPointColor[1];
+					if (posy == -1)
+					{
+						nowCheckPointColor[0] = CheckPointColor[1];
+						posy = y;
+					}
+					else if (!(y >= posy - 5 && y <= posy + 5))
+					{
+						nowCheckPointColor[1] = CheckPointColor[1];
+					}
+
 				}
 				else if (field[y][x] == 21 || field[y][x] == 22)
 				{
@@ -167,6 +189,10 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 			break;
 	}
 
+	Novice::ScreenPrintf(0, 300, "%x", nowCheckPointColor[0]);
+	Novice::ScreenPrintf(0, 320, "%x", nowCheckPointColor[1]);
+	Novice::ScreenPrintf(0, 280, "%d", loadStageNum);
+
 	return returnHitArr;
 
 }
@@ -175,5 +201,7 @@ void STAGE::reset()
 {
 	blastX = -1;
 	blastY = -1;
-	nowCheckPointColor = CheckPointColor[0];
+	nowCheckPointColor[0] = CheckPointColor[0];
+	nowCheckPointColor[1] = CheckPointColor[0];
+	posy = -1;
 }

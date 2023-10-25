@@ -78,6 +78,10 @@ void PLAYER::draw(const Vector2& scroll)
 			sound[CheckPoint].isSound = false;
 			sound[CheckPoint].VoiceHandle = Novice::PlayAudio(sound[CheckPoint].SoundHandle, 0, 0.5f);
 		}
+		else
+		{
+			sound[CheckPoint].isSound = false;
+		}
 	}
 
 	if (sound[Die].isSound)
@@ -251,7 +255,6 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 {
 	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
 
-
 	int localHit[5];
 
 	int divisor = 100000000;
@@ -413,6 +416,11 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 					int a = int((pos.x / maptchipSize));
 					pos.x = a * maptchipSize + size.x;
 
+					if (isBlasted)
+					{
+						isBlasted = false;
+					}
+
 					if (isJump)
 					{
 
@@ -537,14 +545,42 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 				}
 				if (localHit[i] == 25)
 				{
-					sound[CheckPoint].isSound = true;
 					isSetRespawnPos = true;
-					respawnPos = pos;
 
+					//二回目以降
+					if (CPX[0] + 5 >= int(pos.x / 32) && CPX[0] - 5 <= int(pos.x / 32) &&
+						CPY[0] + 5 >= int(pos.y / 32) && CPY[0] - 5 <= int(pos.y / 32))
+					{//Xが＋－３以内にあるなら かつ が＋－３以内にあるなら
+						//フラグを下す
+						isSetRespawnPos = false;
+					}
+					if (CPX[1] + 5 >= int(pos.x / 32) && CPX[1] - 5 <= int(pos.x / 32) &&
+						CPY[1] + 5 >= int(pos.y / 32) && CPY[1] - 5 <= int(pos.y / 32))
+					{//Xが＋－３以内にあるなら かつ が＋－３以内にあるなら
+						//フラグを下す
+						isSetRespawnPos = false;
+					}
+					if (CPX[0] == -1 && CPY[0] == -1 && isSetRespawnPos)//一回目は保存
+					{
+						CPX[0] = int(pos.x / 32);
+						CPY[0] = int(pos.y / 32);
+					}
+					else if (CPX[1] == -1 && CPY[1] == -1 && isSetRespawnPos)
+					{//[1]が－１のとき かつ フラグが立ってるとき
+						CPX[1] = int(pos.x / 32);
+						CPY[1] = int(pos.y / 32);
+					}
 				}
 			}
 		}
 	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		Novice::ScreenPrintf(i * 50, 100, "%d", CPX[i]);
+		Novice::ScreenPrintf(i * 50, 120, "%d", CPY[i]);
+	}
+		Novice::ScreenPrintf(100, 100, "%d", isSetRespawnPos);
 
 	if (localHit[4] >= 3 && localHit[4] < 18 && isJump)
 	{
@@ -627,6 +663,17 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 
 }
 
+void PLAYER::setRespwenPos()
+{
+	if (isSetRespawnPos)
+	{
+		respawnPos = pos;
+		sound[CheckPoint].isSound = true;
+		isSetRespawnPos = false;
+		Novice::ScreenPrintf(0, 0, "true");
+	}
+}
+
 void PLAYER::debugPrint()
 {
 	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
@@ -649,9 +696,9 @@ void PLAYER::reset()
 
 	lives = 3;
 
-	livesDrawPos = { 1114,20 };
+	livesDrawPos = { 1054,20 };
 	livesDrawSize = { 32,32 };
-	livesGHMargin = 10;
+	livesGHMargin = 50;
 
 	isJump = false;
 	isAlive = true;
@@ -685,4 +732,8 @@ void PLAYER::reset()
 
 	isSetRespawnPos = false;
 
+	CPX[0] = -1;
+	CPX[1] = -1;
+	CPY[0] = -1;
+	CPY[1] = -1;
 }

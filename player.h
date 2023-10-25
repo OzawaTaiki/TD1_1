@@ -63,6 +63,9 @@ public:
 
 	Vector2 startPos[7];
 
+	int CPX[2];
+	int CPY[2];
+
 	struct sound
 	{
 		int VoiceHandle;
@@ -98,9 +101,9 @@ public:
 		lives = 3;
 		crossGH = Novice::LoadTexture("./Resources/images/redCross.png");
 
-		livesDrawPos = { 1114,20 };
+		livesDrawPos = { 1054,20 };
 		livesDrawSize = { 32,32 };
-		livesGHMargin = 10;
+		livesGHMargin = 50;
 
 		isJump = false;
 		isAlive = true;
@@ -138,7 +141,7 @@ public:
 
 		startPos[0] = { 300,3000 };
 		startPos[1] = { 300,3000 };
-		startPos[2] = { 200,2800 };
+		startPos[2] = { 300,2800 };
 		startPos[3] = { 300,3000 };
 		startPos[4] = { 200,3000 };
 		startPos[5] = { 300,3000 };
@@ -160,6 +163,11 @@ public:
 		sound[OutBlast].SoundHandle = Novice::LoadAudio("./Resources/sounds/blaster1.mp3");
 		sound[CheckPoint].SoundHandle = Novice::LoadAudio("./Resources/sounds/cheakPoint.mp3");
 
+
+		CPX[0] = -1;
+		CPX[1] = -1;
+		CPY[0] = -1;
+		CPY[1] = -1;
 	}; 
 
 	void draw(const Vector2& scroll);
@@ -192,6 +200,8 @@ public:
 	void dirUpdate();
 
 	void hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw);
+
+	void setRespwenPos();
 
 	void debugPrint();
 

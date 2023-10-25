@@ -25,7 +25,7 @@ struct Box {
 
 	 Novice::LoadTexture("./Resources/images/1~3.png"),
 	 Novice::LoadTexture("./Resources/images/4~6.png"),
-	 Novice::LoadTexture("./Resources/images/smail.png"),
+	 Novice::LoadTexture("white1x1.png"),
 	 Novice::LoadTexture("./Resources/images/tittleLine.png"),
 	 Novice::LoadTexture("./Resources/images/PlayerManual.png"),
 	 Novice::LoadTexture("./Resources/images/ItemManual.png"),

@@ -464,8 +464,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			STAGE.loadStage(STAGE.loadStageNum);
 			STAGE.reset();
+			STAGE.loadStage(STAGE.loadStageNum);
 			checkpoint.reset();
 
 			//イージング
@@ -554,6 +554,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				//敵のリスポーンPos更新
 				ENEMY.setRespawnPos(PLYR.isSetRespawnPos, PLYR.pos, PLYR.dir);
+				PLYR.setRespwenPos();
 
 				ENEMY.timeSlow(PLYR.isJump, PLYR.isAlive);
 				ENEMY.CollisionToPlayer(PLYR.pos, PLYR.size);
@@ -637,8 +638,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] &&
 				!isEaseManual) {
 
+				isSoundhitBox = true;
 				if (manualNum == 1) {
-					SceneNo = 1;//セレクト画面へ移動
+
+					STAGE.loadStageNum = 6;
+					SceneNo = 2;//1ゲーム画面へ移動
 					isChangeScene = true;
 					manualNum = 0;
 				}
@@ -662,6 +666,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					isEaseManual = false;
 				}
 			}
+
+			STAGE.loadStage(STAGE.loadStageNum);
+			STAGE.reset();
+			checkpoint.reset();
+
 			break;
 		}
 
@@ -839,8 +848,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			/*ゲームで必要なリセット*/
-			PLYR.SetStartPos(STAGE.loadStageNum);
-			PLYR.size = { 16,16 };
+			/*PLYR.size = { 16,16 };
 			PLYR.acceleration = { 0.00f,0.5f };
 			PLYR.velocity = { 0,0 };
 			PLYR.isJump = false;
@@ -864,6 +872,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PLYR.respawnTimer = 120;
 			PLYR.blastCountDwon = 30;
 			PLYR.blastDistance = 0;
+			PLYR.isSetRespawnPos = false;*/
+			PLYR.reset();
+			PLYR.SetStartPos(STAGE.loadStageNum);
 
 			ENEMY.SetStartPos(STAGE.loadStageNum);
 			ENEMY.size = { 128,128 };
@@ -948,7 +959,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (!Novice::IsPlayingAudio(hitBoxVoiceHandle) || hitBoxVoiceHandle == -1)
 			{
 				isSoundhitBox = false;
-				hitBoxVoiceHandle = Novice::PlayAudio(hitBoxSoundHandle, 0, 0.15f);
+				hitBoxVoiceHandle = Novice::PlayAudio(hitBoxSoundHandle, 0, 0.4f);
 			}
 		}
 		if (isSoundTitleJump)
@@ -1030,7 +1041,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//score.DrawTimer();
 				enemyHitEffect.Draw(SCROLL.getScroll());
 				checkpoint.draw();
-				ENEMY.enemyToPlayerDistance(PLYR.pos, SCROLL.getScroll());
+				ENEMY.enemyToPlayerDistance(PLYR.pos, SCROLL.getScroll(), PLYR.isStun);
 
 				//PLYR.debugPrint();
 				//ENEMY.debugPrint();

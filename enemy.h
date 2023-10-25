@@ -32,7 +32,7 @@ public:
 
 	Vector2 startPos[7];
 
-	int enemyGH[3] = { 0 };
+	int enemyGH[4] = { 0 };
 
 
 	int color = 0xf03c3cff;
@@ -81,6 +81,7 @@ public:
 		enemyGH[0] = Novice::LoadTexture("./Resources/images/Warning.png");
 		enemyGH[1] = Novice::LoadTexture("./Resources/images/enemyLeft.png");
 		enemyGH[2] = Novice::LoadTexture("./Resources/images/enemyRight.png");
+		enemyGH[3] = Novice::LoadTexture("./Resources/images/stunIcon.png");
 	};
 
 	void SetStartPos(int stageNum);
@@ -109,7 +110,7 @@ public:
 
 	void Warning(const Vector2& scroll, bool& playerIsAlive);
 
-	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll);
+	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll, bool isStun);
 
 	void debugPrint();
 

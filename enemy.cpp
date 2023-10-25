@@ -254,7 +254,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 	}
 
 	if (warningCountDown <= 0 && isWarning) {
- 		warningTimer--;
+		warningTimer--;
 
 		if (warningCountDown % 6 == 0) {
 			Novice::DrawSprite(int(40 - scroll.x), int(2900 - scroll.y), enemyGH[0], 1.0f, 1.0f, 0.0f, 0xffffffff);
@@ -268,7 +268,7 @@ void ENEMY::Warning(const Vector2& scroll, bool& playerIsAlive) {
 	}
 }
 
-void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scroll)
+void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scroll, bool isStun)
 {
 	if (isWarning)
 		return;
@@ -340,6 +340,13 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 		drawSize.x = (1.0f - localT) * maxSize + localT * minSize;
 		drawSize.y = (1.0f - localT) * maxSize + localT * minSize;
 
+		Vector2 stunDrawSize;
+		stunDrawSize.x = (1.0f - localT) * maxSize + localT * minSize;
+		stunDrawSize.y = (1.0f - localT) * maxSize + localT * minSize;
+
+		float stunDrawaddPos;
+		stunDrawaddPos = (1.0f - localT) * 50 + localT * 8;
+
 		Vector2 vertex[4] =
 		{
 			{-drawSize.x / 2,-drawSize.y / 2 },
@@ -352,47 +359,41 @@ void ENEMY::enemyToPlayerDistance(const Vector2& playerPos, const Vector2& scrol
 		{
 		case 1:
 			//Novice::DrawEllipse(int(drawPos.x + drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
-
-			Novice::DrawQuad(int(drawPos.x + drawSize.x / 2 + vertex[0].x), int(drawPos.y + vertex[0].y),
-				int(drawPos.x + drawSize.x / 2 + vertex[1].x), int(drawPos.y + vertex[1].y),
-				int(drawPos.x + drawSize.x / 2 + vertex[2].x), int(drawPos.y + vertex[2].y),
-				int(drawPos.x + drawSize.x / 2 + vertex[3].x), int(drawPos.y + vertex[3].y),
-				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+			drawPos.x += drawSize.x / 2;
 
 			break;
 		case 2:
 			//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y + drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
-
-			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + drawSize.y / 2 + vertex[0].y),
-				int(drawPos.x + vertex[1].x), int(drawPos.y + drawSize.y / 2 + vertex[1].y),
-				int(drawPos.x + vertex[2].x), int(drawPos.y + drawSize.y / 2 + vertex[2].y),
-				int(drawPos.x + vertex[3].x), int(drawPos.y + drawSize.y / 2 + vertex[3].y),
-				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+			drawPos.y += drawSize.y / 2;
 
 			break;
 		case 3:
 			//Novice::DrawEllipse(int(drawPos.x - drawSize.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
-
-			Novice::DrawQuad(int(drawPos.x - drawSize.x / 2 + vertex[0].x), int(drawPos.y + vertex[0].y),
-				int(drawPos.x - drawSize.x / 2 + vertex[1].x), int(drawPos.y + vertex[1].y),
-				int(drawPos.x - drawSize.x / 2 + vertex[2].x), int(drawPos.y + vertex[2].y),
-				int(drawPos.x - drawSize.x / 2 + vertex[3].x), int(drawPos.y + vertex[3].y),
-				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+			drawPos.x -= drawSize.x / 2;
 
 			break;
 		case 4:
 			//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y - drawSize.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
-
-			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y - drawSize.y / 2 + vertex[0].y),
-				int(drawPos.x + vertex[1].x), int(drawPos.y - drawSize.y / 2 + vertex[1].y),
-				int(drawPos.x + vertex[2].x), int(drawPos.y - drawSize.y / 2 + vertex[2].y),
-				int(drawPos.x + vertex[3].x), int(drawPos.y - drawSize.y / 2 + vertex[3].y),
-				0, 0, 128, 128, enemyGH[0], WHITE);//GH要修正
+			drawPos.y -= drawSize.y / 2;
 
 			break;
 		default:
 			break;
 		}
+
+		Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + vertex[0].y),
+			int(drawPos.x + vertex[1].x), int(drawPos.y + vertex[1].y),
+			int(drawPos.x + vertex[2].x), int(drawPos.y + vertex[2].y),
+			int(drawPos.x + vertex[3].x), int(drawPos.y + vertex[3].y),
+			0, 0, 128, 128, enemyGH[0], WHITE);
+
+		if (isStun)
+			Novice::DrawQuad(int(drawPos.x + vertex[0].x), int(drawPos.y + vertex[0].y - stunDrawaddPos),
+				int(drawPos.x + vertex[1].x), int(drawPos.y + vertex[1].y - stunDrawaddPos),
+				int(drawPos.x + vertex[2].x), int(drawPos.y + vertex[2].y - stunDrawaddPos),
+				int(drawPos.x + vertex[3].x), int(drawPos.y + vertex[3].y - stunDrawaddPos),
+				0, 0, 128, 128, enemyGH[3], WHITE);
+
 		//Novice::DrawEllipse(int(drawPos.x), int(drawPos.y), (int)drawSize.x, (int)drawSize.y, 0, RED, kFillModeSolid);
 		//Novice::DrawQuad(int(pos.x+vertex[0].x),int(pos.y+vertex[0].y))
 
