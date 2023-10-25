@@ -638,7 +638,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				!isEaseManual) {
 
 				if (manualNum == 1) {
-					SceneNo = 1;//セレクト画面へ移動
+					//SceneNo = 1;//セレクト画面へ移動
+					STAGE.loadStageNum = 6;
+					SceneNo = 2;//1ゲーム画面へ移動
 					isChangeScene = true;
 					manualNum = 0;
 				}
@@ -662,6 +664,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					isEaseManual = false;
 				}
 			}
+
+
+			STAGE.loadStage(STAGE.loadStageNum);
+			STAGE.reset();
+			checkpoint.reset();
 			break;
 		}
 

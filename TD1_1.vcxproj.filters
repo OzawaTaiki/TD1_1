@@ -71,6 +71,9 @@
     <ClCompile Include="checkPoint.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="BGM.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -162,5 +165,6 @@
     <ClInclude Include="enemyHitEffect.h" />
     <ClInclude Include="RefEffect.h" />
     <ClInclude Include="checkPoint.h" />
+    <ClInclude Include="BGM.h" />
   </ItemGroup>
 </Project>
