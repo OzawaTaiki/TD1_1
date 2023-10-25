@@ -23,65 +23,79 @@ void PLAYER::draw(const Vector2& scroll)
 		Novice::DrawSprite(int(livesDrawPos.x + i * (livesDrawSize.x + livesGHMargin)), int(livesDrawPos.y), crossGH, 1.5f, 1.5f, 0, WHITE);
 	}
 
+	
+	if(isAlive)
 
-	if (sound[Jump].isSound)
 	{
-		if (!Novice::IsPlayingAudio(sound[Jump].VoiceHandle) || sound[Jump].VoiceHandle == -1)
+		if (sound[Jump].isSound)
 		{
-			sound[Jump].isSound = false;
-			sound[Jump].VoiceHandle = Novice::PlayAudio(sound[Jump].SoundHandle, 0, 0.5f);
+			if (!Novice::IsPlayingAudio(sound[Jump].VoiceHandle) || sound[Jump].VoiceHandle == -1)
+			{
+				sound[Jump].isSound = false;
+				sound[Jump].VoiceHandle = Novice::PlayAudio(sound[Jump].SoundHandle, 0, 0.5f);
+			}
+		}
+
+		if (sound[Reflection].isSound)
+		{
+			sound[Reflection].isSound = false;
+			sound[Reflection].VoiceHandle = Novice::PlayAudio(sound[Reflection].SoundHandle, 0, 0.15f);
+		}
+		else if (sound[HitWall].isSound)
+		{
+			sound[HitWall].isSound = false;
+			sound[HitWall].VoiceHandle = Novice::PlayAudio(sound[HitWall].SoundHandle, 0, 0.15f);
+		}
+
+
+		if (sound[Item].isSound)
+		{
+			if (!Novice::IsPlayingAudio(sound[Item].VoiceHandle) || sound[Item].VoiceHandle == -1)
+			{
+				sound[Item].isSound = false;
+				sound[Item].VoiceHandle = Novice::PlayAudio(sound[Item].SoundHandle, 0, 0.5f);
+			}
+		}
+
+		if (sound[EnterBlast].isSound)
+		{
+			if (!Novice::IsPlayingAudio(sound[EnterBlast].VoiceHandle) || sound[EnterBlast].VoiceHandle == -1)
+			{
+				sound[EnterBlast].isSound = false;
+				sound[EnterBlast].VoiceHandle = Novice::PlayAudio(sound[EnterBlast].SoundHandle, 0, 0.5f);
+			}
+		}
+		else if (sound[OutBlast].isSound)
+		{
+			if (!Novice::IsPlayingAudio(sound[OutBlast].VoiceHandle) || sound[OutBlast].VoiceHandle == -1)
+			{
+				sound[OutBlast].isSound = false;
+				sound[OutBlast].VoiceHandle = Novice::PlayAudio(sound[OutBlast].SoundHandle, 0, 0.25f);
+			}
+		}
+
+		if (sound[CheckPoint].isSound)
+		{
+			if (!Novice::IsPlayingAudio(sound[CheckPoint].VoiceHandle) || sound[CheckPoint].VoiceHandle == -1)
+			{
+				sound[CheckPoint].isSound = false;
+				sound[CheckPoint].VoiceHandle = Novice::PlayAudio(sound[CheckPoint].SoundHandle, 0, 0.5f);
+			}
+			else
+			{
+				sound[CheckPoint].isSound = false;
+			}
 		}
 	}
-
-	if (sound[Reflection].isSound)
+	else
 	{
+		sound[Jump].isSound = false;
 		sound[Reflection].isSound = false;
-		sound[Reflection].VoiceHandle = Novice::PlayAudio(sound[Reflection].SoundHandle, 0, 0.15f);
-	}
-	else if (sound[HitWall].isSound)
-	{
 		sound[HitWall].isSound = false;
-		sound[HitWall].VoiceHandle = Novice::PlayAudio(sound[HitWall].SoundHandle, 0, 0.15f);
-	}
-
-
-	if (sound[Item].isSound)
-	{
-		if (!Novice::IsPlayingAudio(sound[Item].VoiceHandle) || sound[Item].VoiceHandle == -1)
-		{
-			sound[Item].isSound = false;
-			sound[Item].VoiceHandle = Novice::PlayAudio(sound[Item].SoundHandle, 0, 0.5f);
-		}
-	}
-
-	if (sound[EnterBlast].isSound)
-	{
-		if (!Novice::IsPlayingAudio(sound[EnterBlast].VoiceHandle) || sound[EnterBlast].VoiceHandle == -1)
-		{
-			sound[EnterBlast].isSound = false;
-			sound[EnterBlast].VoiceHandle = Novice::PlayAudio(sound[EnterBlast].SoundHandle, 0, 0.5f);
-		}
-	}
-	else if (sound[OutBlast].isSound)
-	{
-		if (!Novice::IsPlayingAudio(sound[OutBlast].VoiceHandle) || sound[OutBlast].VoiceHandle == -1)
-		{
-			sound[OutBlast].isSound = false;
-			sound[OutBlast].VoiceHandle = Novice::PlayAudio(sound[OutBlast].SoundHandle, 0, 0.25f);
-		}
-	}
-
-	if (sound[CheckPoint].isSound)
-	{
-		if (!Novice::IsPlayingAudio(sound[CheckPoint].VoiceHandle) || sound[CheckPoint].VoiceHandle == -1)
-		{
-			sound[CheckPoint].isSound = false;
-			sound[CheckPoint].VoiceHandle = Novice::PlayAudio(sound[CheckPoint].SoundHandle, 0, 0.5f);
-		}
-		else
-		{
-			sound[CheckPoint].isSound = false;
-		}
+		sound[Item].isSound = false;
+		sound[EnterBlast].isSound = false;
+		sound[OutBlast].isSound = false;
+		sound[CheckPoint].isSound = false;
 	}
 
 	if (sound[Die].isSound)
@@ -253,8 +267,6 @@ void PLAYER::dirUpdate()
 
 void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint[], bool& isDraw)
 {
-	//Novice::ScreenPrintf(0, 100, "%d", hitBlock);
-
 	int localHit[5];
 
 	int divisor = 100000000;
@@ -575,12 +587,6 @@ void PLAYER::hitAction(unsigned int  hitBlock, int maptchipSize, bool isHitPoint
 		}
 	}
 
-	for (int i = 0; i < 2; i++)
-	{
-		Novice::ScreenPrintf(i * 50, 100, "%d", CPX[i]);
-		Novice::ScreenPrintf(i * 50, 120, "%d", CPY[i]);
-	}
-		Novice::ScreenPrintf(100, 100, "%d", isSetRespawnPos);
 
 	if (localHit[4] >= 3 && localHit[4] < 18 && isJump)
 	{
@@ -670,20 +676,9 @@ void PLAYER::setRespwenPos()
 		respawnPos = pos;
 		sound[CheckPoint].isSound = true;
 		isSetRespawnPos = false;
-		Novice::ScreenPrintf(0, 0, "true");
 	}
 }
 
-void PLAYER::debugPrint()
-{
-	Novice::ScreenPrintf(0, 0, "%f,%f", pos.x, pos.y);
-	Novice::ScreenPrintf(0, 40, "%f", PressT);
-	Novice::ScreenPrintf(0, 200, "%s", isJump ? "true" : "false");
-	Novice::ScreenPrintf(0, 220, "%.0f,%.0f", MoveDir.x, MoveDir.y);
-	Novice::ScreenPrintf(0, 240, "%4.1f,%4.1f", velocity.x, velocity.y);
-	Novice::ScreenPrintf(0, 260, "%d", boundCount);
-	Novice::ScreenPrintf(0, 280, "%4.1f,%4.1f", respawnPos.x, respawnPos.y);
-}
 
 void PLAYER::reset()
 {

@@ -298,7 +298,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			//Novice::ScreenPrintf(0, 100, "%d,%d", TitleBox[0].isHit, TitleBox[1].isHit);
+
 			if (TitleBox[0].isHit) {
 				SceneNo = 1;//セレクト画面へ移動
 				isChangeScene = true;
@@ -479,19 +479,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			if (scene == GAME) {
-
-				if (keys[DIK_R] && !preKeys[DIK_R])
-				{
-					PLYR.isAlive = false;
-					ENEMY.isHit = true;
-					PLYR.lives++;
-				}
-				if (keys[DIK_Q])
-				{
-
-
-				}
-
+				
 				//プレイヤーのリスポーン
 				PLYR.Respawn(ENEMY.isHit, ENEMY.pos, ENEMY.respawnPos);
 				if (PLYR.respawnTimer == 60 && PLYR.lives > 0) {
@@ -567,20 +555,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (scene == GAME) {
 					//リザルトの時間測定する
 					score.TimeCount(PLYR.isAlive, PLYR.isGoal);
-					//仮置き、ゲームオーバー
-					if (keys[DIK_3] && !preKeys[DIK_3]) {
-						SceneNo = 3;
-						isChangeScene = true;
-
-					}
+					
 					if (PLYR.respawnTimer <= 60 &&//ここの秒数弄るとゲームオーバー前だけ時間を長くすることができる
 						PLYR.lives <= 0) {
 						SceneNo = 3;
-						isChangeScene = true;
-					}
-					//仮置きゲームクリア
-					if (keys[DIK_4] && !preKeys[DIK_4]) {
-						SceneNo = 4;
 						isChangeScene = true;
 					}
 				}
@@ -845,34 +823,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[i].isHit = false;
 				SelectBox[i].velY = 0;
 			}
-
-
-			/*ゲームで必要なリセット*/
-			/*PLYR.size = { 16,16 };
-			PLYR.acceleration = { 0.00f,0.5f };
-			PLYR.velocity = { 0,0 };
-			PLYR.isJump = false;
-			PLYR.isAlive = true;
-			PLYR.isGoal = false;
-			PLYR.isHitToge = false;
-			PLYR.MoveDir = { 1,0 };
-			PLYR.PressT = 0.15f;
-			PLYR.addT = 0.018f;
-			PLYR.maxVelocity = 30.0f;
-			PLYR.minVelocity = 1.0f;
-			PLYR.hitStopTimer = 4;
-			PLYR.hitStopVelocity = 1.0f;
-			PLYR.boundCount = 0;
-			PLYR.isStun = false;
-			PLYR.isShake = false;
-			PLYR.isBlasted = false;
-			PLYR.stunTimer = 180;
-			PLYR.blastTimer = 120;
-			PLYR.shakeTimer = 10;
-			PLYR.respawnTimer = 120;
-			PLYR.blastCountDwon = 30;
-			PLYR.blastDistance = 0;
-			PLYR.isSetRespawnPos = false;*/
 			PLYR.reset();
 			PLYR.SetStartPos(STAGE.loadStageNum);
 
@@ -1023,7 +973,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region"ゲームの描画処理"
 
 
-			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
 			score.DrawBGTimer();
 			STAGE.draw(PLYR.pos, SCROLL.getScroll());
 			if (scene == GAME) {
@@ -1038,13 +987,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				JD.rotate(PLYR.pos, PLYR.dir, SCROLL.getScroll(), PLYR.isAlive, PLYR.getPressT());
 				PEffect.Draw(SCROLL.getScroll());
 				PLYR.draw(SCROLL.getScroll());
-				//score.DrawTimer();
 				enemyHitEffect.Draw(SCROLL.getScroll());
 				checkpoint.draw();
 				ENEMY.enemyToPlayerDistance(PLYR.pos, SCROLL.getScroll(), PLYR.isStun);
 
-				//PLYR.debugPrint();
-				//ENEMY.debugPrint();
 
 
 			}
@@ -1092,8 +1038,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 #pragma endregion
 
-		//Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
-		//Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
+
 
 		//シーンチェンジの上
 		changeUp.DrawSpriteUpdate(changeUp.sceneChangeUpGH);

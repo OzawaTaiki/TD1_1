@@ -29,6 +29,5 @@ public:
 
 	Vector2 getScroll();
 
-	void debugPrint();
 
 };

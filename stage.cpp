@@ -63,9 +63,7 @@ void STAGE::draw(const Vector2& pos, const Vector2& scroll)
 						else
 							cpNum = 1;
 
-
 					Novice::DrawSprite(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), GH[field[i][j]], 1.0f, 1.0f, 0, nowCheckPointColor[cpNum]);
-					Novice::ScreenPrintf(int(mapchipsize * j - scroll.x), int(mapchipsize * i - scroll.y), "%d", cpNum);
 				}
 			}
 		}
@@ -189,9 +187,6 @@ int STAGE::collisionCheck(Vector2& pos, const Vector2& size, const Vector2& velo
 			break;
 	}
 
-	Novice::ScreenPrintf(0, 300, "%x", nowCheckPointColor[0]);
-	Novice::ScreenPrintf(0, 320, "%x", nowCheckPointColor[1]);
-	Novice::ScreenPrintf(0, 280, "%d", loadStageNum);
 
 	return returnHitArr;
 

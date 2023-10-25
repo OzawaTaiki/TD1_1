@@ -112,7 +112,5 @@ public:
 
 	void enemyToPlayerDistance(const Vector2 &playerPos, const Vector2& scroll, bool isStun);
 
-	void debugPrint();
-
 
 };

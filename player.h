@@ -203,8 +203,6 @@ public:
 
 	void setRespwenPos();
 
-	void debugPrint();
-
 	void reset();
 
 };

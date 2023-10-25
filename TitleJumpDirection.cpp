@@ -15,8 +15,6 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 		normalizeJumpDirectionVect.x *= direction;
 	}
 
-	//Novice::DrawEllipse(int(RotateJumpDirectionVect.x + pos.x - scroll.x), int(RotateJumpDirectionVect.y + pos.y - scroll.y), 3, 3, 0, RED, kFillModeSolid);
-
 	if (!isRelease) {
 		if (!isReload) {
 			for (int i = 3; i < Num; i++)
@@ -25,10 +23,6 @@ void TjumpDirection::rotate(const Vector2& pos, float direction, const bool& isR
 			}
 		}
 	}
-
-
-	//Novice::ScreenPrintf(0, 300, "%.1f,%.1f", normalizeJumpDirectionVect.x, normalizeJumpDirectionVect.y);
-	//Novice::ScreenPrintf(0, 320, "%.1f,%.1f", pos.x, pos.y);
 
 }
 

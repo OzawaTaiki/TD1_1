@@ -2,6 +2,7 @@
 #include <Novice.h>
 #include <Vector2.h>
 #include"vector2Util.h"
+
 struct Score {
 	int ClearTimer = 0;
 	int ClearTimerS = 0;//秒
