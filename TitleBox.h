@@ -30,8 +30,6 @@ struct Box {
 	 Novice::LoadTexture("./Resources/images/PlayerManual.png"),
 	 Novice::LoadTexture("./Resources/images/ItemManual.png"),
 
-
-
 	};
 
 	int timer = 60;
@@ -89,7 +87,7 @@ struct Box {
 		}
 	}
 
-	void DrawSpriteUpdateManual(int& DrawGH,bool& isEase) {
+	void DrawSpriteUpdateManual(int& DrawGH, bool& isEase) {
 		timer -= 1;
 		if (timer <= 0) {
 			timer = 60;
@@ -101,7 +99,6 @@ struct Box {
 			}
 		}
 	}
-
 
 	void DrawSpriteUpdateSELECT(int& DrawGH) {
 		int shineColor = 0xfc21c6cc;

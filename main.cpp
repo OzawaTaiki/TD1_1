@@ -25,6 +25,7 @@
 #include "enemyHitEffect.h"
 #include "RefEffect.h"
 #include "checkPoint.h"
+#include "BGM.h"
 
 const char kWindowTitle[] = "1105_オザワ_キョウ_ミカミ_Neon_Reflections";
 
@@ -57,7 +58,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int SceneNo = 0;
 	bool isChangeScene = false;
 	bool isChangeSceneGame = false;
-
 	int manualNum = 0;
 
 	/*--------------------------------------------------------------------*/
@@ -78,6 +78,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	EnemyHitEffect enemyHitEffect;
 	RefEffect refEffect;
 	checkPoint checkpoint;
+	BGM BGM;
 
 	refEffect.timer = refEffect.timerMax;
 
@@ -191,7 +192,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		1080
 	);
 
-
 	Box PlayerManual;
 	Box ItemManual;
 	float manualMax = 640;
@@ -214,17 +214,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		0xFFFFFFFF
 	);
 
-
-
-
-
-
-
 	Score score;//スコア表示
 
 
 	const int PAPER_MAX = 32;
 	EffectPaper effectpaper[PAPER_MAX];
+
+	int sceneChangeSoundHandle = Novice::LoadAudio("./Resources/sounds/sceneChange.mp3");
+	int sceneChangeVoiceHandle = -1;
+	bool isSoundSceneChange = false;
+
+
+	int hitBoxSoundHandle = Novice::LoadAudio("./Resources/sounds/hitBox.mp3");
+	int hitBoxVoiceHandle = -1;
+	bool isSoundhitBox = false;
+
+
+	int titleJumpSoundHandle = Novice::LoadAudio("./Resources/sounds/titleJump.mp3");
+	int titleJumpVoiceHandle = -1;
+	bool isSoundTitleJump = false;
 
 
 	bool isReset = false;//リセットフラグ
@@ -257,6 +265,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				TitleJD.isReleaseFlag();
 				TPlayer.jump(TitleJD.getNormalizeJumpVect(), isChangeScene);
+				isSoundTitleJump = true;
 			}
 
 			TPlayer.Move();
@@ -283,6 +292,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							//当たったエフェクト表示（仮置き）
 							TPlayer.canHit = false;//一つの選択肢に当たったあと、別の選択肢に当たらないようにするフラグ
 							TPlayer.isRef = true;//当たった時跳ね返るフラグ
+							//音
+							isSoundhitBox = true;
 						}
 					}
 				}
@@ -298,10 +309,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isChangeScene = true;
 			}
 
-
-
 #pragma endregion
 			break;
+
 		case SELECT:
 #pragma region"セレクトの更新処理"
 			//SPlayer.acc.y = 0.1f;
@@ -317,6 +327,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
 				SelectJD.isReleaseFlag();
 				SPlayer.jump(SelectJD.getNormalizeJumpVect(), isChangeScene);
+				isSoundTitleJump = true;
 			}
 			//選択画面での自機の移動処理
 			SPlayer.Move();
@@ -352,6 +363,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							SelectBox[i].isHit = true;
 							SPlayer.canHit = false;
 							SPlayer.isRef = true;
+							isSoundhitBox = true;
 							//当たったエフェクト表示（仮おき）
 						}
 					}
@@ -476,8 +488,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				if (keys[DIK_Q])
 				{
-					ENEMY.pos = { 3929,2767 };
-					PLYR.respawnPos = { 0,0 };
+
+
 				}
 
 				//プレイヤーのリスポーン
@@ -511,7 +523,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (PLYR.respawnTimer >= 120) {
 						PLYR.Move();
 					}
-				} else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
+				}
+				else if (PLYR.isBlasted && PLYR.blastCountDwon >= 0) {
 					if (!PLYR.isSetBlastPos)
 					{
 						STAGE.blasterPosSet(PLYR.pos, PLYR.size);
@@ -590,7 +603,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-
 #pragma endregion
 
 #pragma region"ゲームクリアの更新処理"
@@ -618,8 +630,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 
 #pragma endregion
-			break;
-			
 
 		case MANUAL:
 			ItemManual.CPos.x = PlayerManual.CPos.x + 1280;
@@ -631,7 +641,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					SceneNo = 1;//セレクト画面へ移動
 					isChangeScene = true;
 					manualNum = 0;
-				} else {
+				}
+				else {
 					manualNum += 1;
 
 				}
@@ -651,9 +662,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					isEaseManual = false;
 				}
 			}
-			Novice::ScreenPrintf(0, 0, "manualFrag=%d,manualNum=%d", isEaseManual, manualNum);
 			break;
 		}
+
 
 		//シーン切り替えしたときの処理
 #pragma region"シーン切り替え"
@@ -663,13 +674,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			changeLow.t += 0.02f * changeLow.dir;
 			changeLow.easeT = 1.0f - powf(1.0f - changeLow.t, 3.0f);
 			changeUp.easeT = 1.0f - powf(1.0f - changeUp.t, 3.0f);
-
 			changeLow.CPos.y = (1.0f - changeLow.easeT) * changeLow.minPos + changeLow.easeT * changeLow.maxPos;
 			changeUp.CPos.y = (1.0f - changeUp.easeT) * changeUp.minPos + changeUp.easeT * changeUp.maxPos;
+
+			if (changeUp.t >= 0.68f && changeUp.t <= 0.71f && changeLow.dir > 0)
+			{
+				isSoundSceneChange = true;
+			}
+
 			//最大で停止
 			if (changeUp.t >= 1.00f) {
 				changeUp.t = 1.0f;
 				changeUp.timer -= 1;
+
 				if (changeUp.timer == 0) {
 					changeUp.dir *= -1;
 					changeUp.timer = 10;//閉じてからタイマーの時間分停止
@@ -727,6 +744,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			changeUp.easeT = 1.0f - powf(1.0f - changeUp.t, 3.0f);
 			changeLow.CPos.y = (1.0f - changeLow.easeT) * changeLow.minPos + changeLow.easeT * changeLow.maxPos;
 			changeUp.CPos.y = (1.0f - changeUp.easeT) * changeUp.minPos + changeUp.easeT * changeUp.maxPos;
+
+			if (changeUp.t >= 0.68f && changeUp.t <= 0.71f && changeLow.dir > 0)
+			{
+				isSoundSceneChange = true;
+			}
+
 			//最大で停止
 			if (changeUp.t >= 1.00f) {
 				changeUp.t = 1.0f;
@@ -734,6 +757,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (changeUp.timer == 0) {
 					changeUp.dir *= -1;
 					changeUp.timer = 10;//閉じてからタイマーの時間分停止
+
 				}
 			}
 			if (changeLow.t >= 1.00f) {
@@ -797,6 +821,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				720,
 				0xFFFFFFFF
 			);
+
 			/*セレクトで必要なリセット*/
 			SPlayer.Init(
 				{ 640,720 },
@@ -907,11 +932,41 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		Novice::DrawBox(0, 0, 1280, 720, 0.0f, 0x000000FF, kFillModeSolid);
+		BGM.Sound(scene, SceneNo);
+
+		if (isSoundSceneChange)
+		{
+			if (!Novice::IsPlayingAudio(sceneChangeVoiceHandle) || sceneChangeVoiceHandle == -1)
+			{
+				isSoundSceneChange = false;
+				sceneChangeVoiceHandle = Novice::PlayAudio(sceneChangeSoundHandle, 0, 0.15f);
+			}
+		}
+
+		if (isSoundhitBox)
+		{
+			if (!Novice::IsPlayingAudio(hitBoxVoiceHandle) || hitBoxVoiceHandle == -1)
+			{
+				isSoundhitBox = false;
+				hitBoxVoiceHandle = Novice::PlayAudio(hitBoxSoundHandle, 0, 0.15f);
+			}
+		}
+		if (isSoundTitleJump)
+		{
+			if (!Novice::IsPlayingAudio(titleJumpVoiceHandle) || titleJumpVoiceHandle == -1)
+			{
+				isSoundTitleJump = false;
+				titleJumpVoiceHandle = Novice::PlayAudio(titleJumpSoundHandle, 0, 0.05f);
+			}
+		}
+
 
 		switch (scene)
 		{
 		case TITLE:
 #pragma region"タイトルの描画処理"
+
+
 			Line[0].CPos.y = 308;
 			Line[1].CPos.y = 591;
 
@@ -930,6 +985,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		case SELECT:
 #pragma region"セレクトの描画処理"
+
+
+
 			Line[0].CPos.y = 259;
 			Line[1].CPos.y = 586;
 			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
@@ -952,6 +1010,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case GAMEOVER:
 		case GAMECLEAR:
 #pragma region"ゲームの描画処理"
+
 
 			//Novice::DrawBox(0, 0, 1280, 720, 0, 0x000000ff, kFillModeSolid);
 			score.DrawBGTimer();
@@ -1006,8 +1065,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			break;
 
-#pragma endregion
-			break;
 		case MANUAL:
 			Line[0].CPos.y = 50;
 			Line[1].CPos.y = 670;
@@ -1017,10 +1074,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ItemManual.DrawSpriteUpdate(Manual.GH[12]);
 			Line[0].DrawSpriteUpdate(Line[0].GH[10]);
 			Line[1].DrawSpriteUpdate(Line[0].GH[10]);
-			PressSpace.DrawSpriteUpdateManual(PressSpace.GH[1],isEaseManual);
-			
+			PressSpace.DrawSpriteUpdateManual(PressSpace.GH[1], isEaseManual);
+
 			break;
+
 		}
+#pragma endregion
+
 		//Novice::ScreenPrintf(1000, 80, "isHit = %d", PLYR.lives);
 		//Novice::ScreenPrintf(1000, 100, "timer = %d", PLYR.respawnTimer);
 
@@ -1046,6 +1106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの終了
 	Novice::Finalize();
 	return 0;
+
 }
 
 
