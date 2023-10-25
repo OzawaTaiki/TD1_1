@@ -466,6 +466,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
+
+			PLYR.reset();
+			PLYR.SetStartPos(STAGE.loadStageNum);
 			STAGE.reset();
 			STAGE.loadStage(STAGE.loadStageNum);
 			checkpoint.reset();
@@ -826,8 +829,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SelectBox[i].isHit = false;
 				SelectBox[i].velY = 0;
 			}
-			PLYR.reset();
-			PLYR.SetStartPos(STAGE.loadStageNum);
+
+
 
 			ENEMY.SetStartPos(STAGE.loadStageNum);
 			ENEMY.size = { 128,128 };
